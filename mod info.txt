@@ -1,0 +1,21 @@
+From Bioconductor.org:
+
+sSeq: Shrinkage estimation of dispersion in Negative Binomial models for RNA-seq experiments with small sample size.\nThe purpose of this package is to discover the genes that are differentially expressed between two conditions in RNA-seq experiments. Gene expression is measured in counts of transcripts and modeled with the Negative Binomial (NB) distribution using a shrinkage approach for dispersion estimation. The method of moment (MM) estimates for dispersion are shrunk towards an estimated target, which minimizes the average squared difference between the shrinkage estimates and the initial estimates. The exact per-gene probability under the NB model is calculated, and used to test the hypothesis that the expected expression of a gene in two conditions identically follow a NB distribution.\nAuthor: Danni Yu <dyu at purdue.edu>, Wolfgang Huber <whuber at embl.de> and Olga Vitek <ovitek at purdue.edu>\nMaintainer: Danni Yu <dyu at purdue.edu>\n
+
+edgeR: Empirical Analysis of Digital Gene Expression Data in R.\nDifferential expression analysis of RNA-seq expression profiles with biological replication. Implements a range of statistical methodology based on the negative binomial distributions, including empirical Bayes estimation, exact tests, generalized linear models and quasi-likelihood tests. As well as RNA-seq, it be applied to differential signal analysis of other types of genomic data that produce counts, including ChIP-seq, SAGE and CAGE.\nAuthor: Yunshun Chen <yuchen at wehi.edu.au>, Aaron Lun <alun at wehi.edu.au>, Davis McCarthy <dmccarthy at wehi.edu.au>, Xiaobei Zhou <xiaobei.zhou at uzh.ch>, Mark Robinson <mark.robinson at imls.uzh.ch>, Gordon Smyth <smyth at wehi.edu.au>\nMaintainer: Yunshun Chen <yuchen at wehi.edu.au>, Aaron Lun <alun at wehi.edu.au>, Mark Robinson <mark.robinson at imls.uzh.ch>, Davis McCarthy <dmccarthy at wehi.edu.au>, Gordon Smyth <smyth at wehi.edu.au>
+
+EBSeq: An R package for gene and isoform differential expression analysis of RNA-seq data.\nDifferential Expression analysis at both gene and isoform level using RNA-seq data.\nAuthor: Ning Leng, Christina Kendziorski.\nMaintainer: Ning Leng <lengning1 at gmail.com>.
+
+DESeq: Differential gene expression analysis based on the negative binomial distribution.\nEstimate variance-mean dependence in count data from high-throughput sequencing assays and test for differential expression based on a model using the negative binomial distribution\nAuthor: Simon Anders, EMBL Heidelberg <sanders at fs.tum.de>.\nMaintainer: Simon Anders <sanders at fs.tum.de>.
+
+DESeq2: Differential gene expression analysis based on the negative binomial distribution.\nEstimate variance-mean dependence in count data from high-throughput sequencing assays and test for differential expression based on a model using the negative binomial distribution.\nAuthor: Michael Love, Simon Anders, Wolfgang Huber.\nMaintainer: Michael Love <michaelisaiahlove at gmail.com>.
+
+ClusterProfiler: Statistical analysis and visualization of functional profiles for genes and gene clusters.\nThis package implements methods to analyze and visualize functional profiles (GO and KEGG) of gene and gene clusters.\nAuthor: Guangchuang Yu [aut, cre], Li-Gen Wang [ctb], Giovanni Dall'Olio [ctb] (formula interface of compareCluster)\nMaintainer: Guangchuang Yu <guangchuangyu at gmail.com>
+
+R:
+
+BoxPlot: Produces box-and-whisker plot of each sample reads.
+
+VennDiagram: Reads the results from all Analysis Modules and creates Intersect.tsv (a spreadsheet file with the intersection of the selected reads) and a Venn Diagram plot these same results.
+
+HeatMap: Creates a normalized version of VennDiagram's "Intersect.tsv", a Dendogram plot and a HeatMap plot.
