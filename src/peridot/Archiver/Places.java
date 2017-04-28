@@ -43,6 +43,7 @@ public final class Places {
             + ".r-peridot-files" 
             + File.separator + "results" 
             + File.separator + geneListInputFileName);
+
     public static File rExec = getRExec();
     public static File jarFolder = getJarFolder();
     public static File defaultModulesDir = getDefaultModulesDir();
@@ -86,20 +87,47 @@ public final class Places {
         }
     }
     
-    public static void createScriptsDir(){
+    public static void updateModulesDir(boolean overwrite){
         try{
-            if(scriptsDir.exists()){
-                FileUtils.deleteDirectory(scriptsDir);
+            if(scriptsDir.exists() == false){
+                scriptsDir.mkdir();
             }
-            Log.logger.info("Creating modules folder");
-            FileUtils.copyDirectory(defaultModulesDir, scriptsDir);
-            File gitDir = new File(scriptsDir.getAbsolutePath() + File.separator + ".git");
-            if(gitDir.exists());
-            FileUtils.deleteDirectory(gitDir);
+            updateModulesFolder(overwrite);
         }
         catch(Exception ex){
-            Log.logger.severe("Error: could not create modules folder.");
+            Log.logger.severe("Error: could not update modules folder.");
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+    }
+
+    private static void updateModulesFolder(boolean overwrite) throws Exception{
+        File[] modules = defaultModulesDir.listFiles();
+
+        for(int i = 0; i < modules.length; i++){
+            if(modules[i].isDirectory()
+                    && modules[i].getParentFile().getAbsolutePath().equals(
+                            defaultModulesDir.getAbsolutePath()
+            ))
+            {
+                File targetDir = new File(scriptsDir.getAbsolutePath()
+                                    + File.separator + modules[i].getName());
+
+                if(targetDir.exists()){
+                    if(overwrite){
+                        FileUtils.deleteDirectory(targetDir);
+                        FileUtils.copyDirectory(modules[i], targetDir);
+                        Log.logger.info("Updated " + modules[i].getName() + ".");
+                    }
+                }else{
+                    FileUtils.copyDirectory(modules[i], targetDir);
+                    Log.logger.info("Updated " + modules[i].getName() + ".");
+                }
+            }
+        }
+
+        File gitDir = new File(scriptsDir.getAbsolutePath() + File.separator + ".git");
+        if(gitDir.exists()){
+            FileUtils.deleteDirectory(gitDir);
         }
     }
     

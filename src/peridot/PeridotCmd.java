@@ -29,10 +29,7 @@ public final class PeridotCmd {
 
     public static boolean loadAll(){
         Places.createPeridotDir();
-        if(Places.scriptsDir.exists() == false){
-            Places.createScriptsDir();
-        }
-        //Util.getRPath();
+        Places.updateModulesDir(false);
 
         Log.logger.info("Starting to load modules...");
         RScript.loadUserScripts();
@@ -44,12 +41,16 @@ public final class PeridotCmd {
         return true;
     }
 
-    public static boolean resetModules(){
+    public static void updateDefaultModules(){
+        Places.updateModulesDir(true);
+    }
+
+    public static boolean resetAllModules(){
         boolean result = Global.deleteScriptsFolder();
         if(result){
             return true;
         }else{
-            Log.logger.severe("Could not delete " + Places.peridotDir);
+            Log.logger.severe("Could not delete " + Places.scriptsDir);
             return false;
         }
     }
