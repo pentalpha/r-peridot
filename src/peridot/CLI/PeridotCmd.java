@@ -1,6 +1,10 @@
-package peridot;
+package peridot.CLI;
 
+import peridot.AnalysisParameters;
 import peridot.Archiver.Places;
+import peridot.Global;
+import peridot.Log;
+import peridot.RNASeq;
 import peridot.script.AnalysisScript;
 import peridot.script.PostAnalysisScript;
 import peridot.script.RScript;
@@ -124,5 +128,18 @@ public final class PeridotCmd {
         for(Map.Entry<String, RScript> pair : RScript.availableScripts.entrySet()){
             pair.getValue().cleanTempFiles();
         }
+    }
+
+    public static void listModules(){
+        System.out.println("- Analysis Modules: ");
+        for(String name : RScript.getAvailablePackages()){
+            System.out.println("\t" + name);
+        }
+        System.out.println("\n");
+        System.out.println("- Post-Analysis Modules: ");
+        for(String name : RScript.getAvailablePostAnalysisScripts()){
+            System.out.println("\t" + name);
+        }
+        System.out.println("\n");
     }
 }

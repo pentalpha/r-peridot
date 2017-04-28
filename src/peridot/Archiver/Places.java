@@ -105,9 +105,8 @@ public final class Places {
 
         for(int i = 0; i < modules.length; i++){
             if(modules[i].isDirectory()
-                    && modules[i].getParentFile().getAbsolutePath().equals(
-                            defaultModulesDir.getAbsolutePath()
-            ))
+            && modules[i].getParentFile().getAbsolutePath().equals(defaultModulesDir.getAbsolutePath())
+            && modules[i].getName().contains(".git") == false)
             {
                 File targetDir = new File(scriptsDir.getAbsolutePath()
                                     + File.separator + modules[i].getName());
