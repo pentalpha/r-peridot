@@ -1,25 +1,21 @@
 package peridot;
 
-import peridot.AnalysisParameters;
 import peridot.Archiver.Places;
-import peridot.Log;
-import peridot.RNASeq;
 import peridot.script.AnalysisScript;
 import peridot.script.PostAnalysisScript;
 import peridot.script.RScript;
 import peridot.script.Task;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
-public class Peridot {
+public final class PeridotCmd {
 
-    public Peridot(){
-
+    private PeridotCmd(){
+        throw new AssertionError();
     }
 
     public static Task start(Set<String> scriptsToExec, AnalysisParameters params,
@@ -32,8 +28,7 @@ public class Peridot {
     }
 
     public static boolean loadAll(){
-        Log.logger.info("Starting R-Peridot");
-        Places.createSgsDir();
+        Places.createPeridotDir();
         if(Places.scriptsDir.exists() == false){
             Places.createScriptsDir();
         }
@@ -54,7 +49,7 @@ public class Peridot {
         if(result){
             return true;
         }else{
-            Log.logger.severe("Could not delete " + Places.sgsDir);
+            Log.logger.severe("Could not delete " + Places.peridotDir);
             return false;
         }
     }

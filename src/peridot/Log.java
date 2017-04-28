@@ -29,14 +29,14 @@ public final class Log {
                 + ".sgs-remake-files" 
                 + File.separator + "log.txt");
             file.getParentFile().mkdirs();
-            logger = Logger.getLogger("Peridot Log");
+            logger = Logger.getLogger("PeridotCmd Log");
             //Places.getUserHomePath();
             fh = new FileHandler(file.getAbsolutePath(), true); 
             SimpleFormatter formatter = new SimpleFormatter();  
             fh.setFormatter(formatter);
             logger.addHandler(fh);
             logger.setLevel(Level.ALL);
-            logger.info("Init Peridot Log");  
+            logger.info("Init PeridotCmd Log");
         }catch (Exception e) {  
             e.printStackTrace();  
         }

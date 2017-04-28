@@ -83,11 +83,11 @@ public final class Manager {
     public static Set<File> getSubDirs(File dir){
         Set<File> subFiles;
         Set<File> subDirs = new TreeSet<File>();
-        subFiles = new TreeSet<File>(FileUtils.listFilesAndDirs(Places.sgsDir,
+        subFiles = new TreeSet<File>(FileUtils.listFilesAndDirs(Places.peridotDir,
                                      TrueFileFilter.TRUE, TrueFileFilter.TRUE));
         for(File file : subFiles){
             String filePath = file.getAbsolutePath();
-            if((filePath.equals(Places.sgsDir.getAbsolutePath()) == false)
+            if((filePath.equals(Places.peridotDir.getAbsolutePath()) == false)
                 && (file.getAbsolutePath().contains("results") == false)
                 && (file.getAbsolutePath().contains("results"+File.separator) == false)
                 && (file.isDirectory() == true))

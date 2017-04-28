@@ -59,8 +59,8 @@ public final class Global {
                 Log.logger.removeHandler(h);
             }
             f.close();
-            new File(Places.sgsDir + File.separator + "log.txt").delete();
-            FileUtils.deleteDirectory(Places.sgsDir);
+            new File(Places.peridotDir + File.separator + "log.txt").delete();
+            FileUtils.deleteDirectory(Places.peridotDir);
             return true;
         }catch(IOException ex){
             Log.logger.severe("Could not delete sgs-remake-files");

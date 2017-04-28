@@ -6,7 +6,6 @@
 package peridot.Archiver;
 
 import peridot.Log;
-import peridot.script.RScript;
 import org.apache.commons.lang3.*;
 import java.io.File;
 import java.net.URI;
@@ -20,32 +19,34 @@ import org.apache.commons.io.FileUtils;
  * @author pentalpha
  */
 public final class Places {
-    public static File sgsDir = new File(getUserHomePath() + File.separator 
-            + ".sgs-remake-files");
+    public static File peridotDir = new File(getUserHomePath() + File.separator
+            + ".r-peridot-files");
     public static File finalResultsDir = new File(getUserHomePath() + File.separator 
-            + ".sgs-remake-files" 
+            + ".r-peridot-files" 
             + File.separator + "results");
     public static File scriptsDir = new File(getUserHomePath() + File.separator 
-            + ".sgs-remake-files" 
+            + ".r-peridot-files" 
             + File.separator + "scripts");
     public static File rPortableDir = getRPortableFolder();
     public static String rnaSeqInputFileName = "rna-seq-input.tsv";
     public static File rnaSeqInputFile = new File(getUserHomePath() + File.separator 
-            + ".sgs-remake-files" 
+            + ".r-peridot-files" 
             + File.separator + "results" 
             + File.separator + rnaSeqInputFileName);
     public static String conditionInputFileName = "condition-input.tsv";
     public static File conditionInputFile = new File(getUserHomePath() + File.separator 
-            + ".sgs-remake-files" 
+            + ".r-peridot-files" 
             + File.separator + "results" 
             + File.separator + conditionInputFileName);
     public static String geneListInputFileName = "gene-list-input.txt";
     public static File geneListInputFile = new File(getUserHomePath() + File.separator 
-            + ".sgs-remake-files" 
+            + ".r-peridot-files" 
             + File.separator + "results" 
             + File.separator + geneListInputFileName);
     public static File rExec = getRExec();
     public static File jarFolder = getJarFolder();
+    public static File defaultModulesDir = getDefaultModulesDir();
+
     private Places(){
         throw new AssertionError();
     }
@@ -54,22 +55,34 @@ public final class Places {
         return System.getProperty("user.home");
     }
     
-    public static void createSgsDir(){
-        if(sgsDir.exists() == false){
-            Log.logger.info("sgs-remake-files not found, creating it.");
-            sgsDir.mkdirs();
-            sgsDir.mkdir();
-            if(!sgsDir.exists()){
-                Log.logger.severe("Could not create it");
+    public static void createPeridotDir(){
+        if(peridotDir.exists() == false){
+            Log.logger.info("~/r-peridot-files not found, creating it.");
+            peridotDir.mkdirs();
+            peridotDir.mkdir();
+            if(!peridotDir.exists()){
+                Log.logger.severe("Error: Could not create " + peridotDir.getAbsolutePath());
             }
         }
         if(finalResultsDir.exists() == false){
-            Log.logger.info("Results dir not found, creating it.");
+            Log.logger.info("Results directory not found, creating it.");
             finalResultsDir.mkdirs();
             finalResultsDir.mkdir();
             if(!finalResultsDir.exists()){
-                Log.logger.severe("Could not create it");
+                Log.logger.severe("Error: Could not create directory for final results it");
             }
+        }
+    }
+
+    public static File getDefaultModulesDir(){
+        File file = new File(Places.jarFolder.getAbsolutePath() +
+                            File.separator + "r-peridot-scripts");
+        if(file.exists()){
+            return file;
+        }else{
+            Log.logger.warning("Warning: No DefaultModulesDir found, without it you can't " +
+                    "reload the modules.");
+            return null;
         }
     }
     
@@ -78,11 +91,14 @@ public final class Places {
             if(scriptsDir.exists()){
                 FileUtils.deleteDirectory(scriptsDir);
             }
-            scriptsDir.mkdir();
-            Log.logger.info("creating scripts folder");
-            RScript.makeDefaultScriptsFolders();
+            Log.logger.info("Creating modules folder");
+            FileUtils.copyDirectory(defaultModulesDir, scriptsDir);
+            File gitDir = new File(scriptsDir.getAbsolutePath() + File.separator + ".git");
+            if(gitDir.exists());
+            FileUtils.deleteDirectory(gitDir);
         }
         catch(Exception ex){
+            Log.logger.severe("Error: could not create modules folder.");
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
@@ -95,14 +111,14 @@ public final class Places {
                 + "r-portable");
         
         if(localRPortable.exists()){
-            Log.logger.info("Local r-portable foulder found.");
+            Log.logger.info("Local r-portable folder found.");
             return localRPortable;
         }else if (userRPortable.exists()){
-            Log.logger.warning("Local r-portable foulder not found.");
-            Log.logger.info("User r-portable foulder found.");
+            Log.logger.warning("Warning: Local r-portable folder not found.");
+            Log.logger.info("User r-portable folder found.");
             return userRPortable;
         }else{
-            Log.logger.severe("No r-portable found");
+            Log.logger.severe("Error: No r-portable found");
             return null;
         }
     }
@@ -124,7 +140,7 @@ public final class Places {
             return jarFolder;
         }catch(Exception ex){
             ex.printStackTrace();
-            Log.logger.info("Could not load jar location");
+            Log.logger.severe("Error: Could not load jar location");
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }

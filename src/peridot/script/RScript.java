@@ -290,18 +290,12 @@ public class RScript implements Serializable{
             }else{
                 Log.logger.info("created " + getWorkingDirectory().getName());
             }
-            if(nonDefaultScript == false){
-                String scriptPath = Persistence.exportResource(scriptName, this.getWorkingDirectoryPath());
-                scriptFile = new File(scriptPath);
-                Log.logger.info("extracted script to: " + scriptFile.getAbsolutePath());
-            }else{
-                if(newScriptFilePath != null){
-                    if(!copyExternalScriptToWorkingDir(newScriptFilePath, scriptName)){
-                        throw new IOException("Could not copy external script " + newScriptFilePath);
-                    }
-                }else if(scriptContent != null){
-                    exportScriptToDir();
+            if(newScriptFilePath != null){
+                if(!copyExternalScriptToWorkingDir(newScriptFilePath, scriptName)){
+                    throw new IOException("Could not copy external script " + newScriptFilePath);
                 }
+            }else if(scriptContent != null){
+                exportScriptToDir();
             }
             loadScriptContent();
             resultsFolder = new File(this.getWorkingDirectoryPath() + File.separator + "results");
