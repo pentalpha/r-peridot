@@ -231,6 +231,10 @@ public class RScript implements Serializable{
         loadScriptContent();
         this.mandatoryFailed = false;
     }
+
+    public File getDescriptionFile(){
+        return new File(getWorkingDirectoryPath() + File.separator + "description");
+    }
     
     public void createClassDescription() throws IOException{
         File description = new File(getWorkingDirectoryPath() + File.separator + "description");
