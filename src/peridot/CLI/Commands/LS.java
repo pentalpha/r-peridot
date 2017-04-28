@@ -22,10 +22,6 @@ public class LS extends Command {
                 "\tls --help\t\tDisplays this help message\n";
     }
 
-    public boolean isAModule(String name){
-        return RScript.availableScripts.containsKey(name);
-    }
-
     public void evaluateArgs() throws CmdParseException{
         if(args.length > 1){
             fail("'r-peridot ls' takes only zero or one arguments.");

@@ -2,6 +2,7 @@ package peridot.CLI;
 
 
 import peridot.Log;
+import peridot.script.RScript;
 
 import java.util.logging.Level;
 
@@ -30,6 +31,10 @@ public abstract class Command {
     protected abstract void evaluateArgs() throws CmdParseException;
 
     protected abstract void run();
+
+    public static boolean isAModule(String name){
+        return RScript.availableScripts.containsKey(name);
+    }
 
     public static boolean isHelpArg(String arg){
         if(arg == null){

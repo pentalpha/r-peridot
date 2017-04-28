@@ -70,11 +70,12 @@ public final class PeridotCmd {
             Log.logger.severe("Error: " + modName + " is not an existent module.");
             return;
         }
-        File file = new File(folderName + "." + RScript.binExtension);
+        File file = new File(folderName + File.separator + s.name + "." + RScript.binExtension);
         if(file.exists()){
             file.delete();
         }
         try{
+            System.out.println(file.getAbsolutePath());
             s.toBin(file);
         }catch (IOException ex){
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
@@ -131,15 +132,13 @@ public final class PeridotCmd {
     }
 
     public static void listModules(){
-        System.out.println("- Analysis Modules: ");
+        System.out.println("\n- Analysis Modules: ");
         for(String name : RScript.getAvailablePackages()){
             System.out.println("\t" + name);
         }
-        System.out.println("\n");
-        System.out.println("- Post-Analysis Modules: ");
+        System.out.println("\n- Post-Analysis Modules: ");
         for(String name : RScript.getAvailablePostAnalysisScripts()){
             System.out.println("\t" + name);
         }
-        System.out.println("\n");
     }
 }

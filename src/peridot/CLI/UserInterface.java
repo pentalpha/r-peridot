@@ -19,9 +19,9 @@ public class UserInterface {
         }else if(command.equals("ls")){
             cmd = new LS(theRest);
         }else if(command.equals("in")){
-            //cmd = new X(theRest);
+            cmd = new IN(theRest);
         }else if(command.equals("out")){
-            //cmd = new X(theRest);
+            cmd = new OUT(theRest);
         }else if(command.equals("run")){
             //cmd = new X(theRest);
         }else{
