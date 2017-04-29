@@ -8,15 +8,15 @@ package peridot.Archiver;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import peridot.Log;
-
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.logging.Level;
+
 /**
- *
+ * Archiver.Places determines, creates and stores important global files and directories of R-Peridot.
  * @author pentalpha
  */
 public final class Places {
