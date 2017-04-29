@@ -17,14 +17,20 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import peridot.Log;
 
 /**
- *
+ * Archiver.Manager is a collection of methods to manage files/folders and retrieve info about them.
  * @author pentalpha
  */
 public final class Manager {
     private Manager(){
         throw new AssertionError();
     }
-    
+
+    /**
+     * Build a String from the contents of a file
+     * @param   Text file to be read
+     * @return  The text read on the file
+     * @throws  IOException
+     */
     private static StringBuilder readFile(File file) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader (file));
         String         line = null;
@@ -41,7 +47,12 @@ public final class Manager {
             reader.close();
         }
     }
-    
+
+    /**
+     * Convert text file to String, without throwing exceptions.
+     * @param File to be read
+     * @return The contents of the file. Returns null if could not read anything.
+     */
     public static StringBuilder fileToString(File file){
         try{
             return readFile(file);
@@ -50,22 +61,34 @@ public final class Manager {
             return null;
         }
     }
-    
+
+    /**
+     * Checks for the existence of a directory.
+     * @param path  Path of the directory
+     * @return  True if exists and is a directory
+     */
     public static boolean dirExists(String path){
         File f = new File(path);
         return (f.exists() && f.isDirectory());
     }
 
+    /**
+     * Checks for the existence of a file
+     * @param path  Path to the file
+     * @return  True if exists and is a file
+     */
     public static boolean fileExists(String path){
         File f = new File(path);
         return (f.exists() && !f.isDirectory());
     }
 
     /***
-     * Creates a new file, giver a name
+     * Creates a new file, given a path
+     * If did not existed, creates it alongside the parent directory
+     * If existed previously, overwrites it
      * 
      * @param path Absolute path to the file
-     * @return If a file with the same name already existed
+     * @return If a file with the same path already existed
      */
     public static boolean makeNewFile(String path) throws IOException{
         //Log.info("trying to create " + path);
@@ -80,6 +103,12 @@ public final class Manager {
         return alreadyExisted;
     }
 
+    /**
+     * Retrieves the subdirectories of a directory
+     * @param dir The directory to be searched
+     *
+     * @return  Set of files that are subdirectories of dir
+     */
     public static Set<File> getSubDirs(File dir){
         Set<File> subFiles;
         Set<File> subDirs = new TreeSet<File>();
@@ -98,13 +127,24 @@ public final class Manager {
         return subDirs;
     }
 
+    /**
+     * Determines if a file is an .jpg, .png or .img image file
+     * @param fileName  the full path to the file
+     * @return  If it's an image file
+     */
     public static boolean isImageFile(String fileName){
         return fileName.contains(".jpg") 
                || fileName.contains(".jpeg")
                || fileName.contains(".png")
                || fileName.contains(".img");
     }
-    
+
+    /**
+     * Counts the number of lines in a text file
+     * @param filename  The full path to the file
+     * @return  The number of lines
+     * @throws IOException
+     */
     public static int countLines(String filename) throws IOException {
         //Log.info("counting lines of " + filename);
         FileReader reader = new FileReader(filename);

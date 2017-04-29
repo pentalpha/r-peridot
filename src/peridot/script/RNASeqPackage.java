@@ -46,7 +46,7 @@ public class RNASeqPackage extends AnalysisScript {
     
     public static TreeSet<String> getDefaultRequiredFiles(){
         TreeSet<String> requiredExternalFiles = new TreeSet<String>();
-        requiredExternalFiles.add(Places.rnaSeqInputFileName);
+        requiredExternalFiles.add(Places.countReadsInputFileName);
         requiredExternalFiles.add(Places.conditionInputFileName);
         
         return requiredExternalFiles;

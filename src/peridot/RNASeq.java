@@ -227,7 +227,7 @@ public class RNASeq {
     }
     
     private void writeRNASeqWithoutConditions() throws IOException{
-        File newRNASeq = Places.rnaSeqInputFile;
+        File newRNASeq = Places.countReadsInputFile;
         if(newRNASeq.exists()){
             newRNASeq.delete();
         }

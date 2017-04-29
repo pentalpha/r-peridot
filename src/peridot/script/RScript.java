@@ -839,7 +839,7 @@ public class RScript implements Serializable{
             
             requiredScripts = new TreeSet<String>();
             requiredExternalFiles = new TreeSet<String>();
-            //requiredExternalFiles.add(Places.rnaSeqInputFileName);
+            //requiredExternalFiles.add(Places.countReadsInputFileName);
             results = new TreeSet<String>();
             results.add("Intersect.tsv");
             results.add("plots.pdf");
@@ -856,7 +856,7 @@ public class RScript implements Serializable{
             
             requiredScripts = new TreeSet<String>();
             requiredExternalFiles = new TreeSet<String>();
-            //requiredExternalFiles.add(Places.rnaSeqInputFileName);
+            //requiredExternalFiles.add(Places.countReadsInputFileName);
             //requiredExternalFiles.add(Places.conditionInputFileName);
             results = new TreeSet<String>();
             results.add("BoxPlot.png");

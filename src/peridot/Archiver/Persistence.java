@@ -14,7 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- *
+ *  Utilities to manage importing and exporting of Objects
  * @author pentalpha
  */
 public final class Persistence{
@@ -22,6 +22,12 @@ public final class Persistence{
         throw new AssertionError();
     }
 
+    /**
+     * Save an Object as a binary file
+     * @param file  The file where the Object will be stored
+     * @param data  The Java's Object to be stored in file
+     * @throws IOException
+     */
     public static void saveObjectAsBin(File file, 
                                    Object data)
             throws IOException
@@ -36,6 +42,11 @@ public final class Persistence{
         oOutput.close();
     }
 
+    /**
+     * Load an Object from a binary file
+     * @param filePath  Full path to the file
+     * @return  Object loaded from filePath
+     */
     public static Object loadObjectFromBin(String filePath){
         Object data = null;
         try{
