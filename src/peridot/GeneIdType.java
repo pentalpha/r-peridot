@@ -8,15 +8,29 @@ package peridot;
 import java.util.LinkedList;
 
 /**
- *
+ *  Lists the types of IDs available to be used on GeneOntology
  * @author pitagoras
  */
 public class GeneIdType {
     public String idName;
+
+    /**
+     * The list of default ID types.
+     */
     static public LinkedList<String> defaultIDTypes = getDefaultIDTypes();
+
+    /**
+     *
+     * @param idName ID type.
+     */
     public GeneIdType(String idName){
         this.idName = idName;
     }
+
+    /**
+     * Defines the default list of IDs available
+     * @return List of ID types.
+     */
     public static LinkedList<String> getDefaultIDTypes(){
         LinkedList<String> list = new LinkedList<>();
         list.add("None");

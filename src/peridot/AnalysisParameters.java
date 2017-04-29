@@ -9,25 +9,45 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * The parameters necessary for an analysis.
  * @author pentalpha
  */
 public class AnalysisParameters {
+    /**
+     * Maps parameter name to type of parameter to be passed.
+     */
     public Map<String, Class> requiredParameters;
+
+    /**
+     * The parameters that have already been passed.
+     */
     public Map<String, Object> parameters;
-    
+
+    /**
+     * Creates an empty AnalysisParameters
+     */
     public AnalysisParameters(){
         requiredParameters = new HashMap<String, Class>();
         parameters = new HashMap<String, Object>();
     }
-    
+
+    /**
+     * Creates AnalysisParameters defining the required parameters.
+     * @param requiredParameters    The parameters required (Name,Type).
+     */
     public AnalysisParameters(Map<String, Class> requiredParameters){
         this.requiredParameters = new HashMap<String, Class>();
         this.parameters = new HashMap<String, Object>();
         
         this.requiredParameters.putAll(requiredParameters);
     }
-    
+
+    /**
+     * Creates a ready AnalysisParameters, with both definition of
+     * required parameters and parameters.
+     * @param requiredParameters    The parameters required (Name,Type).
+     * @param parameters            The parameters (Name, Value).
+     */
     public AnalysisParameters(Map<String, Class> requiredParameters, 
                               Map<String, Object> parameters){
         this.requiredParameters = new HashMap<String, Class>();
@@ -36,7 +56,13 @@ public class AnalysisParameters {
         this.requiredParameters.putAll(requiredParameters);
         this.parameters.putAll(parameters);
     }
-    
+
+    /**
+     * Pass a parameter.
+     * @param name  Name of parameter to be passed.
+     * @param value Value to be passed to the parameter.
+     * @return      True if could pass the parameter successfully.
+     */
     public boolean passParameter(String name, Object value){
         if(requiredParameters.containsKey(name)){
             if(requiredParameters.get(name) == value.getClass()){
@@ -50,7 +76,12 @@ public class AnalysisParameters {
         }
         return false;
     }
-    
+
+    /**
+     * Inserts new required parameter.
+     * @param name  Parameter name.
+     * @param type  Parameter type.
+     */
     public void newRequiredParameter(String name, Class type){
         requiredParameters.put(name, type);
     }

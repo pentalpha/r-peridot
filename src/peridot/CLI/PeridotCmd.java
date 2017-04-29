@@ -50,7 +50,7 @@ public final class PeridotCmd {
     }
 
     public static boolean resetAllModules(){
-        boolean result = Global.deleteScriptsFolder();
+        boolean result = Global.deletePeridotFolder();
         if(result){
             return true;
         }else{

@@ -16,13 +16,18 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 
 /**
- *
+ * Global general purpose functions.
  * @author pentalpha
  */
 public final class Global {
     private Global(){
         throw new AssertionError();
     }
+
+    /**
+     * @param s String of text.
+     * @return  True if there are only letters and digits on s.
+     */
     public static boolean stringIsLettersAndDigits(String s){
         String text = s;
         for(int i = 0; i < text.length(); i++){
@@ -32,6 +37,11 @@ public final class Global {
         }
         return true;
     }
+
+    /**
+     * Open a file with it's default viewer on the actual system.
+     * @param file The file to be opened.
+     */
     public static void openFileWithSysApp(File file){
         String cmd = "";
         if(SystemUtils.IS_OS_WINDOWS){
@@ -47,8 +57,12 @@ public final class Global {
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
-    
-    public static boolean deleteScriptsFolder(){
+
+    /**
+     * Delete the whole r-peridot-files folder.
+     * @return  True if the deletion was successful.
+     */
+    public static boolean deletePeridotFolder(){
         try{
             FileHandler f = null;
             for(Handler h : Log.logger.getHandlers()){
@@ -62,12 +76,17 @@ public final class Global {
             FileUtils.deleteDirectory(Places.peridotDir);
             return true;
         }catch(IOException ex){
-            Log.logger.severe("Could not delete sgs-remake-files");
+            Log.logger.severe("Could not delete ~/r-peridot-files");
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             return false;
         }
     }
-    
+
+    /**
+     * Run's a Runnable after a certain time delay.
+     * @param runnable  Runnable to be executed.
+     * @param delay     Delay, in milliseconds.
+     */
     public static void setTimeout(Runnable runnable, int delay){
         new Thread(() -> {
             try {
@@ -80,13 +99,23 @@ public final class Global {
         }).start();
         
     }
-    
+
+    /**
+     * Replaces all spaces ' ' with '_' on a string
+     * @param string    Text to be edited.
+     * @return          The edited text.
+     */
     public static String noSpaces(String string)
     {
         string = string.replaceAll(" ", "_");
         return string;
     }
-    
+
+    /**
+     * Splits a line with tabulation or ',', the one who splits more.
+     * @param line  Line to be Spliced.
+     * @return      Spliced line.
+     */
     public static String[] splitWithTabOrCur(String line){
         String[] row = line.split("\t");
         String[] row2 = line.split(",");
@@ -95,7 +124,11 @@ public final class Global {
         }
         return row;
     }
-    
+
+    /**
+     * @param word  Word to be verified.
+     * @return      True if word is some kind of 'gene id' string.
+     */
     public static boolean wordIsGeneID(String word){
         return (word.equals("gene-id")
             || word.equals("gene_id")
@@ -103,7 +136,11 @@ public final class Global {
             || word.equals("gene id")
             || word.equals("id"));
     }
-    
+
+    /**
+     * @param word  Word to be verified.
+     * @return      True if word is some kind of 'microarray' string.
+     */
     public static boolean wordIsMicroArrayID(String word){
         return (word.toLowerCase().equals("micro array")
             || word.toLowerCase().equals("micro_array")
@@ -112,7 +149,11 @@ public final class Global {
             || word.toLowerCase().equals("array")
             || word.toLowerCase().equals("id"));
     }
-    
+
+    /**
+     * @param row   Cells of text to be analyzed.
+     * @return      True if most of the cells is made of text.
+     */
     public static boolean lineIsWords(String[] row){
         int countWords = 0;
         for(int i = 0; i < row.length; i++){
@@ -128,7 +169,11 @@ public final class Global {
         }
         return countWords >= 2;
     }
-    
+
+    /**
+     * @param row   Cells of text to be analyzed.
+     * @return      True if most of the cells is made of rational values.
+     */
     public static boolean lineIsDoubles(String[] row){
         int countDoubles = 0;
         
@@ -145,8 +190,12 @@ public final class Global {
         
         return countDoubles > 0;
     }
-    
-    
+
+    /**
+     * Changes a String from programming notation to a more "natural" form.
+     * @param string    Text to be verified.
+     * @return          'Naturally Writen' text.
+     */
     public static String getNaturallyWritenString(String string){
         String res = "";
         for(int i = 0; i < string.length(); i++){
@@ -166,7 +215,10 @@ public final class Global {
         }
         return res;
     }
-    
+
+    /**
+     * Prints an array of integers.
+     */
     public static void printArray(int[] array){
         String s = "";
         for(int i = 0; i < array.length; i++){
@@ -177,7 +229,10 @@ public final class Global {
         }
         Log.logger.info(s);
     }
-    
+
+    /**
+     * Prints an array of Strings.
+     */
     public static void printArray(String[] array){
         String s = "";
         for(int i = 0; i < array.length; i++){
