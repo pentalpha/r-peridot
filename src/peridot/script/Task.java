@@ -4,7 +4,12 @@
  * and open the template in the editor.
  */
 package peridot.script;
+
+import peridot.AnalysisParameters;
 import peridot.Log;
+import peridot.Output;
+import peridot.RNASeq;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,9 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import peridot.AnalysisParameters;
-import peridot.Output;
-import peridot.RNASeq;
 
 /**
  *

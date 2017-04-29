@@ -1,10 +1,7 @@
 package peridot.CLI;
 
 
-import peridot.Log;
 import peridot.script.RScript;
-
-import java.util.logging.Level;
 
 public abstract class Command {
     protected String commandStr;

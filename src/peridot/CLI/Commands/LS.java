@@ -2,7 +2,6 @@ package peridot.CLI.Commands;
 
 import peridot.CLI.Command;
 import peridot.CLI.PeridotCmd;
-import peridot.script.RScript;
 
 /**
  * Created by pentalpha on 4/28/17.

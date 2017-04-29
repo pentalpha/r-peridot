@@ -5,6 +5,10 @@
  */
 package peridot.Archiver;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import peridot.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,9 +16,6 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import peridot.Log;
 
 /**
  * Archiver.Manager is a collection of methods to manage files/folders and retrieve info about them.
@@ -27,8 +28,8 @@ public final class Manager {
 
     /**
      * Build a String from the contents of a file
-     * @param   Text file to be read
-     * @return  The text read on the file
+     * @param   file    Text file to be read
+     * @return          The text read on the file
      * @throws  IOException
      */
     private static StringBuilder readFile(File file) throws IOException {
@@ -50,8 +51,8 @@ public final class Manager {
 
     /**
      * Convert text file to String, without throwing exceptions.
-     * @param File to be read
-     * @return The contents of the file. Returns null if could not read anything.
+     * @param   file    File to be read
+     * @return          The contents of the file. Returns null if could not read anything.
      */
     public static StringBuilder fileToString(File file){
         try{

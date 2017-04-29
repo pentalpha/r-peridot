@@ -1,24 +1,13 @@
 package peridot;
 
-import peridot.Archiver.Spreadsheet;
-import peridot.Archiver.Places;
 import peridot.Archiver.Manager;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import peridot.Archiver.Places;
+import peridot.Archiver.Spreadsheet;
 import peridot.Archiver.Spreadsheet.Info;
+
+import java.io.*;
+import java.util.*;
+import java.util.Map.Entry;
 /**
  *
  * @author pentalpha

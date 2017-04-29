@@ -5,14 +5,15 @@
  */
 package peridot.script;
 
+import peridot.Log;
+import peridot.Output;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
-import peridot.Log;
-import peridot.Output;
 /**
  *
  * @author pentalpha

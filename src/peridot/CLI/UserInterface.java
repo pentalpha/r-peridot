@@ -1,6 +1,8 @@
 package peridot.CLI;
 
-import peridot.CLI.Commands.*;
+import peridot.CLI.Commands.IN;
+import peridot.CLI.Commands.LS;
+import peridot.CLI.Commands.OUT;
 import peridot.script.RScript;
 
 /**

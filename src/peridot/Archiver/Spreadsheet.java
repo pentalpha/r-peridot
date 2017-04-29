@@ -4,12 +4,14 @@
  * and open the template in the editor.
  */
 package peridot.Archiver;
-import peridot.Log;
-import peridot.Global;
+
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
+import peridot.Global;
+import peridot.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

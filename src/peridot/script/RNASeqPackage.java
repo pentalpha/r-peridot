@@ -4,10 +4,12 @@
  * and open the template in the editor.
  */
 package peridot.script;
+
+import peridot.Archiver.Places;
+
 import java.io.File;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import peridot.Archiver.Places;
 
 //TODO: 
 //Create constructor for packages 

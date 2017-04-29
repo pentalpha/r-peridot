@@ -5,35 +5,17 @@
  */
 package peridot.script;
 
-import peridot.Archiver.Persistence;
-import peridot.Archiver.Manager;
-import peridot.Log;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Serializable;
-import java.util.AbstractCollection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.Vector;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import peridot.AnalysisParameters;
-import peridot.GeneIdType;
+import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
+import peridot.GeneIdType;
+import peridot.Log;
+
+import java.io.*;
+import java.util.*;
+import java.util.logging.Level;
 
 /**
  *

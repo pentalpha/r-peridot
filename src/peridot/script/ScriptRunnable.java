@@ -5,6 +5,11 @@
  */
 package peridot.script;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
+import peridot.Archiver.Places;
+import peridot.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,10 +18,6 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.logging.Level;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
-import peridot.Archiver.Places;
-import peridot.Log;
 
 /**
  *
