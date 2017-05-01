@@ -3,6 +3,7 @@ package peridot.CLI;
 import peridot.CLI.Commands.IN;
 import peridot.CLI.Commands.LS;
 import peridot.CLI.Commands.OUT;
+import peridot.CLI.Commands.RUN;
 import peridot.script.RScript;
 
 /**
@@ -25,7 +26,7 @@ public class UserInterface {
         }else if(command.equals("out")){
             cmd = new OUT(theRest);
         }else if(command.equals("run")){
-            //cmd = new X(theRest);
+            cmd = new RUN(theRest);
         }else{
             printInvalidCommand(command);
         }
