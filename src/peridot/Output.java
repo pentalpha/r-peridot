@@ -47,6 +47,9 @@ public class Output {
     }
     
     public String getText(){
+        while(!toAdd.isEmpty()){
+            buffer += toAdd.poll();
+        }
         return buffer;
     }
     

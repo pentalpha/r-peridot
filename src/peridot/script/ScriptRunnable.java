@@ -41,39 +41,44 @@ public class ScriptRunnable implements Runnable {
         ready = false;
         detectPreviousRunn();
         defineCommand();
-        boolean pbMade = makeProcessBuilder();
+        //boolean pbMade = makeProcessBuilder();
         process = null;
     }
 
     @Override
     public void run(){
+        ProcessBuilder processBuilder = makeProcessBuilder();
         if(processBuilder == null){
-            exec.output.appendLine("ProcessBuilder is null, not executing");
+            exec.output.appendLine("ProcessBuilder is null, not executing analysis.");
+            Log.logger.severe("ProcessBuilder is null, not executing analysis.");
             return;
         }
         try{
             process = processBuilder.start();
             if(process == null){
-                throw new NullPointerException("Null process returned");
+                throw new NullPointerException("Fatal Error: Failed to create "
+                        + exec.script.name + "'s process.");
+            }else{
+                //Log.logger.info(exec.script.name + "'s process started.");
             }
             exec.afterStart();
-        }catch(NullPointerException ex){
-            exec.output.appendLine("NullPointerException: ");
-            exec.output.appendLine(ex.getMessage());
-            exec.output.appendLine(ex.toString());
-            Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
         }catch(IndexOutOfBoundsException ex){
             exec.output.appendLine("IndexOutOfBoundsException: ");
             exec.output.appendLine(ex.getMessage());
             exec.output.appendLine(ex.toString());
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
         }catch(SecurityException ex){
-            exec.output.appendLine("Security xception: ");
+            exec.output.appendLine("Security exception: ");
             exec.output.appendLine(ex.getMessage());
             exec.output.appendLine(ex.toString());
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
         }catch(IOException ex){
             exec.output.appendLine("IO exception: ");
+            exec.output.appendLine(ex.getMessage());
+            exec.output.appendLine(ex.toString());
+            Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+        }catch(NullPointerException ex){
+            exec.output.appendLine("NullPointerException: ");
             exec.output.appendLine(ex.getMessage());
             exec.output.appendLine(ex.toString());
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
@@ -152,41 +157,73 @@ public class ScriptRunnable implements Runnable {
         Log.logger.fine(commandString);
     }
     
-    public boolean makeProcessBuilder(){
+    public ProcessBuilder makeProcessBuilder(){
         processBuilder = null;
 
         if(SystemUtils.IS_OS_WINDOWS){
             processBuilder = new ProcessBuilder(commandArray);
-            processBuilder.redirectErrorStream(true);
         }else {
-            File executeScript = new File(exec.script.workingDirectory.getAbsolutePath() + File.separator + "run.sh");
+            File executeScript = new File(exec.script.workingDirectory.getAbsolutePath()
+                    + File.separator + "run.sh");
             try {
-                if(executeScript.exists()){
+                if (executeScript.exists()) {
                     executeScript.delete();
                 }
-                boolean success = executeScript.createNewFile();
-                if(executeScript.exists() == false){
-                    System.out.println("Could not create script " + executeScript.getAbsolutePath());
-                }else{
-                    System.out.println(executeScript.getAbsolutePath() + " has been created");
-                }
+                executeScript.createNewFile();
                 PrintWriter out = new PrintWriter(executeScript);
                 out.println(commandString);
                 out.close();
-                TreeSet<PosixFilePermission> permsSet = new TreeSet<>();
-                permsSet.add(PosixFilePermission.OWNER_EXECUTE);
-                permsSet.add(PosixFilePermission.OWNER_READ);
-                Files.setPosixFilePermissions(executeScript.toPath(), permsSet);
-                //runtime.exec("chmod 755 " + executeScript.getAbsolutePath());
-                processBuilder = new ProcessBuilder(executeScript.getAbsolutePath());
-                processBuilder.redirectErrorStream(true);
-                
-                
-            }catch(IOException ex){
+                //Log.logger.info(executeScript.getAbsolutePath() + " has been created");
+            }catch(IOException ex) {
                 Log.logger.severe("Error, could not create " + executeScript.getAbsolutePath());
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+                return null;
             }
+
+            /*StringBuilder sBuilder = peridot.Archiver.Manager.fileToString(executeScript);
+            if(sBuilder == null){
+                Log.logger.severe("Could not read the contents of " + executeScript.getAbsolutePath());
+                return null;
+            }
+            System.out.println(sBuilder.toString());*/
+
+            TreeSet<PosixFilePermission> permsSet = new TreeSet<>();
+            permsSet.add(PosixFilePermission.OWNER_EXECUTE);
+            permsSet.add(PosixFilePermission.OWNER_READ);
+            try {
+                Files.setPosixFilePermissions(executeScript.toPath(), permsSet);
+                //runtime.exec("chmod 755 " + executeScript.getAbsolutePath());
+                //Log.logger.info("Permissions have been granted to "
+                //       + executeScript.getAbsolutePath());
+            }catch(UnsupportedOperationException ex){
+                Log.logger.severe("Error, could not grant permissions to "
+                        + executeScript.getParentFile().getName()
+                + " because the file does not support PosixFileAttributeView");
+                Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+                return null;
+            }catch(ClassCastException ex){
+                Log.logger.severe("Error, could not grant permissions to "
+                        + executeScript.getParentFile().getName()
+                        + " because some of the permissions granted are invalid.");
+                Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+                return null;
+            }catch(SecurityException ex){
+                Log.logger.severe("Error, could not grant permissions to "
+                        + executeScript.getParentFile().getName()
+                        + " because of an SecurityException.");
+                Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+                return null;
+            }catch(IOException ex) {
+                Log.logger.severe("Error, could not grant permissions to "
+                        + executeScript.getParentFile().getName()
+                + " because of an I/O Exception.");
+                Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+                return null;
+            }
+            String[] bashCmdArray = {"/bin/bash", executeScript.getAbsolutePath()};
+            processBuilder = new ProcessBuilder(bashCmdArray);
         }
-        return processBuilder != null;
+        processBuilder.redirectErrorStream(true);
+        return processBuilder;
     }
 }

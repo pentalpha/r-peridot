@@ -5,13 +5,11 @@
  */
 package peridot.script;
 
+import peridot.Archiver.Places;
 import peridot.Log;
 import peridot.Output;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 /**
@@ -61,7 +59,6 @@ public class ScriptExec {
             Integer exitStatus = new Integer(-999);
             try{
                 exitStatus = new Integer(process.waitFor());
-                Log.logger.warning("Process of " + script.name + " finished with exit status " + exitStatus.toString());
             }catch(java.lang.InterruptedException ex){
                 output.appendLine("Process Interrupted");
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
@@ -82,15 +79,13 @@ public class ScriptExec {
         BufferedReader buffReader = new BufferedReader(iStreamReader);
         try{
             int c;
-            while((c = buffReader.read()) != -1 
-                    && process.isAlive() 
-                    && this.running.get()){
+            while((c = buffReader.read()) != -1){
                 output.appendChar((char)c);
             }
             if(!process.isAlive()){
-                Log.logger.info("Process of " + script.name + " ended.");
+                Log.logger.info("Buffer ended: Process of " + script.name + " is dead.");
             }else if(!this.running.get()){
-                Log.logger.info(script.name + " not running anymore.");
+                Log.logger.info("Buffer ended: " + script.name + " not running anymore.");
             }else{
                 Log.logger.info("Buffer ended for " + script.name);
             }
@@ -124,9 +119,11 @@ public class ScriptExec {
         if(!running.get()){
             return;
         }
-        output.appendLine("end of input");
         Log.logger.info("Process of " + script.name + " finished.");
         savingFlag.set(true);
+        output.appendLine("\n[End of input]");
+        peridot.Archiver.Manager.stringToFile(Places.finalResultsDir
+                + File.separator + script.name + ".output", output.getText());
         if(script.verifyResults()){
             successFlag.set(true);
             Log.logger.info("Saving results of " + script.name);

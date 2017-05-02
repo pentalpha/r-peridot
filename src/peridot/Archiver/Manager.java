@@ -9,10 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import peridot.Log;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -38,15 +35,12 @@ public final class Manager {
         StringBuilder  stringBuilder = new StringBuilder();
         String         ls = System.getProperty("line.separator");
 
-        try {
-            while((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
-                stringBuilder.append(ls);
-            }
-            return stringBuilder;
-        } finally {
-            reader.close();
+        while((line = reader.readLine()) != null) {
+            stringBuilder.append(line);
+            stringBuilder.append(ls);
         }
+        reader.close();
+        return stringBuilder;
     }
 
     /**
@@ -56,7 +50,8 @@ public final class Manager {
      */
     public static StringBuilder fileToString(File file){
         try{
-            return readFile(file);
+            StringBuilder sBuilder =  readFile(file);
+            return sBuilder;
         }catch(IOException ex){
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
@@ -157,5 +152,26 @@ public final class Manager {
         reader.close();
         buffReader.close();
         return count;
+    }
+
+    public static File stringToFile(String path, String content){
+        File file = new File(path);
+        try{
+            if(file.exists()){
+                file.delete();
+            }
+            file.createNewFile();
+            FileWriter writer = new FileWriter(file);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+
+            bufferedWriter.write(content);
+
+            bufferedWriter.close();
+            writer.close();
+            return file;
+        }catch(IOException ex){
+            Log.logger.severe("Error: could not write " + path);
+            return null;
+        }
     }
 }

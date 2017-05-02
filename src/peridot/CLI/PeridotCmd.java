@@ -32,6 +32,8 @@ public final class PeridotCmd {
     public static Task start(Set<String> scriptsToExec, AnalysisParameters params,
                              Map<String, AnalysisParameters> specificParams,
                              RNASeq expression){
+        expression.writeExpression();
+        expression.writeFinalConditions();
 
         Task task = new Task(scriptsToExec, params, specificParams, expression);
         task.start();

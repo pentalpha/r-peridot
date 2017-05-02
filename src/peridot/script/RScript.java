@@ -626,6 +626,8 @@ public class RScript implements Serializable{
             File file = iterator.next();
             if(file.getAbsolutePath().equals(resultsFolder.getAbsolutePath())
                     || file.getName().equals("description")
+                    || file.getName().equals("run.sh")
+                    || file.getName().equals("config.txt")
                     || file.getAbsolutePath().equals(getWorkingDirectoryPath())
                     || file.getAbsolutePath().equals(scriptFile.getAbsolutePath()))
             {
