@@ -145,17 +145,17 @@ public class RNASeq {
         
         String[] firstRow = Spreadsheet.getFirstRowFromFile(file);
         int nConditions;
-        if(info.firstCellPresent == false || info.labelsOnFirstCol == false){
+        if(info.getFirstCellPresent() == false || info.getLabelsOnFirstCol() == false){
             nConditions = firstRow.length;
         }else{
             nConditions = firstRow.length-1;
         }
         String[] names;
         
-        if(info.headerOnFirstLine){
+        if(info.getHeaderOnFirstLine()){
             names = new String[nConditions];
             for(int i = 0; i < names.length; i++){
-                if(info.firstCellPresent && info.labelsOnFirstCol){
+                if(info.getFirstCellPresent() && info.getLabelsOnFirstCol()){
                     names[i] = firstRow[i+1];
                 }else{
                     names[i] = firstRow[i];
@@ -280,7 +280,7 @@ public class RNASeq {
         buffOutput.write(firstLine);
         buffOutput.newLine();
         String line = buffInput.readLine();
-        if(info.headerOnFirstLine){
+        if(info.getHeaderOnFirstLine()){
             line = buffInput.readLine();
         }
         
@@ -289,7 +289,7 @@ public class RNASeq {
             String[] lineSplitted = Global.splitWithTabOrCur(line);
             String[] values;
             String label;
-            if(info.labelsOnFirstCol){
+            if(info.getLabelsOnFirstCol()){
                 label = lineSplitted[0];
                 values = new String[lineSplitted.length-1];
                 for(int i = 0; i < values.length; i++){

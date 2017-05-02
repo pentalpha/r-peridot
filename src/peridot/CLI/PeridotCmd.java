@@ -22,6 +22,13 @@ public final class PeridotCmd {
         throw new AssertionError();
     }
 
+
+    public static Task start(AnalysisFile analysisFile){
+        return PeridotCmd.start(analysisFile.scriptsToExec,
+                analysisFile.params, analysisFile.specificParams,
+                analysisFile.expression);
+    }
+
     public static Task start(Set<String> scriptsToExec, AnalysisParameters params,
                              Map<String, AnalysisParameters> specificParams,
                              RNASeq expression){

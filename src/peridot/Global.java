@@ -244,5 +244,27 @@ public final class Global {
         Log.logger.info(s);
     }
 
-    
+
+    /**
+     * Turns a string into an array of two strings where the
+     * first is the first word of the string and the second
+     * one is the rest of the original string
+     * @param text String to be separated in two
+     * @return  return[0] = first word, return[1] = the rest
+     */
+    public static String[] firstWordAndTheRest(String text){
+        String[] array = new String[2];
+        String[] spliced = text.split(" ");
+        array[0] = spliced[1];
+        if(spliced.length == 1){
+            array[1] = null;
+        }else{
+            array[1] = "";
+            for(int i = 1; i < spliced.length; i++)
+            {
+                array[1] += " " + spliced[i];
+            }
+        }
+        return array;
+    }
 }

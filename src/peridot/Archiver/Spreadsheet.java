@@ -32,52 +32,6 @@ public class Spreadsheet {
     }
 
     /**
-     * Meta-information about a spreadsheet file.
-     */
-    public static class Info{
-        /**
-         * Rationals or Integers
-         */
-        public DataType dataType;
-        /**
-         * If there are labels on the first column
-         */
-        public boolean labelsOnFirstCol;
-        /**
-         * If there are headers on the first line
-         */
-        public boolean headerOnFirstLine;
-        /**
-         * If the first cell (line 0, column 0) has
-         * a header, label or value on it.
-         */
-        public boolean firstCellPresent;
-
-        /**
-         *
-         * @param dataType          Rationals or Integers
-         * @param labelsOnFirstCol  If there are labels on the first column
-         * @param headerOnFirstLine If there are headers on the first line
-         * @param firstCellPresent  If the first cell (line 0, column 0) has
-         *                          a header, label or value on it.
-         */
-        public Info(DataType dataType, boolean labelsOnFirstCol, 
-                boolean headerOnFirstLine, boolean firstCellPresent){
-            this.dataType = dataType;
-            this.labelsOnFirstCol = labelsOnFirstCol;
-            this.headerOnFirstLine = headerOnFirstLine;
-            this.firstCellPresent = firstCellPresent;
-        }
-
-        /**
-         * Constructor that does nothing
-         */
-        public Info(){
-            
-        }
-    }
-
-    /**
      * @param line  line from a .csv or .tsv file.
      * @return      If the line is made mostly of words, not numbers.
      */
@@ -92,36 +46,7 @@ public class Spreadsheet {
         return false;
     }
 
-    /**
-     *  R-Peridot tries to guess the Spreadsheet.Info of a spreadsheet.
-     * @param tableFile     The .csv or .tsv file to be analyzed.
-     * @return              Spreadsheet.Info instance with the info.
-     * @throws IOException
-     */
-    public static Spreadsheet.Info getInfo(File tableFile) throws IOException{
-        Spreadsheet.Info info = new Spreadsheet.Info();
-        
-        FileReader inputReader = new FileReader(tableFile);
-        BufferedReader tableInput = new BufferedReader(inputReader);
-        String line = tableInput.readLine();
-        String line2 = tableInput.readLine();
-        tableInput.close();
-        inputReader.close();
-        
-        info.firstCellPresent = !(Global.splitWithTabOrCur(line).length < Global.splitWithTabOrCur(line2).length);
-        if(info.firstCellPresent){
-            info.headerOnFirstLine = lineIsHeader(line);
-        }else{
-            info.headerOnFirstLine = true;
-        }
-        if(Global.lineIsDoubles(Global.splitWithTabOrCur(line2))){
-            info.dataType = DataType.Float;
-        }else{
-            info.dataType = DataType.Int;
-        }
-        info.labelsOnFirstCol = true;
-        return info;
-    }
+
 
     /**
      * @param tableFile .csv file, values separated by ','
@@ -284,46 +209,122 @@ public class Spreadsheet {
         return defaultNames;
     }
 
-    /*public static String[][] getColunnNamesAndConditions(File file){
-        String[][] colunnAndCondition = null;
-        try{
-            int nLines = Manager.countLines(file.getAbsolutePath());
-            colunnAndCondition = new String[nLines][2];
-            FileReader reader = new FileReader(file);
-            BufferedReader buffReader = new BufferedReader(reader);
-            String line;
-            String[] splitedLine;
-            for(int i = 0; i < colunnAndCondition.length; i++){
-                line = buffReader.readLine();
-                splitedLine = line.split("\t");
-                colunnAndCondition[i][0] = splitedLine[0];
-                colunnAndCondition[i][1] = splitedLine[1];
-            }
-            buffReader.close();
-            reader.close();
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-        return colunnAndCondition;
-    }*/
-    
-    /*public static boolean tableFileHasHeader(File tableFile) throws IOException, LessWordsOnHeaderLineException{
+    /**
+     *  R-Peridot tries to guess the Spreadsheet.Info of a spreadsheet.
+     * @param tableFile     The .csv or .tsv file to be analyzed.
+     * @return              Spreadsheet.Info instance with the info.
+     * @throws IOException
+     */
+    public static Spreadsheet.Info getInfo(File tableFile) throws IOException{
+        Spreadsheet.Info info = new Spreadsheet.Info();
+
         FileReader inputReader = new FileReader(tableFile);
         BufferedReader tableInput = new BufferedReader(inputReader);
         String line = tableInput.readLine();
         String line2 = tableInput.readLine();
-        if(splitWithTabOrCur(line).length < splitWithTabOrCur(line2).length){
-            Log.logger.info("Less words on header");
-            throw new LessWordsOnHeaderLineException();
-        }else if(lineIsHeader(line)){
-            Log.logger.info("FirstLine is header");
-            return true;
+        tableInput.close();
+        inputReader.close();
+
+        info.setFirstCellPresent(!(Global.splitWithTabOrCur(line).length < Global.splitWithTabOrCur(line2).length));
+        if(info.getFirstCellPresent()){
+            info.setHeaderOnFirstLine(lineIsHeader(line));
         }else{
-            ConfirmNoHeaderDialog askTheUser = new ConfirmNoHeaderDialog(MainGUI._instance, tableFile);
-            askTheUser.setVisible(true);
-            Log.logger.info("Asking the user");
-            return askTheUser.isHeaderOnFirstLine;
+            info.setHeaderOnFirstLine(true);
         }
-        
-    }*/
+        if(Global.lineIsDoubles(Global.splitWithTabOrCur(line2))){
+            info.dataType = DataType.Float;
+        }else{
+            info.dataType = DataType.Int;
+        }
+        info.setLabelsOnFirstCol(true);
+        return info;
+    }
+
+    /**
+     * Meta-information about a spreadsheet file.
+     */
+    public static class Info{
+        /**
+         * Rationals or Integers
+         */
+        public DataType dataType;
+        /**
+         * If there are labels on the first column
+         */
+        private Boolean labelsOnFirstCol;
+        /**
+         * If there are headers on the first line
+         */
+        private Boolean headerOnFirstLine;
+        /**
+         * If the first cell (line 0, column 0) has
+         * a header, label or value on it.
+         */
+        private Boolean firstCellPresent;
+
+        /**
+         *
+         * @param dataType          Rationals+Integer or Integers only
+         * @param labelsOnFirstCol  If there are labels on the first column
+         * @param headerOnFirstLine If there are headers on the first line
+         * @param firstCellPresent  If the first cell (line 0, column 0) has
+         *                          a header, label or value on it.
+         */
+        public Info(DataType dataType, boolean labelsOnFirstCol,
+                    boolean headerOnFirstLine, boolean firstCellPresent){
+            this.dataType = dataType;
+            this.labelsOnFirstCol = new Boolean(labelsOnFirstCol);
+            this.headerOnFirstLine = new Boolean(headerOnFirstLine);
+            this.firstCellPresent = new Boolean(firstCellPresent);
+        }
+
+        /**
+         * Constructor that does nothing
+         */
+        public Info(){
+
+        }
+
+        public boolean allInfoSet(){
+            return labelsOnFirstCol != null
+                    && headerOnFirstLine != null
+                    && dataType != null;
+        }
+
+        public boolean getFirstCellPresent(){
+            return this.firstCellPresent.booleanValue();
+        }
+
+        public boolean getLabelsOnFirstCol(){
+            return this.labelsOnFirstCol.booleanValue();
+        }
+
+        public boolean getHeaderOnFirstLine(){
+            return this.headerOnFirstLine.booleanValue();
+        }
+
+        public void setFirstCellPresent(boolean newValue){
+            if(firstCellPresent == null){
+                firstCellPresent = new Boolean(newValue);
+            }else{
+                firstCellPresent = new Boolean(newValue);
+            }
+        }
+
+        public void setLabelsOnFirstCol(boolean newValue){
+            if(labelsOnFirstCol == null){
+                labelsOnFirstCol = new Boolean(newValue);
+            }else{
+                labelsOnFirstCol = new Boolean(newValue);
+            }
+        }
+
+        public void setHeaderOnFirstLine(boolean newValue){
+            if(headerOnFirstLine == null){
+                headerOnFirstLine = new Boolean(newValue);
+            }else{
+                headerOnFirstLine = new Boolean(newValue);
+            }
+        }
+    }
 }

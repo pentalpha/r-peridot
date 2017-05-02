@@ -1,17 +1,21 @@
 package peridot.CLI.Commands;
 
+import peridot.CLI.AnalysisFile;
+import peridot.CLI.AnalysisFileParser;
 import peridot.CLI.Command;
 import peridot.CLI.PeridotCmd;
+import peridot.Log;
 import peridot.script.RScript;
 import peridot.script.Task;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 /**
  * Created by pentalpha on 01/05/17.
  */
 public class RUN extends Command{
-    public static String specification = getSpecification();
+    public static String specification = AnalysisFile.getSpecification();
     public static final String createExampleOperation = "--create-example";
     public static final String specifyOperation = "--specification";
 
@@ -57,21 +61,25 @@ public class RUN extends Command{
             if(isHelpArg(args[0])){
                 this.printDetails();
             }else if (args[0].equals(specifyOperation)){
-                System.out.println(getSpecification());
+                System.out.println(AnalysisFile.getSpecification());
             }else{
                 File file = new File(args[0]);
-                /*AnalysisFile analysisFile = new AnalysisFile(file);
+                AnalysisFile analysisFile = AnalysisFileParser.make(file);
                 if(analysisFile.isValid() == false){
-
+                    Log.logger.severe("Fatal Error: Invalid info. on '"
+                            + file.getAbsolutePath() + "'" +
+                            ", cannot run analysis.");
                 }else if(analysisFile.hasAllInfo() == false){
-
+                    Log.logger.severe("Fatal Error: '" + file.getName() + "'" +
+                            "does not have all the necessary information to run an" +
+                            " analysis.");
                 }else{
                     peridot.script.Task task = PeridotCmd.start(analysisFile);
-                }*/
+                }
             }
         }else if(args.length == 2){
             File countReadsFile = new File(args[1]);
-            //PeridotCmd.createAnalysisFileFor(countReadsFile);
+            AnalysisFile.createExampleFileFor(countReadsFile);
         }
     }
 
@@ -95,61 +103,5 @@ public class RUN extends Command{
                 "\trun --help\n\t\tDisplays this message\n\n";
     }
 
-    public static String getSpecification(){
-        String string = "\n\n\t---SPECIFICATION---\n# Comments start with '#'\n";
 
-        string += "" +
-                "# Specify count reads:\n" +
-                "[data] path/to/file.tsv\n" +
-                "### TSV and CSV are supported. #################\n\n";
-        string += "" +
-                "# Specify conditions (groups) of samples:\n" +
-                "[conditions] path/to/file.conditions\n";
-        string += "" +
-                "################################################\n" +
-                "### Example Conditions File: ###################\n" +
-                "sample1\tgroupX\n" +
-                "sample2\tgroupX\n" +
-                "sample3\tgroupZ\n" +
-                "sample4\tgroupY\n" +
-                "sample5\tgroupY\n" +
-                "sample6\tnot-use\n" +
-                "### Use tabulation, not ',' or ' ' to separate #\n" +
-                "### sample from condition. #####################\n" +
-                "### Sample names must be on their original #####\n" +
-                "### order. #####################################\n" +
-                "### No comments on this file, only content. ####\n" +
-                "### The 'not-use' condition is ignored. ########\n" +
-                "################################################\n\n";
-        string += "" +
-                "# Specifying Modules:\n" +
-                "[modules]\n" +
-                "moduleName1\n" +
-                "moduleName2\n" +
-                "moduleName3\n" +
-                "[/modules]\n" +
-                "### Use r-peridot ls <module-name> to verify ###\n" +
-                "### if a module depends on the results of ######\n" +
-                "### other module. If it does, the module it ####\n" +
-                "### depends on must be listed too. #############\n\n";
-        string += "" +
-                "# Specifying parameters (general and specific):\n" +
-                "[parameters]\n" +
-                "parameterName=value\n" +
-                "otherParameter=otherValue\n" +
-                "aSpecificParameter::targetModule=anotherValue\n" +
-                "[/parameters]\n" +
-                "### All parameters needed by the modules ######\n" +
-                "### must have values specified for them here. #\n\n";
-        string += "" +
-                "######################################################\n" +
-                "### Don't be scared, it's not that hard. The command #\n" +
-                "### 'r-peridot run --create-example path/to/file' ####\n" +
-                "### can create a file with most of these #############\n" +
-                "### descriptions ready. You only have to modify the ##\n" +
-                "### conditions of each sample and the parameter's ####\n" +
-                "### default values. ##################################\n" +
-                "######################################################\n";
-        return string;
-    }
 }
