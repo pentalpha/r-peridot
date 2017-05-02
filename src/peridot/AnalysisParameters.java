@@ -85,7 +85,18 @@ public class AnalysisParameters {
     public void newRequiredParameter(String name, Class type){
         requiredParameters.put(name, type);
     }
-    
+
+    public static HashMap<String, Object> getDefaultValues(){
+        HashMap<String, Object> defaultValues = new HashMap<>();
+        defaultValues.put("p-value", new Float(0.01));
+        defaultValues.put("fdr", new Float(0.05));
+        defaultValues.put("log2-fold-change", new Float(0.01));
+        defaultValues.put("tops", new Integer(0));
+        defaultValues.put("gene-id-type", new GeneIdType("None"));
+
+        return defaultValues;
+    }
+
     @Override
     public String toString(){
         String string = "";

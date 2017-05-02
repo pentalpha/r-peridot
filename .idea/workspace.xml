@@ -6,15 +6,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e4f6c08-aa0c-476a-a9ac-fe508fc4faf1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/peridot/CLI/AnalysisFile.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jar/r-peridot.jar" afterPath="$PROJECT_DIR$/jar/r-peridot.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/Archiver/Spreadsheet.java" afterPath="$PROJECT_DIR$/src/peridot/Archiver/Spreadsheet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/Commands/RUN.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/Commands/RUN.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/PeridotCmd.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/PeridotCmd.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/Global.java" afterPath="$PROJECT_DIR$/src/peridot/Global.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/RNASeq.java" afterPath="$PROJECT_DIR$/src/peridot/RNASeq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/AnalysisParameters.java" afterPath="$PROJECT_DIR$/src/peridot/AnalysisParameters.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/AnalysisFile.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/AnalysisFile.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -42,8 +36,8 @@
             <file leaf-file-name="Spreadsheet.java" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/src/peridot/Archiver/Spreadsheet.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="502">
-                    <caret line="239" column="20" lean-forward="true" selection-start-line="239" selection-start-column="20" selection-end-line="239" selection-end-column="20" />
+                  <state relative-caret-position="128">
+                    <caret line="217" column="38" lean-forward="true" selection-start-line="217" selection-start-column="38" selection-end-line="217" selection-end-column="38" />
                     <folding />
                   </state>
                 </provider>
@@ -60,8 +54,8 @@
             <file leaf-file-name="RUN.java" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/src/peridot/CLI/Commands/RUN.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="357">
-                    <caret line="32" column="37" lean-forward="true" selection-start-line="32" selection-start-column="37" selection-end-line="32" selection-end-column="37" />
+                  <state relative-caret-position="646">
+                    <caret line="70" column="37" lean-forward="false" selection-start-line="70" selection-start-column="37" selection-end-line="70" selection-end-column="37" />
                     <folding />
                   </state>
                 </provider>
@@ -78,28 +72,18 @@
       <file leaf-file-name="AnalysisParameters.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/peridot/AnalysisParameters.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="28" column="32" lean-forward="true" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
+            <state relative-caret-position="243">
+              <caret line="57" column="5" lean-forward="false" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RNASeqPackage.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/peridot/script/RNASeqPackage.java">
+      <file leaf-file-name="RScript.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/peridot/script/RScript.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="44" column="8" lean-forward="true" selection-start-line="44" selection-start-column="8" selection-end-line="44" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PostAnalysisOntology.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/peridot/script/PostAnalysisOntology.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="30" column="47" lean-forward="false" selection-start-line="30" selection-start-column="37" selection-end-line="30" selection-end-column="47" />
+            <state relative-caret-position="305">
+              <caret line="584" column="17" lean-forward="true" selection-start-line="584" selection-start-column="17" selection-end-line="584" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -108,38 +92,14 @@
       <file leaf-file-name="AnalysisFile.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/peridot/CLI/AnalysisFile.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="112" column="40" lean-forward="false" selection-start-line="112" selection-start-column="40" selection-end-line="112" selection-end-column="40" />
+            <state relative-caret-position="1161">
+              <caret line="79" column="75" lean-forward="false" selection-start-line="79" selection-start-column="75" selection-end-line="79" selection-end-column="75" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#781#782#0" expanded="true" />
-                <element signature="e#809#810#0" expanded="true" />
-                <element signature="e#844#845#0" expanded="true" />
-                <element signature="e#874#875#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RNASeq.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/peridot/RNASeq.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="293" column="59" lean-forward="true" selection-start-line="293" selection-start-column="59" selection-end-line="293" selection-end-column="59" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AnalysisFileParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="31" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#10221#10222#0" expanded="true" />
-                <element signature="e#10259#10260#0" expanded="true" />
+                <element signature="e#609#610#0" expanded="true" />
+                <element signature="e#637#638#0" expanded="true" />
+                <element signature="e#672#673#0" expanded="true" />
+                <element signature="e#702#703#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -175,6 +135,18 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="AnalysisFileParser.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1275">
+              <caret line="105" column="29" lean-forward="false" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -186,9 +158,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>info.firstC</find>
-      <find>info.firstCe</find>
-      <find>info.firstCel</find>
       <find>info.firstCell</find>
       <find>info.firstCellP</find>
       <find>info.firstCellPr</find>
@@ -216,6 +185,9 @@
       <find>info.headerOnFirstLin</find>
       <find>info.headerOnFirstLine</find>
       <find>info.labelsOnFirstCol</find>
+      <find>d</find>
+      <find>defau</find>
+      <find>default</find>
     </findStrings>
     <replaceStrings>
       <replace>peridotDir</replace>
@@ -225,6 +197,7 @@
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/peridot</dir>
+      <dir>$PROJECT_DIR$/src</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -261,15 +234,15 @@
         <option value="$PROJECT_DIR$/src/peridot/GeneIdType.java" />
         <option value="$PROJECT_DIR$/src/peridot/IndexedString.java" />
         <option value="$PROJECT_DIR$/src/peridot/CLI/UserInterface.java" />
-        <option value="$PROJECT_DIR$/src/peridot/AnalysisParameters.java" />
         <option value="$PROJECT_DIR$/src/peridot/CLI/PeridotCmd.java" />
         <option value="$PROJECT_DIR$/src/peridot/Global.java" />
         <option value="$PROJECT_DIR$/src/peridot/script/RNASeqPackage.java" />
-        <option value="$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java" />
-        <option value="$PROJECT_DIR$/src/peridot/CLI/AnalysisFile.java" />
         <option value="$PROJECT_DIR$/src/peridot/RNASeq.java" />
         <option value="$PROJECT_DIR$/src/peridot/Archiver/Spreadsheet.java" />
         <option value="$PROJECT_DIR$/src/peridot/CLI/Commands/RUN.java" />
+        <option value="$PROJECT_DIR$/src/peridot/CLI/AnalysisFile.java" />
+        <option value="$PROJECT_DIR$/src/peridot/AnalysisParameters.java" />
+        <option value="$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java" />
       </list>
     </option>
   </component>
@@ -443,7 +416,7 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../r-peridot-gui" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunDashboard">
@@ -787,13 +760,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/peridot/script/RScript.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13440">
-          <caret line="718" column="0" lean-forward="false" selection-start-line="718" selection-start-column="0" selection-end-line="718" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/peridot/CLI/Commands/DetailCmd.java" />
     <entry file="file://$PROJECT_DIR$/src/peridot/CLI/Commands/LS.java" />
     <entry file="file://$PROJECT_DIR$/src/peridot/CLI/Commands/OUT.java" />
@@ -890,22 +856,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/peridot/AnalysisParameters.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="28" column="32" lean-forward="true" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/peridot/script/RNASeqPackage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="44" column="8" lean-forward="true" selection-start-line="44" selection-start-column="8" selection-end-line="44" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/peridot/script/PostAnalysisOntology.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -914,52 +864,74 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java">
+    <entry file="file://$PROJECT_DIR$/src/peridot/script/RNASeqPackage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="31" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#10221#10222#0" expanded="true" />
-            <element signature="e#10259#10260#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="50">
+          <caret line="21" column="51" lean-forward="true" selection-start-line="21" selection-start-column="51" selection-end-line="21" selection-end-column="51" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/peridot/CLI/AnalysisFile.java">
+    <entry file="file://$PROJECT_DIR$/src/peridot/script/RScript.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="112" column="40" lean-forward="false" selection-start-line="112" selection-start-column="40" selection-end-line="112" selection-end-column="40" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#781#782#0" expanded="true" />
-            <element signature="e#809#810#0" expanded="true" />
-            <element signature="e#844#845#0" expanded="true" />
-            <element signature="e#874#875#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="305">
+          <caret line="584" column="17" lean-forward="true" selection-start-line="584" selection-start-column="17" selection-end-line="584" selection-end-column="17" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/peridot/RNASeq.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="293" column="59" lean-forward="true" selection-start-line="293" selection-start-column="59" selection-end-line="293" selection-end-column="59" />
+        <state relative-caret-position="41">
+          <caret line="179" column="23" lean-forward="false" selection-start-line="179" selection-start-column="23" selection-end-line="179" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/peridot/Archiver/Spreadsheet.java">
+    <entry file="file://$PROJECT_DIR$/src/peridot/AnalysisParameters.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="502">
-          <caret line="239" column="20" lean-forward="true" selection-start-line="239" selection-start-column="20" selection-end-line="239" selection-end-column="20" />
+        <state relative-caret-position="243">
+          <caret line="57" column="5" lean-forward="false" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/peridot/CLI/AnalysisFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1161">
+          <caret line="79" column="75" lean-forward="false" selection-start-line="79" selection-start-column="75" selection-end-line="79" selection-end-column="75" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#609#610#0" expanded="true" />
+            <element signature="e#637#638#0" expanded="true" />
+            <element signature="e#672#673#0" expanded="true" />
+            <element signature="e#702#703#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/peridot/CLI/Commands/RUN.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="32" column="37" lean-forward="true" selection-start-line="32" selection-start-column="37" selection-end-line="32" selection-end-column="37" />
+        <state relative-caret-position="646">
+          <caret line="70" column="37" lean-forward="false" selection-start-line="70" selection-start-column="37" selection-end-line="70" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1275">
+          <caret line="105" column="29" lean-forward="false" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/peridot/Archiver/Spreadsheet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="217" column="38" lean-forward="true" selection-start-line="217" selection-start-column="38" selection-end-line="217" selection-end-column="38" />
           <folding />
         </state>
       </provider>

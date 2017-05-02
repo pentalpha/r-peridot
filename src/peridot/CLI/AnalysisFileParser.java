@@ -90,6 +90,20 @@ public class AnalysisFileParser {
             setModules();
             analysisFile.params = getAnalysisParamsFromMap(params, null);
             analysisFile.specificParams = getSpecificParams();
+            for(Map.Entry<String, Class> pair : analysisFile.params.requiredParameters.entrySet()){
+                boolean found = false;
+                for(Map.Entry<String, Object> pair2 : analysisFile.params.parameters.entrySet()){
+                    if(pair.getKey().equals(pair2.getKey())){
+                        found = true;
+                        break;
+                    }
+                }
+                if(found == false){
+                    throw new ParseException("Error: The parameter " +
+                            pair.getKey() + " has not been specified.");
+                }
+            }
+            hasParams = true;
         }
         catch (ParseException ex){
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
@@ -108,6 +122,8 @@ public class AnalysisFileParser {
         if(conditionsFile != null && countReadsFile != null && info.allInfoSet()){
             info.setFirstCellPresent(!info.getHeaderOnFirstLine() || !info.getLabelsOnFirstCol());
             analysisFile.expression = new RNASeq(countReadsFile, conditionsFile, info);
+            hasData = true;
+            hasConditions = true;
         }
     }
 
@@ -126,6 +142,7 @@ public class AnalysisFileParser {
         }
         if(anyPackages){
             analysisFile.scriptsToExec = modules;
+            hasModules = true;
         }else{
             throw new ParseException("Error: No Analysis module was chosen.");
         }

@@ -1,16 +1,10 @@
 package peridot.CLI;
 
-import peridot.AnalysisParameters;
+import peridot.*;
 import peridot.Archiver.Spreadsheet;
-import peridot.Global;
-import peridot.Log;
-import peridot.RNASeq;
 import peridot.script.RScript;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -44,7 +38,49 @@ public class AnalysisFile {
     }
 
     public static void createExampleFileFor(File countReadsFile){
+        try {
+            String content = "";
+            Spreadsheet.Info info = Spreadsheet.getInfo(countReadsFile);
+            content += AnalysisFileParser.dataStr + " " + countReadsFile.getAbsolutePath() + "\n";
+            SortedMap<IndexedString, String> conditions = RNASeq.getConditionsFromExpressionFile(countReadsFile, info);
+            File condFile = new File(countReadsFile.getAbsolutePath() + ".conditions");
+            RNASeq.createConditionsFile(condFile, conditions, false);
+            content += AnalysisFileParser.integersOnlyStr + (info.dataType == Spreadsheet.DataType.Int) + "\n";
+            content += AnalysisFileParser.labelsOnFirstColStr + info.getLabelsOnFirstCol() + "\n";
+            content += AnalysisFileParser.headerOnFirstLineStr + info.getHeaderOnFirstLine() + "\n\n";
+            content += AnalysisFileParser.conditionsStr + " " + condFile.getAbsolutePath() + "\n\n";
+            content += AnalysisFileParser.modulesStartStr + "\n";
+            for(String pack : RScript.getAvailablePackages()){
+                content += "#" + pack + "\n";
+            }
+            for(String script : RScript.getAvailablePostAnalysisScripts()){
+                content += "#" + script + "\n";
+            }
+            content += AnalysisFileParser.endStr + "\n\n";
+            content += AnalysisFileParser.paramsStartStr + "\n";
+            for(Map.Entry<String, Object> pair : AnalysisParameters.getDefaultValues().entrySet()){
+                content += pair.getValue().getClass().getSimpleName() + " "
+                        + pair.getKey() + "=" + pair.getValue().toString() + "\n";
+            }
+            content += AnalysisFileParser.endStr + "\n\n";
 
+            File exampleFile = new File(countReadsFile.getAbsolutePath() + ".af");
+            if(exampleFile.exists()){
+                exampleFile.delete();
+            }
+            exampleFile.createNewFile();
+            FileWriter writer = new FileWriter(exampleFile);
+            BufferedWriter buffWriter = new BufferedWriter(writer);
+
+            buffWriter.write(content);
+
+            buffWriter.close();
+            writer.close();
+
+            System.out.println("Created " + exampleFile.getAbsolutePath());
+        }catch(IOException ex){
+            Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+        }
     }
 
     public static String getSpecification(){
