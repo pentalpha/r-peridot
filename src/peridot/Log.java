@@ -28,17 +28,17 @@ public final class Log {
         try {
             // This block configure the logger with handler and formatter
             File file = new File(System.getProperty("user.home") + File.separator 
-                + ".sgs-remake-files" 
+                + ".r-peridot-files"
                 + File.separator + "log.txt");
             file.getParentFile().mkdirs();
-            logger = Logger.getLogger("PeridotCmd Log");
+            logger = Logger.getLogger("R-Peridot Logger");
             //Places.getUserHomePath();
             fh = new FileHandler(file.getAbsolutePath(), true); 
             SimpleFormatter formatter = new SimpleFormatter();  
             fh.setFormatter(formatter);
             logger.addHandler(fh);
             logger.setLevel(Level.ALL);
-            logger.info("Init PeridotCmd Log");
+            logger.info("Init R-Peridot Log");
         }catch (Exception e) {  
             e.printStackTrace();  
         }

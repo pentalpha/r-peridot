@@ -41,7 +41,7 @@ public class ScriptRunnable implements Runnable {
         ready = false;
         detectPreviousRunn();
         defineCommand();
-        makeProcessBuilder();
+        boolean pbMade = makeProcessBuilder();
         process = null;
     }
 
@@ -149,7 +149,7 @@ public class ScriptRunnable implements Runnable {
                 commandString += " ";
             }
         }
-        Log.logger.info(commandString);
+        Log.logger.fine(commandString);
     }
     
     public boolean makeProcessBuilder(){
@@ -164,7 +164,12 @@ public class ScriptRunnable implements Runnable {
                 if(executeScript.exists()){
                     executeScript.delete();
                 }
-                executeScript.createNewFile();
+                boolean success = executeScript.createNewFile();
+                if(executeScript.exists() == false){
+                    System.out.println("Could not create script " + executeScript.getAbsolutePath());
+                }else{
+                    System.out.println(executeScript.getAbsolutePath() + " has been created");
+                }
                 PrintWriter out = new PrintWriter(executeScript);
                 out.println(commandString);
                 out.close();
@@ -178,7 +183,7 @@ public class ScriptRunnable implements Runnable {
                 
                 
             }catch(IOException ex){
-                Log.logger.info("Error, could not create " + executeScript.getAbsolutePath());
+                Log.logger.severe("Error, could not create " + executeScript.getAbsolutePath());
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
