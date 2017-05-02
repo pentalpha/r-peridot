@@ -2,6 +2,7 @@ package peridot.CLI;
 
 import peridot.*;
 import peridot.Archiver.Spreadsheet;
+import peridot.script.AnalysisScript;
 import peridot.script.RScript;
 
 import java.io.File;
@@ -55,6 +56,7 @@ public class AnalysisFileParser {
     }
 
     private void parse(File file){
+        analysisFile = new AnalysisFile();
         Scanner scanner;
         String word = null;
         String line = null;
@@ -63,16 +65,16 @@ public class AnalysisFileParser {
             while(scanner.hasNextLine()) {
                 line = scanner.nextLine();
                 if(line.length() > 1){
-                    if(line.charAt(0) != '#'){
+                    if(line.substring(0, 1).equals("#") == false){
                         String[] words = Global.firstWordAndTheRest(line);
-                        word = words[1];
+                        word = words[0];
                         if(words[1] == null){
                             Set<String> all = new TreeSet<>();
-                            while(true){
+                            while(true) {
                                 line = scanner.nextLine();
-                                if(line.contains(endStr)){
+                                if (line.contains(endStr)) {
                                     break;
-                                }else{
+                                }else if (line.substring(0, 1).equals("#") == false){
                                     all.add(line);
                                 }
                             }
@@ -130,8 +132,10 @@ public class AnalysisFileParser {
     public void setModules() throws ParseException {
         boolean anyPackages = false;
         for(String module : modules){
-            if(RScript.getAvailablePackages().contains(module)){
+            if(RScript.availableScripts.get(module) instanceof AnalysisScript){
                 anyPackages = true;
+            }else{
+                System.out.println(module + " is no package");
             }
             for(String dep : RScript.availableScripts.get(module).requiredScripts){
                 if(modules.contains(dep) == false){
@@ -221,7 +225,7 @@ public class AnalysisFileParser {
             }else{
                 throw new ParseException("Error: The type " + typeAndParam[0] + " is not valid.");
             }
-            String[] attributeAndValue = param.split(typeAndParam[1]);
+            String[] attributeAndValue = typeAndParam[1].split(paramEqualStr);
             if(attributeAndValue.length != 2){
                 throw new ParseException("Error: Invalid parameter attribution: " + param);
             }
@@ -243,10 +247,12 @@ public class AnalysisFileParser {
     }
 
     public void parseSingleLineInfo(String word, String second) throws ParseException {
+        second = second.replace(" ", "");
         if(word.equals(dataStr)){
             countReadsFile = new File(second);
             if(countReadsFile.exists() == false){
-                throw new ParseException(dataStr + " file does not exists.");
+                System.out.println(second);
+                throw new ParseException(second + " file does not exists.");
             }
         }else if(word.equals(conditionsStr)){
             conditionsFile = new File(second);

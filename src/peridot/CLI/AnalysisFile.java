@@ -45,9 +45,9 @@ public class AnalysisFile {
             SortedMap<IndexedString, String> conditions = RNASeq.getConditionsFromExpressionFile(countReadsFile, info);
             File condFile = new File(countReadsFile.getAbsolutePath() + ".conditions");
             RNASeq.createConditionsFile(condFile, conditions, false);
-            content += AnalysisFileParser.integersOnlyStr + (info.dataType == Spreadsheet.DataType.Int) + "\n";
-            content += AnalysisFileParser.labelsOnFirstColStr + info.getLabelsOnFirstCol() + "\n";
-            content += AnalysisFileParser.headerOnFirstLineStr + info.getHeaderOnFirstLine() + "\n\n";
+            content += AnalysisFileParser.integersOnlyStr + " " + (info.dataType == Spreadsheet.DataType.Int) + "\n";
+            content += AnalysisFileParser.labelsOnFirstColStr + " " + info.getLabelsOnFirstCol() + "\n";
+            content += AnalysisFileParser.headerOnFirstLineStr + " " + info.getHeaderOnFirstLine() + "\n\n";
             content += AnalysisFileParser.conditionsStr + " " + condFile.getAbsolutePath() + "\n\n";
             content += AnalysisFileParser.modulesStartStr + "\n";
             for(String pack : RScript.getAvailablePackages()){

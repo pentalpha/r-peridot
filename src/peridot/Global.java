@@ -255,7 +255,7 @@ public final class Global {
     public static String[] firstWordAndTheRest(String text){
         String[] array = new String[2];
         String[] spliced = text.split(" ");
-        array[0] = spliced[1];
+        array[0] = spliced[0];
         if(spliced.length == 1){
             array[1] = null;
         }else{
