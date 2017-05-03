@@ -134,8 +134,6 @@ public class AnalysisFileParser {
         for(String module : modules){
             if(RScript.availableScripts.get(module) instanceof AnalysisScript){
                 anyPackages = true;
-            }else{
-                System.out.println(module + " is no package");
             }
             for(String dep : RScript.availableScripts.get(module).requiredScripts){
                 if(modules.contains(dep) == false){

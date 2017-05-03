@@ -32,6 +32,9 @@ public final class PeridotCmd {
     public static Task start(Set<String> scriptsToExec, AnalysisParameters params,
                              Map<String, AnalysisParameters> specificParams,
                              RNASeq expression){
+        PeridotCmd.clean();
+        RScript.removeScriptResults();
+
         expression.writeExpression();
         expression.writeFinalConditions();
 
@@ -44,13 +47,13 @@ public final class PeridotCmd {
         Places.createPeridotDir();
         Places.updateModulesDir(false);
 
-        Log.logger.info("Starting to load modules...");
         RScript.loadUserScripts();
         if(RScript.getAvailableScripts().size() == 0){
-            Log.logger.severe("Modules could not be loaded. We recommend using resetting the modules folder..");
+            Log.logger.severe("Fatal Error: Modules could not be loaded. " +
+                    "We recommend reloading the modules folder.");
             return false;
         }
-        Log.logger.info("Modules loaded");
+        Log.logger.finest("Modules loaded");
         return true;
     }
 

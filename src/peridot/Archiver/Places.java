@@ -212,14 +212,14 @@ public final class Places {
                 + "r-portable");
         
         if(localRPortable.exists()){
-            Log.logger.info("Local r-portable folder found.");
+            //Log.logger.info("Local r-portable folder found.");
             return localRPortable;
         }else if (userRPortable.exists()){
-            Log.logger.warning("Warning: Local r-portable folder not found.");
-            Log.logger.info("User r-portable folder found.");
+            //Log.logger.warning("Warning: Local r-portable folder not found.");
+            //Log.logger.info("User r-portable folder found.");
             return userRPortable;
         }else{
-            Log.logger.severe("Error: No r-portable found");
+            //Log.logger.severe("Error: No r-portable found");
             return null;
         }
     }
@@ -241,7 +241,6 @@ public final class Places {
                 File parent = jarFolder.getParentFile();
                 jarFolder = parent;
             }
-            Log.logger.info("Jar folder: " + jarFolder.getAbsolutePath());
             return jarFolder;
         }catch(Exception ex){
             ex.printStackTrace();

@@ -13,7 +13,7 @@ public class Main {
                 return;
             }
             new peridot.CLI.UserInterface(args);
-            PeridotCmd.clean();
+
         }
     }
 }

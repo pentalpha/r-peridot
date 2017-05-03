@@ -69,10 +69,10 @@ public class AnalysisParameters {
                 parameters.put(name, value);
                 return true;
             }else{
-                Log.logger.info(requiredParameters.get(name) + " != " + value.getClass());
+                Log.logger.warning(requiredParameters.get(name) + "'s type is not " + value.getClass());
             }
         }else{
-            Log.logger.info("required params do not contain " + name);
+            Log.logger.info(name + " is not necessary for the chosen modules.");
         }
         return false;
     }

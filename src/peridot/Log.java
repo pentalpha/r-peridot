@@ -37,9 +37,9 @@ public final class Log {
             SimpleFormatter formatter = new SimpleFormatter();  
             fh.setFormatter(formatter);
             logger.addHandler(fh);
-            logger.setLevel(Level.ALL);
+            logger.setLevel(Level.INFO);
             //logger.setLevel(Level.WARNING);
-            logger.info("Init R-Peridot Log");
+            logger.finest("Init R-Peridot Log");
         }catch (Exception e) {  
             e.printStackTrace();  
         }

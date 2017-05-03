@@ -95,8 +95,6 @@ public class Task {
                 }else{
                     if(script instanceof AnalysisScript){
                         remainingAnalysisScripts++;
-                    }else{
-                        Log.logger.info(name + " isnt an analysis script");
                     }
                     Output output = new Output();
                     ScriptExec exec = new ScriptExec(script, output, this);
@@ -190,7 +188,7 @@ public class Task {
     }
     
     public synchronized void addFinished(String name, boolean prefailed){
-        Log.logger.info("Adding " + name + " to finished scripts.");
+        Log.logger.finer("Adding " + name + " to finished scripts.");
         if(RScript.getAvailablePackages().contains(name)){
             remainingAnalysisScripts--;
             Log.logger.fine(remainingAnalysisScripts + " analysis scripts remaining.");
@@ -286,18 +284,18 @@ public class Task {
                 {
                     toPutReady.add(pair.getKey());
                 }else if(this.packagesFinishedFlag.get()){
-                    Log.logger.info("Checking if " + pair.getKey() + " is ready...");
+                    Log.logger.finer("Checking if " + pair.getKey() + " is ready...");
                     if(exec.script.requirementsSufficed()){
                         toPutReady.add(pair.getKey());
                     }else{
-                        Log.logger.info("...not ready;");
+                        Log.logger.finer("...not ready;");
                     }
                 }
             }
         }
         for(String name : toPutReady){
             waitState.replace(name, WaitState.READY);
-            Log.logger.info(name + " is now ready");
+            Log.logger.finer(name + " is now ready");
         }
     }
     

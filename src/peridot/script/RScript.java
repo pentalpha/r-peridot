@@ -433,7 +433,7 @@ public class RScript implements Serializable{
     public boolean filesSufficed(){
         for(String filePath : this.requiredExternalFiles){
             if(Manager.fileExists(Places.finalResultsDir.getAbsolutePath() + File.separator + filePath) == false){
-                Log.logger.info(filePath + " does not exists");
+                //Log.logger.info(filePath + " does not exists");
                 return false;
             }
         }
@@ -463,10 +463,8 @@ public class RScript implements Serializable{
     }
     
     public boolean createConfig(){
-        Log.logger.info("trying to run: ");
         if(parametersSufficed() && this.environmentCreated){
             this.createConfigFile();
-            //return new ScriptExec(this);
             return true;
         }
         return false;
@@ -626,8 +624,6 @@ public class RScript implements Serializable{
             File file = iterator.next();
             if(file.getAbsolutePath().equals(resultsFolder.getAbsolutePath())
                     || file.getName().equals("description")
-                    || file.getName().equals("run.sh")
-                    || file.getName().equals("config.txt")
                     || file.getAbsolutePath().equals(getWorkingDirectoryPath())
                     || file.getAbsolutePath().equals(scriptFile.getAbsolutePath()))
             {

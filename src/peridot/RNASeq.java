@@ -238,12 +238,12 @@ public class RNASeq {
                 }
             }
         }
-        Log.logger.info("Unsorted conditions: ");
-        Global.printArray(sampleNameWithCondition);
+        //Log.logger.info("Unsorted conditions: ");
+        //Global.printArray(sampleNameWithCondition);
         
         Arrays.sort(sampleNameWithCondition);
-        Log.logger.info("Sorted conditions: ");
-        Global.printArray(sampleNameWithCondition);
+        //Log.logger.info("Sorted conditions: ");
+        //Global.printArray(sampleNameWithCondition);
         
         int[] sampleNameNewIndex = new int[sampleName.length];
         for(int i = 0; i < sampleName.length; i++)
@@ -255,8 +255,8 @@ public class RNASeq {
                 }
             }
         }
-        Log.logger.info("New positions: ");
-        Global.printArray(sampleNameNewIndex);
+        //Log.logger.info("New positions: ");
+        //Global.printArray(sampleNameNewIndex);
         
         String[] sortedSampleName = new String[sampleNameWithCondition.length];
         for(int i = 0; i < sortedSampleName.length; i++)

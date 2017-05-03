@@ -75,11 +75,36 @@ public class RUN extends Command{
                             " analysis.");
                 }else{
                     peridot.script.Task task = PeridotCmd.start(analysisFile);
+                    waitForEnd(task);
                 }
             }
         }else if(args.length == 2){
             File countReadsFile = new File(args[1]);
             AnalysisFile.createExampleFileFor(countReadsFile);
+        }
+    }
+
+    public void waitForEnd (Task task){
+        while(task.isProcessing()){
+
+        }
+        System.out.println("\nFinished processing task.");
+        System.out.println("Failed: ");
+        if(task.failedScripts.size() == 0){
+            System.out.println("\tNone");
+        }else{
+            for(String s : task.failedScripts){
+                System.out.println("\t" + s);
+            }
+        }
+
+        System.out.println("Success: ");
+        if(task.successfulScripts.size() == 0){
+            System.out.println("\tNone");
+        }else{
+            for(String s : task.successfulScripts){
+                System.out.println("\t" + s);
+            }
         }
     }
 

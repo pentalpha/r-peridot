@@ -23,7 +23,8 @@ public class ScriptExec {
     public AtomicBoolean savingFlag;
     public AtomicBoolean successFlag;
     public Process process;
-    
+    public Integer exitStatus;
+
     private Thread scriptThread;
     private ScriptRunnable runnable;
     public Thread runningUpdater;
@@ -56,16 +57,14 @@ public class ScriptExec {
     
     private void defineIsRunningRunnable(){
         isRunningRunnable = () -> {
-            Integer exitStatus = new Integer(-999);
             try{
-                exitStatus = new Integer(process.waitFor());
+                this.exitStatus = new Integer(process.waitFor());
+                if(this.exitStatus.intValue() != 0){
+                    Log.logger.severe(script.name + " exit status: " + exitStatus.intValue());
+                }
             }catch(java.lang.InterruptedException ex){
                 output.appendLine("Process Interrupted");
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
-            }
-            
-            if(exitStatus != null){
-                Log.logger.info(script.name + " finished: " + exitStatus.intValue());
             }
             
             started.set(true);
@@ -83,11 +82,11 @@ public class ScriptExec {
                 output.appendChar((char)c);
             }
             if(!process.isAlive()){
-                Log.logger.info("Buffer ended: Process of " + script.name + " is dead.");
+                //Log.logger.info("Buffer ended: Process of " + script.name + " is dead.");
             }else if(!this.running.get()){
-                Log.logger.info("Buffer ended: " + script.name + " not running anymore.");
+                //Log.logger.info("Buffer ended: " + script.name + " not running anymore.");
             }else{
-                Log.logger.info("Buffer ended for " + script.name);
+                //Log.logger.info("Buffer ended for " + script.name);
             }
         }catch(IOException ex){
             output.appendLine("IOException in "+script.name+": ");
@@ -119,14 +118,16 @@ public class ScriptExec {
         if(!running.get()){
             return;
         }
-        Log.logger.info("Process of " + script.name + " finished.");
+        String exitMessage = script.name + " finished.";
+        Log.logger.info(exitMessage);
+
         savingFlag.set(true);
         output.appendLine("\n[End of input]");
         peridot.Archiver.Manager.stringToFile(Places.finalResultsDir
                 + File.separator + script.name + ".output", output.getText());
         if(script.verifyResults()){
             successFlag.set(true);
-            Log.logger.info("Saving results of " + script.name);
+            Log.logger.finer("Saving results of " + script.name);
             script.saveResults();
         }else{
             successFlag.set(false);

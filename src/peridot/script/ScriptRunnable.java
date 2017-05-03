@@ -87,15 +87,15 @@ public class ScriptRunnable implements Runnable {
 
     private void detectPreviousRunn(){
         firstRun = true;
-        Log.logger.info("checking for previous execution:");
+        //Log.logger.info("checking for previous execution:");
         Iterator<File> it = FileUtils.iterateFiles(exec.script.workingDirectory, null, false);
         while(it.hasNext()){
             if(it.next().getName().contains(".RData")){
-                Log.logger.info("Detected .RData in " + exec.script.workingDirectory);
+                //Log.logger.info("Detected .RData in " + exec.script.workingDirectory);
                 firstRun = false;
                 break;
             }else{
-                Log.logger.info("Executing for the first time in " + exec.script.workingDirectory);
+                //Log.logger.info("Executing for the first time in " + exec.script.workingDirectory);
             }
         }
     }
