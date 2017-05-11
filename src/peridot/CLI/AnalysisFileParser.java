@@ -23,6 +23,7 @@ public class AnalysisFileParser {
     boolean hasParams;
     File countReadsFile;
     File conditionsFile;
+    File saveFolder;
     Spreadsheet.Info info;
     Set<String> modules;
     Map<String, Class> paramTypes;
@@ -90,6 +91,7 @@ public class AnalysisFileParser {
 
             setExpression();
             setModules();
+            analysisFile.outputFolder = saveFolder;
             analysisFile.params = getAnalysisParamsFromMap(params, null);
             analysisFile.specificParams = getSpecificParams();
             for(Map.Entry<String, Class> pair : analysisFile.params.requiredParameters.entrySet()){
@@ -252,10 +254,20 @@ public class AnalysisFileParser {
                 System.out.println(second);
                 throw new ParseException(second + " file does not exists.");
             }
-        }else if(word.equals(conditionsStr)){
+        }else if(word.equals(conditionsStr)) {
             conditionsFile = new File(second);
-            if(conditionsFile.exists() == false){
+            if (conditionsFile.exists() == false) {
                 throw new ParseException(conditionsStr + " file does not exists.");
+            }
+        }else if(word.equals(saveAtStr)){
+            saveFolder = new File(second);
+            if(saveFolder.isFile()){
+                throw new ParseException("The output directory " +
+                        "'" + saveFolder.getAbsolutePath() + "' is a file, not a directory.");
+            }
+            if(saveFolder.exists() == false){
+                throw new ParseException("The output directory " +
+                        "'" + saveFolder.getAbsolutePath() + "' does not exist.");
             }
         }else if(word.equals(integersOnlyStr)){
             boolean value = Boolean.parseBoolean(second);
@@ -283,6 +295,7 @@ public class AnalysisFileParser {
     public final static String integersOnlyStr = "[only-integers]";
     public final static String labelsOnFirstColStr = "[labels]";
     public final static String headerOnFirstLineStr = "[header]";
+    public final static String saveAtStr = "[output]";
 
     public static class ParseException extends Exception{
         public ParseException(String message){

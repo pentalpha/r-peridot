@@ -18,6 +18,7 @@ public class AnalysisFile {
     public AnalysisParameters params;
     public Map<String, AnalysisParameters> specificParams;
     public RNASeq expression;
+    public File outputFolder;
 
     public AnalysisFile(File file){
         valid = true;
@@ -49,6 +50,7 @@ public class AnalysisFile {
             content += AnalysisFileParser.labelsOnFirstColStr + " " + info.getLabelsOnFirstCol() + "\n";
             content += AnalysisFileParser.headerOnFirstLineStr + " " + info.getHeaderOnFirstLine() + "\n\n";
             content += AnalysisFileParser.conditionsStr + " " + condFile.getAbsolutePath() + "\n\n";
+            content += AnalysisFileParser.saveAtStr + " " + countReadsFile.getParentFile().getAbsolutePath() + "\n\n";
             content += AnalysisFileParser.modulesStartStr + "\n";
             for(String pack : RScript.getAvailablePackages()){
                 content += "#" + pack + "\n";
@@ -105,6 +107,10 @@ public class AnalysisFile {
         string += "" +
                 "# Specify conditions (groups) of samples:\n" +
                 "[conditions] path/to/file.conditions\n";
+        string += "" +
+                "# Directory where the results will be saved: \n" +
+                AnalysisFileParser.saveAtStr + " path/to/dir/\n" +
+                "# The directory must exist #####################\n\n";
         string += "" +
                 "################################################\n" +
                 "### Example Conditions File: ###################\n" +

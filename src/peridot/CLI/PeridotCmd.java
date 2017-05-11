@@ -1,5 +1,6 @@
 package peridot.CLI;
 
+import org.apache.commons.io.FileUtils;
 import peridot.AnalysisParameters;
 import peridot.Archiver.Places;
 import peridot.Global;
@@ -151,6 +152,24 @@ public final class PeridotCmd {
         System.out.println("\n- Post-Analysis Modules: ");
         for(String name : RScript.getAvailablePostAnalysisScripts()){
             System.out.println("\t" + name);
+        }
+    }
+
+    public static boolean saveResultsAt(File file){
+        File saveFolder = file;
+        if(saveFolder.isFile()){
+            return false;
+        }
+        try {
+            if (saveFolder.exists() == false) {
+                FileUtils.forceMkdirParent(saveFolder);
+                FileUtils.forceMkdir(saveFolder);
+            }
+            FileUtils.copyDirectoryToDirectory(Places.finalResultsDir, saveFolder);
+            return true;
+        } catch (Exception ex) {
+            Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
         }
     }
 }

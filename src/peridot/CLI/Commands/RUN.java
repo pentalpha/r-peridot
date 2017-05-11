@@ -75,7 +75,7 @@ public class RUN extends Command{
                             " analysis.");
                 }else{
                     peridot.script.Task task = PeridotCmd.start(analysisFile);
-                    waitForEnd(task);
+                    waitForEnd(task, analysisFile);
                 }
             }
         }else if(args.length == 2){
@@ -84,7 +84,7 @@ public class RUN extends Command{
         }
     }
 
-    public void waitForEnd (Task task){
+    public void waitForEnd (Task task, AnalysisFile analysisFile){
         while(task.isProcessing()){
 
         }
@@ -105,6 +105,11 @@ public class RUN extends Command{
             for(String s : task.successfulScripts){
                 System.out.println("\t" + s);
             }
+
+        }
+        boolean success = PeridotCmd.saveResultsAt(analysisFile.outputFolder);
+        if(!success){
+            System.out.println("Could not save the results to '" + analysisFile.outputFolder.getAbsolutePath() + "'.");
         }
     }
 
