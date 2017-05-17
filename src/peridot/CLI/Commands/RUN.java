@@ -1,5 +1,6 @@
 package peridot.CLI.Commands;
 
+import peridot.Archiver.Places;
 import peridot.CLI.AnalysisFile;
 import peridot.CLI.AnalysisFileParser;
 import peridot.CLI.Command;
@@ -85,6 +86,7 @@ public class RUN extends Command{
     }
 
     public void waitForEnd (Task task, AnalysisFile analysisFile){
+        //System.out.print("Waiting for processing to finish");
         while(task.isProcessing()){
 
         }
@@ -107,9 +109,13 @@ public class RUN extends Command{
             }
 
         }
+
         boolean success = PeridotCmd.saveResultsAt(analysisFile.outputFolder);
         if(!success){
-            System.out.println("Could not save the results to '" + analysisFile.outputFolder.getAbsolutePath() + "'.");
+            Log.logger.severe("Could not save the results to '" + analysisFile.outputFolder.getAbsolutePath() + "'." +
+                    " The results are temporarily stored at " + Places.finalResultsDir.getAbsolutePath());
+        }else{
+            System.out.println("Saved all results at " + analysisFile.outputFolder.getAbsolutePath());
         }
     }
 
@@ -132,6 +138,4 @@ public class RUN extends Command{
                 "\t\tPrints the specification of the analysis file.\n\n" +
                 "\trun --help\n\t\tDisplays this message\n\n";
     }
-
-
 }

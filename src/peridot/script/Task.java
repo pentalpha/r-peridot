@@ -30,7 +30,7 @@ public class Task {
     public Map<String, AnalysisParameters> specificParams;
     public RNASeq expression;
     
-    public AtomicBoolean packagesFinishedFlag;
+    public AtomicBoolean packagesFinishedFlag, abortAllFlag;
     //The actual status of the processing.
     //-2 = Not started, -1 = Processing, 0 = failed, 1 = some failed, 2 = all success
     public AtomicInteger processingStatus;
@@ -78,6 +78,9 @@ public class Task {
     }
     
     public void start(){
+        abortAllFlag = new AtomicBoolean();
+        abortAllFlag.set(false);
+        _instance = this;
         RScript.removeScriptResults();
         failedResults = new ConcurrentLinkedDeque<>();
         //ProcessingPanel.cleanMonitorPanels();
@@ -156,6 +159,8 @@ public class Task {
                 }catch (java.lang.InterruptedException ex){
                     break;
                 }
+                updateStatus();
+                playReady();
                 for(String s : runningScripts){
                     LocalDateTime lastUpdate = scriptOutputs.get(s).lastUpdate;
                     if(lastUpdate.isBefore(LocalDateTime.now().minusMinutes(2))){
@@ -173,7 +178,7 @@ public class Task {
      * 
      * @return  
      */
-    private void updateStatus(){
+    private synchronized void updateStatus(){
         if(finishedScripts.size() == scriptExecs.size()){
             if(failedScripts.size() == 0){
                 processingStatus.set(2);
@@ -182,7 +187,18 @@ public class Task {
             }else{
                 processingStatus.set(0);
             }
+            _instance = null;
         }else{
+            /*System.out.println("\n");
+            for(String name : scriptsToExec){
+                if(finishedScripts.contains(name) == false) {
+                    System.out.println("Remaining: " + name);
+                }
+            }
+
+            for(String name : runningScripts){
+                System.out.println("Running: " + name);
+            }*/
             processingStatus.set(-1);
         }
     }
@@ -229,18 +245,40 @@ public class Task {
         }
     }
     
-    private void playReady(){
-        Set<String> started = new HashSet<String>();
-        for(Map.Entry<String, WaitState> pair : waitState.entrySet()){
-            if(pair.getValue().equals(WaitState.READY)){
-                scriptExecs.get(pair.getKey()).start();
-                started.add(pair.getKey());
-                runningScripts.add(pair.getKey());
+    private synchronized void playReady(){
+        boolean found;
+        String foundName;
+        while(true){
+            found = false;
+            foundName = "";
+            for(Map.Entry<String, WaitState> pair : waitState.entrySet()){
+                if(abortAllFlag.get()){
+                    if(pair.getValue().equals(WaitState.WAITING)
+                            || pair.getValue().equals(WaitState.WAITING)){
+                        found = true;
+                        foundName = pair.getKey();
+                        break;
+                    }
+                }else{
+                    if(pair.getValue().equals(WaitState.READY)){
+                        found = true;
+                        foundName = pair.getKey();
+                        break;
+                    }
+                }
             }
-        }
-        for(String name : started){
-            waitState.replace(name, WaitState.STARTED);
-            Log.logger.info(name + " has started");
+            if(found){
+                waitState.replace(foundName, WaitState.STARTED);
+                if(abortAllFlag.get()) {
+                    scriptExecs.get(foundName).cancel();
+                }else{
+                    scriptExecs.get(foundName).start();
+                    Log.logger.info(foundName + " has started");
+                }
+                runningScripts.add(foundName);
+            }else{
+                break;
+            }
         }
     }
     
@@ -298,7 +336,22 @@ public class Task {
             Log.logger.finer(name + " is now ready");
         }
     }
-    
+
+    public void abortAll(){
+        abortAllFlag.set(true);
+        for(ScriptExec exec : scriptExecs.values()){
+            if(exec.running.get()){
+                exec.abort();
+            }
+        }
+    }
+
+    public static Task getRunningTask(){
+        return _instance;
+    }
+
+    private static Task _instance;
+
     public enum WaitState{
         WAITING, PRE_FAILED, READY, STARTED
     }

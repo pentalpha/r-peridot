@@ -282,6 +282,8 @@ public class AnalysisFileParser {
         }else if(word.equals(headerOnFirstLineStr)){
             boolean value = Boolean.parseBoolean(second);
             info.setHeaderOnFirstLine(value);
+        }else {
+            Log.logger.warning("Unknown category: " + word + ". Ignoring.");
         }
     }
 

@@ -22,7 +22,7 @@ public class ScriptExec {
     public AtomicBoolean started;
     public AtomicBoolean savingFlag;
     public AtomicBoolean successFlag;
-    public Process process;
+    public Process process = null;
     public Integer exitStatus;
 
     private Thread scriptThread;
@@ -65,6 +65,9 @@ public class ScriptExec {
             }catch(java.lang.InterruptedException ex){
                 output.appendLine("Process Interrupted");
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+            }catch(java.lang.NullPointerException ex){
+                output.appendLine("No process to monitor.");
+                Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
             
             started.set(true);
@@ -73,31 +76,39 @@ public class ScriptExec {
     }
     
     public void updateOutput(){
-        InputStream iStream = process.getInputStream();
-        InputStreamReader iStreamReader = new InputStreamReader(iStream);
-        BufferedReader buffReader = new BufferedReader(iStreamReader);
-        try{
-            int c;
-            while((c = buffReader.read()) != -1){
-                output.appendChar((char)c);
+        if(process != null){
+            InputStream iStream = process.getInputStream();
+            InputStreamReader iStreamReader = new InputStreamReader(iStream);
+            BufferedReader buffReader = new BufferedReader(iStreamReader);
+            try{
+                int c;
+                while((c = buffReader.read()) != -1){
+                    output.appendChar((char)c);
+                }
+                if(!process.isAlive()){
+                    //Log.logger.info("Buffer ended: Process of " + script.name + " is dead.");
+                }else if(!this.running.get()){
+                    //Log.logger.info("Buffer ended: " + script.name + " not running anymore.");
+                }else{
+                    //Log.logger.info("Buffer ended for " + script.name);
+                }
+            }catch(IOException ex){
+                output.appendLine("IOException in "+script.name+": ");
+                output.appendLine(ex.getMessage());
+                output.appendLine(ex.toString());
+                Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
-            if(!process.isAlive()){
-                //Log.logger.info("Buffer ended: Process of " + script.name + " is dead.");
-            }else if(!this.running.get()){
-                //Log.logger.info("Buffer ended: " + script.name + " not running anymore.");
-            }else{
-                //Log.logger.info("Buffer ended for " + script.name);
-            }
-        }catch(IOException ex){
-            output.appendLine("IOException in "+script.name+": ");
-            output.appendLine(ex.getMessage());
-            output.appendLine(ex.toString());
-            Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+        }else{
+            output.appendLine("No process started!");
         }
-        
+
         if(running.get() == true){
             onEnd();
         }
+    }
+
+    public void cancel(){
+        afterStart();
     }
     
     public void start(){
@@ -116,6 +127,7 @@ public class ScriptExec {
     
     public synchronized void onEnd(){
         if(!running.get()){
+
             return;
         }
         String exitMessage = script.name + " finished.";
@@ -139,6 +151,7 @@ public class ScriptExec {
         running.set(false);
         
         task.addFinished(script.name, false);
+        //System.out.println(script.name + " onEnd()");
     }
     
     public String getName(){
@@ -146,10 +159,13 @@ public class ScriptExec {
     }
     
     public void abort(){
-        Log.logger.info("trying to abort " + script.name);
+        //Log.logger.info("Trying to abort " + script.name);
         if(running.get() || process.isAlive()){
-            process.destroy();
-            process.destroyForcibly();
+            //Log.logger.info("Aborting " + script.name);
+            if (process != null) {
+                process.destroyForcibly();
+            }
+            //Log.logger.info("Aborted " + script.name);
         }
         onEnd();
     }
