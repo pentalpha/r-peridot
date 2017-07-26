@@ -210,7 +210,14 @@ public final class Places {
         File jarFolder = getJarFolder();
         File localRPortable = new File(jarFolder.getAbsolutePath() + File.separator
                 + "r-portable");
-        
+
+        if(SystemUtils.IS_OS_LINUX){
+            File file = new File("/opt/r-peridot/r-portable");
+            if (file.exists()){
+                return file;
+            }
+        }
+
         if(localRPortable.exists()){
             //Log.logger.info("Local r-portable folder found.");
             return localRPortable;
@@ -220,6 +227,7 @@ public final class Places {
             return userRPortable;
         }else{
             //Log.logger.severe("Error: No r-portable found");
+
             return null;
         }
     }
@@ -291,7 +299,7 @@ public final class Places {
         }
         if(exec.exists()){
             if(exec.isFile()){
-                Log.logger.fine("R is " + exec.getAbsolutePath());
+                Log.logger.info("R is " + exec.getAbsolutePath());
                 if(SystemUtils.IS_OS_LINUX){
                     //setLinuxEnvironmentVars();
                 }
