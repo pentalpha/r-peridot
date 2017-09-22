@@ -2,6 +2,7 @@ package peridot.CLI;
 
 import org.apache.commons.io.FileUtils;
 import peridot.AnalysisParameters;
+import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.Global;
 import peridot.Log;
@@ -37,7 +38,7 @@ public final class PeridotCmd {
         RScript.removeScriptResults();
 
         expression.writeExpression();
-        expression.writeFinalConditions();
+        //expression.writeFinalConditions();
 
         Task task = new Task(scriptsToExec, params, specificParams, expression);
         task.start();
@@ -156,6 +157,7 @@ public final class PeridotCmd {
     }
 
     public static boolean saveResultsAt(File file){
+        //System.out.println("Trying to save results at " + file.getAbsolutePath());
         File saveFolder = file;
         if(saveFolder.isFile()){
             return false;
@@ -164,6 +166,9 @@ public final class PeridotCmd {
             if (saveFolder.exists() == false) {
                 FileUtils.forceMkdirParent(saveFolder);
                 FileUtils.forceMkdir(saveFolder);
+            }else if (!Manager.isDirEmpty(saveFolder.toPath())){
+                File newSaveFolder = Manager.getAlternativeFileName(saveFolder);
+                return saveResultsAt(newSaveFolder);
             }
             FileUtils.copyDirectoryToDirectory(Places.finalResultsDir, saveFolder);
             return true;

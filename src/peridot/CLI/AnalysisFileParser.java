@@ -177,6 +177,8 @@ public class AnalysisFileParser {
                 value = new Integer(pair.getValue());
             }else if(paramTypes.get(pair.getKey()) == GeneIdType.class){
                 value = new GeneIdType(pair.getValue());
+            }else if(paramTypes.get(pair.getKey()) == Organism.class){
+                value = new Organism(pair.getValue());
             }
             ap.passParameter(pair.getKey(), value);
         }
@@ -216,15 +218,13 @@ public class AnalysisFileParser {
                 throw new ParseException("Error: No parameter type: " + param);
             }
             Class paramType = null;
-            if(typeAndParam[0].equals("Float")){
-                paramType = Float.class;
-            }else if(typeAndParam[0].equals("Integer")){
-                paramType = Integer.class;
-            }else if(typeAndParam[0].equals("GeneIdType")){
-                paramType = GeneIdType.class;
-            }else{
+
+            if(AnalysisParameters.availableParamTypes.containsKey(typeAndParam[0])){
+                paramType = AnalysisParameters.availableParamTypes.get(typeAndParam[0]);
+            }else {
                 throw new ParseException("Error: The type " + typeAndParam[0] + " is not valid.");
             }
+
             String[] attributeAndValue = typeAndParam[1].split(paramEqualStr);
             if(attributeAndValue.length != 2){
                 throw new ParseException("Error: Invalid parameter attribution: " + param);
@@ -286,6 +286,8 @@ public class AnalysisFileParser {
             Log.logger.warning("Unknown category: " + word + ". Ignoring.");
         }
     }
+
+
 
     public final static String dataStr = "[data]";
     public final static String conditionsStr = "[conditions]";

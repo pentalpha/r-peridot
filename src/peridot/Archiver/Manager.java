@@ -10,6 +10,9 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import peridot.Log;
 
 import java.io.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -172,6 +175,31 @@ public final class Manager {
         }catch(IOException ex){
             Log.logger.severe("Error: could not write " + path);
             return null;
+        }
+    }
+
+    public static File getAlternativeFileName(File file){
+        int pathLength = file.getAbsolutePath().length();
+        char lastChar = file.getAbsolutePath().charAt(pathLength-1);
+        try{
+
+            int lastCharInt = Integer.parseInt(Character.toString(lastChar), 10);
+            String subStr = file.getAbsolutePath().substring(0, pathLength-1);
+            subStr = subStr + (lastCharInt+1);
+            File nextFile = new File(subStr);
+            if(nextFile.exists()){
+                return getAlternativeFileName(nextFile);
+            }else{
+                return nextFile;
+            }
+        }catch(NumberFormatException ex){
+            return new File(file.getAbsolutePath() + "0");
+        }
+    }
+
+    public static boolean isDirEmpty(final Path directory) throws IOException {
+        try(DirectoryStream<Path> dirStream = Files.newDirectoryStream(directory)) {
+            return !dirStream.iterator().hasNext();
         }
     }
 }

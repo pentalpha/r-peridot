@@ -167,6 +167,9 @@ public class RScript implements Serializable{
 
                 if(category.equals("[REQUIRED-PARAMETER]"))
                 {
+                    if(AnalysisParameters.availableParamTypes.keySet().contains(value2)){
+                        this.requiredParameters.put(value, AnalysisParameters.availableParamTypes.get(value2));
+                    }/*
                     if(value2.equals("Integer")){
                         this.requiredParameters.put(value, Integer.class);
                     }
@@ -182,7 +185,7 @@ public class RScript implements Serializable{
                     else if(value2.equals("GeneIdType")){
                         this.requiredParameters.put(value, GeneIdType.class);
                     }
-                    else
+                    */else
                     {
                         throw new Exception("Unknown parameter type: " + value2);
                     }
@@ -736,6 +739,16 @@ public class RScript implements Serializable{
         }
         //sortAvailableScripts();
         //return loadedScripts;
+    }
+
+    public static Map<String, Class> getRequiredParametersFromModules(){
+        Map<String, Class> params = new HashMap<>();
+        for(RScript script : availableScripts.values()){
+            for(Map.Entry<String, Class> param : script.requiredParameters.entrySet()){
+                params.put(param.getKey(), param.getValue());
+            }
+        }
+        return params;
     }
     
     public static boolean makeDefaultScriptsFolders(){

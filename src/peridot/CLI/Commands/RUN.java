@@ -115,7 +115,7 @@ public class RUN extends Command{
             Log.logger.severe("Could not save the results to '" + analysisFile.outputFolder.getAbsolutePath() + "'." +
                     " The results are temporarily stored at " + Places.finalResultsDir.getAbsolutePath());
         }else{
-            System.out.println("Saved all results at " + analysisFile.outputFolder.getAbsolutePath());
+            System.out.println("Output directory is " + analysisFile.outputFolder.getAbsolutePath());
         }
     }
 

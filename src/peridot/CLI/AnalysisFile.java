@@ -59,10 +59,18 @@ public class AnalysisFile {
                 content += "#" + script + "\n";
             }
             content += AnalysisFileParser.endStr + "\n\n";
+
             content += AnalysisFileParser.paramsStartStr + "\n";
-            for(Map.Entry<String, Object> pair : AnalysisParameters.getDefaultValues().entrySet()){
-                content += pair.getValue().getClass().getSimpleName() + " "
-                        + pair.getKey() + "=" + pair.getValue().toString() + "\n";
+            Map<String, Object> defaultValues = AnalysisParameters.getDefaultValues();
+            for(Map.Entry<String, Class> entry : RScript.getRequiredParametersFromModules().entrySet()){
+                if(defaultValues.containsKey(entry.getKey())){
+                    content += entry.getValue().getSimpleName() + " "
+                            + entry.getKey() + "=" + defaultValues.get(entry.getKey()).toString() + "\n";
+                }else{
+                    content += entry.getValue().getSimpleName() + " "
+                            + entry.getKey() + "=INSERT_VALUE" + "\n";
+                }
+
             }
             content += AnalysisFileParser.endStr + "\n\n";
 

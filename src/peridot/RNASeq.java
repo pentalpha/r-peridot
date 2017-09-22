@@ -22,6 +22,7 @@ public class RNASeq {
     
     public RNASeq(File expressionFile, SortedMap<IndexedString, String> conditions, Info info) throws IOException{
         File newConditionsFile = new File(expressionFile.getAbsolutePath() + ".conditions");
+        this.conditions = conditions;
         createConditionsFile(newConditionsFile, conditions, false);
         defaultBuilderOperations(expressionFile, newConditionsFile, info);
     }
@@ -173,12 +174,12 @@ public class RNASeq {
         return map;
     }
     
-    public void writeFinalConditions(){
+    protected void writeFinalConditions(){
         RNASeq.createConditionsFile(Places.conditionInputFile, conditions, true);
     }
     
-    public static void createConditionsFile(File file, 
-            SortedMap<IndexedString, String> conditions, boolean makeHeader)
+    public static void createConditionsFile(File file,
+                                               SortedMap<IndexedString, String> conditions, boolean makeHeader)
     {
         try{
             if(file.exists() == true){
@@ -187,17 +188,27 @@ public class RNASeq {
             file.createNewFile();
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter buffWriter = new BufferedWriter(fileWriter);
+
             String text = "";
             if(makeHeader){
                 text += "sample\tcondition" + System.lineSeparator();
             }
+            /*String nameWithCondition, name, condition;
+            for(int i = 0; i < sampleNameWithCondition.length; i++){
+                nameWithCondition = sampleNameWithCondition[i];
+                int sepIndex = nameWithCondition.indexOf("-");
+                name = nameWithCondition.substring(sepIndex+1);
+                condition = nameWithCondition.substring(0, sepIndex-1);
+                text += name + "\t" + condition + System.lineSeparator();
+            }*/
             IndexedString[] sampleNames = conditions.keySet().toArray(new IndexedString[conditions.size()]);
-            Arrays.sort(sampleNames);
+            //Arrays.sort(sampleNames);
             for(int i = 0; i < sampleNames.length; i++){
                 String sampleName = Global.noSpaces(sampleNames[i].getText());
                 //Log.logger.info("With spaces: " + sampleNames[i].getText() + ", without: " + sampleName);
                 text += sampleName + "\t" + conditions.get(sampleNames[i]) + System.lineSeparator();
             }
+
             //Log.logger.info("printing:\n" + text);
             buffWriter.write(text);
             buffWriter.close();
@@ -210,6 +221,7 @@ public class RNASeq {
     public void writeExpression(){
         try{
             this.writeRNASeqWithoutConditions();
+            this.writeFinalConditions();
         }catch(Exception ex){
             ex.printStackTrace();
         }
@@ -226,13 +238,15 @@ public class RNASeq {
         FileWriter outputWriter = new FileWriter(newRNASeq);
         BufferedReader buffInput = new BufferedReader(inputReader);
         BufferedWriter buffOutput = new BufferedWriter(outputWriter);
-        
-        String[] sampleName = new String[conditions.size()];
+
+        IndexedString[] sampleNames = new IndexedString[conditions.size()];
+        String[] conditionNames = new String[conditions.size()];
         String[] sampleNameWithCondition = new String[conditions.size()];
-        for(int i = 0; i < sampleName.length; i++){
+        for(int i = 0; i < sampleNames.length; i++){
             for(Map.Entry<IndexedString, String> pair : conditions.entrySet()){
                 if(pair.getKey().getNumber() == i){
-                        sampleName[i] = pair.getKey().getText();
+                        sampleNames[i] = pair.getKey();
+                        conditionNames[i] = pair.getValue();
                         sampleNameWithCondition[i] = pair.getValue() + "-" + pair.getKey().getText();
                     break;
                 }
@@ -245,16 +259,35 @@ public class RNASeq {
         //Log.logger.info("Sorted conditions: ");
         //Global.printArray(sampleNameWithCondition);
         
-        int[] sampleNameNewIndex = new int[sampleName.length];
-        for(int i = 0; i < sampleName.length; i++)
+        int[] sampleNameNewIndex = new int[sampleNames.length];
+        for(int i = 0; i < sampleNames.length; i++)
         {
             for(int j = 0; j < sampleNameWithCondition.length; j++){
-                if(sampleNameWithCondition[j].contains("-" + sampleName[i])){
+                //System.out.println("-" + sampleNames[i].getText() + " in " + sampleNameWithCondition[j] + "?");
+                if(sampleNameWithCondition[j].contains("-" + sampleNames[i].getText())){
                     sampleNameNewIndex[i] = j;
                     break;
                 }
             }
         }
+
+        for(int j = 0; j < sampleNameWithCondition.length; j++){
+            for(int i = 0; i < sampleNames.length; i++) {
+                if (sampleNameWithCondition[j].contains("-" + sampleNames[i].getText())) {
+                    //Log.logger.info("Changing " + sampleNames[i] + " from " + sampleNames[i].getNumber()
+                    //+ " to " + j);
+                    sampleNames[i].setIndex(j);
+                    break;
+                }
+            }
+        }
+
+        SortedMap<IndexedString, String> newConditions = new TreeMap<>();
+        for(int i = 0; i < sampleNames.length; i++)
+        {
+            newConditions.put(sampleNames[i], conditionNames[i]);
+        }
+        //Arrays.sort(sampleNames);
         //Log.logger.info("New positions: ");
         //Global.printArray(sampleNameNewIndex);
         
@@ -323,5 +356,7 @@ public class RNASeq {
         inputReader.close();
         buffOutput.close();
         outputWriter.close();
+
+        conditions = newConditions;
     }
 }

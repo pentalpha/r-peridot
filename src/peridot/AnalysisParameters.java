@@ -93,8 +93,21 @@ public class AnalysisParameters {
         defaultValues.put("log2FoldChange", new Float(0.01));
         defaultValues.put("tops", new Integer(0));
         defaultValues.put("geneIdType", new GeneIdType("None"));
-
+        defaultValues.put("referenceOrganism", new Organism("Human"));
         return defaultValues;
+    }
+
+    //TODO
+    public static HashMap<String, Class> availableParamTypes = getAvailableParamTypes();
+
+    public static HashMap<String, Class> getAvailableParamTypes(){
+        HashMap<String, Class> classes = new HashMap<>();
+        classes.put(Integer.class.getSimpleName(), Integer.class);
+        classes.put(Float.class.getSimpleName(), Float.class);
+        classes.put(GeneIdType.class.getSimpleName(), GeneIdType.class);
+        classes.put(Organism.class.getSimpleName(), Organism.class);
+
+        return classes;
     }
 
     @Override

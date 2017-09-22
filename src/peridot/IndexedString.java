@@ -19,6 +19,10 @@ public class IndexedString implements Comparable<IndexedString>{
         this.number = number;
     }
 
+    public void setIndex(int newValue){
+        this.number = newValue;
+    }
+
     public String getText() {
         return text;
     }
