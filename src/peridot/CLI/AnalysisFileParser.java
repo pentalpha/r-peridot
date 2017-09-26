@@ -21,6 +21,10 @@ public class AnalysisFileParser {
     boolean hasConditions;
     boolean hasModules;
     boolean hasParams;
+
+    int threshold;
+    String roundingMode;
+
     File countReadsFile;
     File conditionsFile;
     File saveFolder;
@@ -125,7 +129,7 @@ public class AnalysisFileParser {
     public void setExpression() throws IOException{
         if(conditionsFile != null && countReadsFile != null && info.allInfoSet()){
             info.setFirstCellPresent(!info.getHeaderOnFirstLine() || !info.getLabelsOnFirstCol());
-            analysisFile.expression = new RNASeq(countReadsFile, conditionsFile, info);
+            analysisFile.expression = new AnalysisData(countReadsFile, conditionsFile, info, roundingMode, threshold);
             hasData = true;
             hasConditions = true;
         }
@@ -148,7 +152,7 @@ public class AnalysisFileParser {
             analysisFile.scriptsToExec = modules;
             hasModules = true;
         }else{
-            throw new ParseException("Error: No Analysis module was chosen.");
+            throw new ParseException("Error: No AnalysisData module was chosen.");
         }
     }
 
@@ -282,6 +286,12 @@ public class AnalysisFileParser {
         }else if(word.equals(headerOnFirstLineStr)){
             boolean value = Boolean.parseBoolean(second);
             info.setHeaderOnFirstLine(value);
+        }else if(word.equals(thresholdStr)){
+            int value = Integer.parseInt(second);
+            threshold = value;
+        }else if(word.equals(roundingModeStr)){
+            String value = second;
+            roundingMode = value;
         }else {
             Log.logger.warning("Unknown category: " + word + ". Ignoring.");
         }
@@ -300,6 +310,8 @@ public class AnalysisFileParser {
     public final static String labelsOnFirstColStr = "[labels]";
     public final static String headerOnFirstLineStr = "[header]";
     public final static String saveAtStr = "[output]";
+    public final static String thresholdStr = "[count-reads-threshold]";
+    public final static String roundingModeStr = "[rounding-mode]";
 
     public static class ParseException extends Exception{
         public ParseException(String message){

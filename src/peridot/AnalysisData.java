@@ -12,23 +12,42 @@ import java.util.Map.Entry;
  *
  * @author pentalpha
  */
-public class Analysis {
+public class AnalysisData {
     public Spreadsheet.Info info;
     public File conditionsFile, expressionFile;
     public SortedMap<IndexedString, String> conditions;
-    public Analysis(File expressionFile, File conditionsFile, Info info) throws IOException{
-        defaultBuilderOperations(expressionFile, conditionsFile, info);
+    protected int countReadsThreshold;
+    protected Global.RoundingMode roundMode;
+    public AnalysisData(File expressionFile, File conditionsFile, Info info, String roundMode,
+                        int countReadsThreshold) throws IOException
+    {
+        defaultBuilderOperations(expressionFile, conditionsFile, info, roundMode, countReadsThreshold);
     }
     
-    public Analysis(File expressionFile, SortedMap<IndexedString, String> conditions, Info info) throws IOException{
+    public AnalysisData(File expressionFile, SortedMap<IndexedString, String> conditions, Info info, String roundMode,
+                        int countReadsThreshold) throws IOException
+    {
         File newConditionsFile = new File(expressionFile.getAbsolutePath() + ".conditions");
         this.conditions = conditions;
         createConditionsFile(newConditionsFile, conditions, false);
-        defaultBuilderOperations(expressionFile, newConditionsFile, info);
+        defaultBuilderOperations(expressionFile, newConditionsFile, info, roundMode, countReadsThreshold);
     }
     
-    private void defaultBuilderOperations(File expressionFile, File conditionsFile, Info info)  throws IOException{
+    private void defaultBuilderOperations(File expressionFile, File conditionsFile, Info info, String roundMode,
+                                          int countReadsThreshold)  throws IOException
+    {
         this.info = info;
+        if(roundMode.equals("HALF_UP")){
+            this.roundMode = Global.RoundingMode.HALF_UP;
+        }else if(roundMode.equals("HALF_DOWN")){
+            this.roundMode = Global.RoundingMode.HALF_DOWN;
+        }else if(roundMode.equals("UP")){
+            this.roundMode = Global.RoundingMode.UP;
+        }else{
+            this.roundMode = Global.RoundingMode.DOWN;
+        }
+        this.countReadsThreshold = countReadsThreshold;
+
         if(Manager.fileExists(expressionFile.getAbsolutePath())){
             this.expressionFile = expressionFile;
         }else{
@@ -175,7 +194,7 @@ public class Analysis {
     }
     
     protected void writeFinalConditions(){
-        Analysis.createConditionsFile(Places.conditionInputFile, conditions, true);
+        AnalysisData.createConditionsFile(Places.conditionInputFile, conditions, true);
     }
     
     public static void createConditionsFile(File file,
@@ -318,21 +337,22 @@ public class Analysis {
         }
         
         int counter = 1;
+        int removeCounter = 0;
         while(line != null){
-            String[] lineSplitted = Global.splitWithTabOrCur(line);
+            String[] lineSplited = Global.splitWithTabOrCur(line);
             String[] values;
             String label;
             if(info.getLabelsOnFirstCol()){
-                label = lineSplitted[0];
-                values = new String[lineSplitted.length-1];
+                label = lineSplited[0];
+                values = new String[lineSplited.length-1];
                 for(int i = 0; i < values.length; i++){
-                    values[i] = lineSplitted[i+1];
+                    values[i] = lineSplited[i+1];
                 }
             }else{
                 label = "gene" + counter;
-                values = new String[lineSplitted.length];
+                values = new String[lineSplited.length];
                 for(int i = 0; i < values.length; i++){
-                    values[i] = lineSplitted[i];
+                    values[i] = lineSplited[i];
                 }
             }
             
@@ -340,13 +360,20 @@ public class Analysis {
             for(int i = 0; i < sortedValues.length; i++){
                 sortedValues[sampleNameNewIndex[i]] = values[i];
             }
-            
-            String lineToWrite = label;
-            for(int i = 0; i < sortedValues.length; i++){
-                lineToWrite += "\t" + sortedValues[i];
+            int[] intSortedValues = roundValues(sortedValues);
+            boolean eraseLine = filterValues(intSortedValues);
+            if(eraseLine){
+                removeCounter++;
+                Log.logger.info(label + " line dropped by threshold.");
+            }else{
+                String lineToWrite = label;
+                for(int i = 0; i < sortedValues.length; i++){
+                    lineToWrite += "\t" + intSortedValues[i];
+                }
+                buffOutput.write(lineToWrite);
+                buffOutput.newLine();
             }
-            buffOutput.write(lineToWrite);
-            buffOutput.newLine();
+
             
             line = buffInput.readLine();
             counter++;
@@ -357,6 +384,27 @@ public class Analysis {
         buffOutput.close();
         outputWriter.close();
 
+        Log.logger.info( (float)removeCounter/(float)counter + " of the lines dropped by threshold");
         conditions = newConditions;
+    }
+
+    protected int[] roundValues(String[] values){
+        int[] decimals = new int[values.length];
+        for (int i = 0; i < values.length; i++){
+            decimals[i] = Global.roundFloat(Float.parseFloat(values[i]), roundMode);
+            if(decimals[i] < countReadsThreshold){
+                decimals[i] = 0;
+            }
+        }
+        return decimals;
+    }
+
+    protected boolean filterValues(int[] values){
+        for (int i = 0; i < values.length; i++){
+            if(values[i] >= countReadsThreshold){
+                return false;
+            }
+        }
+        return true;
     }
 }

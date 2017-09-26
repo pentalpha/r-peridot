@@ -766,7 +766,7 @@ public class RScript implements Serializable{
             scripts.add(ebSeq);
             AnalysisScript edgeR = new RNASeqPackage("edgeR", "scriptEdgeR.R", false, false, true);
             edgeR.setInfo("From bioconductor.org:[LINE-BREAK]"
-                    + "edgeR: Empirical Analysis of Digital Gene Expression "
+                    + "edgeR: Empirical AnalysisData of Digital Gene Expression "
                     + "Data in R.[LINE-BREAK]Differential expression analysis of "
                     + "RNA-seq expression profiles with biological replication. "
                     + "Implements a range of statistical methodology based on the "
@@ -841,7 +841,7 @@ public class RScript implements Serializable{
                     new HashMap<String, Class>(), requiredExternalFiles,
                     results, requiredScripts);
             vennDiagram.setResultAsMandatory("Intersect.tsv");
-            vennDiagram.setInfo("VennDiagram: Reads the results from all Analysis "
+            vennDiagram.setInfo("VennDiagram: Reads the results from all AnalysisData "
                     + "Modules and creates Intersect.tsv (a spreadsheet file with "
                     + "the intersection of the selected reads) and a Venn Diagram "
                     + "plot these same results.");

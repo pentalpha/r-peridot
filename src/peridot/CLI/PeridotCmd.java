@@ -6,7 +6,7 @@ import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.Global;
 import peridot.Log;
-import peridot.RNASeq;
+import peridot.AnalysisData;
 import peridot.script.AnalysisScript;
 import peridot.script.PostAnalysisScript;
 import peridot.script.RScript;
@@ -33,7 +33,7 @@ public final class PeridotCmd {
 
     public static Task start(Set<String> scriptsToExec, AnalysisParameters params,
                              Map<String, AnalysisParameters> specificParams,
-                             RNASeq expression){
+                             AnalysisData expression){
         PeridotCmd.clean();
         RScript.removeScriptResults();
 
@@ -146,11 +146,11 @@ public final class PeridotCmd {
     }
 
     public static void listModules(){
-        System.out.println("\n- Analysis Modules: ");
+        System.out.println("\n- AnalysisData Modules: ");
         for(String name : RScript.getAvailablePackages()){
             System.out.println("\t" + name);
         }
-        System.out.println("\n- Post-Analysis Modules: ");
+        System.out.println("\n- Post-AnalysisData Modules: ");
         for(String name : RScript.getAvailablePostAnalysisScripts()){
             System.out.println("\t" + name);
         }

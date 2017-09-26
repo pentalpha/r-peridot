@@ -11,6 +11,7 @@ public class Main {
 
     public static AtomicBoolean finished;
     public static void main(String[] args) {
+
         finished = new AtomicBoolean(false);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {

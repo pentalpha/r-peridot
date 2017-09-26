@@ -5,10 +5,10 @@
  */
 package peridot.script;
 
+import peridot.AnalysisData;
 import peridot.AnalysisParameters;
 import peridot.Log;
 import peridot.Output;
-import peridot.RNASeq;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -28,7 +28,7 @@ public class Task {
     public Set<String> scriptsToExec; 
     public AnalysisParameters params;
     public Map<String, AnalysisParameters> specificParams;
-    public RNASeq expression;
+    public AnalysisData expression;
     
     public AtomicBoolean packagesFinishedFlag, abortAllFlag;
     //The actual status of the processing.
@@ -53,7 +53,7 @@ public class Task {
     
     public Task(Set<String> scriptsToExec, AnalysisParameters params,
                             Map<String, AnalysisParameters> specificParams,
-                            RNASeq expression)
+                            AnalysisData expression)
     {
         //_instance = this;
         this.scriptsToExec = scriptsToExec;

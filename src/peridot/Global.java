@@ -20,6 +20,12 @@ import java.util.logging.Level;
  * @author pentalpha
  */
 public final class Global {
+    enum RoundingMode {
+        HALF_UP,
+        HALF_DOWN,
+        UP,
+        DOWN
+    }
     private Global(){
         throw new AssertionError();
     }
@@ -266,5 +272,39 @@ public final class Global {
             }
         }
         return array;
+    }
+
+    public static int roundFloat(float x, RoundingMode roundingMode){
+        if(roundingMode == RoundingMode.DOWN){
+            return (int) Math.floor(x);
+        }else if (roundingMode == RoundingMode.UP){
+            return (int) Math.ceil(x);
+        }else {
+            int naturalPart = new Double(Math.floor(x)).intValue();
+            float fraction = x - naturalPart;
+            if (fraction < 0.5) {
+                return naturalPart;
+            }else if(fraction > 0.5){
+                return naturalPart+1;
+            }else{
+                if (roundingMode == RoundingMode.HALF_DOWN) {
+                    return naturalPart;
+                }else{
+                    return naturalPart+1;
+                }
+            }
+        }
+    }
+
+    public static void printRoundingTable(){
+        String str = "x\tUP\tDOWN\tHALF_UP\tHALF_DOWN\n";
+        float[] val = {0.1f, 0.25f, 0.5f, 0.75f, 1.0f, 3.1f, 3.25f, 3.5f, 3.75f, 4.0f};
+        for(int i = 0; i < val.length; i++){
+            str += val[i] + "\t" + roundFloat(val[i], RoundingMode.UP) +
+                    "\t" + roundFloat(val[i], RoundingMode.DOWN) +
+                    "\t" + roundFloat(val[i], RoundingMode.HALF_UP) +
+                    "\t" + roundFloat(val[i], RoundingMode.HALF_DOWN) + "\n";
+        }
+        System.out.println(str);
     }
 }

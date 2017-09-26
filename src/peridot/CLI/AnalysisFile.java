@@ -17,7 +17,7 @@ public class AnalysisFile {
     public Set<String> scriptsToExec;
     public AnalysisParameters params;
     public Map<String, AnalysisParameters> specificParams;
-    public RNASeq expression;
+    public AnalysisData expression;
     public File outputFolder;
 
     public AnalysisFile(File file){
@@ -43,9 +43,11 @@ public class AnalysisFile {
             String content = "";
             Spreadsheet.Info info = Spreadsheet.getInfo(countReadsFile);
             content += AnalysisFileParser.dataStr + " " + countReadsFile.getAbsolutePath() + "\n";
-            SortedMap<IndexedString, String> conditions = RNASeq.getConditionsFromExpressionFile(countReadsFile, info);
+            SortedMap<IndexedString, String> conditions = AnalysisData.getConditionsFromExpressionFile(countReadsFile, info);
             File condFile = new File(countReadsFile.getAbsolutePath() + ".conditions");
-            RNASeq.createConditionsFile(condFile, conditions, false);
+            AnalysisData.createConditionsFile(condFile, conditions, false);
+            content += AnalysisFileParser.thresholdStr + " 5\n";
+            content += AnalysisFileParser.roundingModeStr + " HALF_UP\n";
             content += AnalysisFileParser.integersOnlyStr + " " + (info.dataType == Spreadsheet.DataType.Int) + "\n";
             content += AnalysisFileParser.labelsOnFirstColStr + " " + info.getLabelsOnFirstCol() + "\n";
             content += AnalysisFileParser.headerOnFirstLineStr + " " + info.getHeaderOnFirstLine() + "\n\n";
@@ -101,6 +103,24 @@ public class AnalysisFile {
                 "# Specify count reads:\n" +
                 "[data] path/to/file.tsv\n" +
                 "### TSV and CSV are supported. #################\n\n";
+        string += "" +
+                "# Minimum count read value to be considered. ###\n" +
+                "# Lines without values equal/above are ignored #\n" +
+                AnalysisFileParser.thresholdStr + " Integer\n" +
+                "# The diff. expression packages require int ####\n" +
+                "# values, but the values at the count reads ####\n" +
+                "# can be real numbers. In that case, r-peridot #\n" +
+                "# rounds the number according to a rounding ####\n" +
+                "# rule: ########################################\n" +
+                "#     UP: Round away from zero #################\n" +
+                "#     DOWN: Round towards zero #################\n" +
+                "#     HALF_UP: Round to the closest integer ####\n" +
+                "#         but if the value ends with *.5, ######\n" +
+                "#         round UP. ############################\n" +
+                "#     HALF_DOWN: Round to the closest integer ##\n" +
+                "#         but if the value ends with *.5, ######\n" +
+                "#         round DOWN. ##########################\n" +
+                AnalysisFileParser.roundingModeStr + " HALF_UP|HALF_DOWN|UP|DOWN\n";
         string +="" +
                 "# Meta-data about the count reads file:\n" +
                 AnalysisFileParser.integersOnlyStr + " True|False\n" +
