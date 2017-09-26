@@ -27,9 +27,9 @@ public class Spreadsheet {
     /**
      * Types of values that can be found on the data: Integer or Rational
      */
-    public enum DataType{
-        Int, Float
-    }
+    //public enum DataType{
+      //  Int, Float
+    //}
 
     /**
      * @param line  line from a .csv or .tsv file.
@@ -231,11 +231,11 @@ public class Spreadsheet {
         }else{
             info.setHeaderOnFirstLine(true);
         }
-        if(Global.lineIsDoubles(Global.splitWithTabOrCur(line2))){
+        /*if(Global.lineIsDoubles(Global.splitWithTabOrCur(line2))){
             info.dataType = DataType.Float;
         }else{
             info.dataType = DataType.Int;
-        }
+        }*/
         info.setLabelsOnFirstCol(true);
         return info;
     }
@@ -247,7 +247,7 @@ public class Spreadsheet {
         /**
          * Rationals or Integers
          */
-        public DataType dataType;
+        //public DataType dataType;
         /**
          * If there are labels on the first column
          */
@@ -270,9 +270,9 @@ public class Spreadsheet {
          * @param firstCellPresent  If the first cell (line 0, column 0) has
          *                          a header, label or value on it.
          */
-        public Info(DataType dataType, boolean labelsOnFirstCol,
+        public Info(boolean labelsOnFirstCol,
                     boolean headerOnFirstLine, boolean firstCellPresent){
-            this.dataType = dataType;
+            //this.dataType = dataType;
             this.labelsOnFirstCol = new Boolean(labelsOnFirstCol);
             this.headerOnFirstLine = new Boolean(headerOnFirstLine);
             this.firstCellPresent = new Boolean(firstCellPresent);
@@ -288,7 +288,7 @@ public class Spreadsheet {
         public boolean allInfoSet(){
             return labelsOnFirstCol != null
                     && headerOnFirstLine != null
-                    && dataType != null;
+                    /*&& dataType != null*/;
         }
 
         public boolean getFirstCellPresent(){

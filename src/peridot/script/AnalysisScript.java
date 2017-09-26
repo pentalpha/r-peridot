@@ -19,12 +19,10 @@ public class AnalysisScript extends RScript{
     public AnalysisScript(String name, String scriptFile, boolean externalScript,
             Map<String, Class> requiredParameters, 
             Set<String> requiredExternalFiles,
-            Set<String> results,
-            boolean floatValuesToo)
+            Set<String> results)
     {
         super(name, scriptFile, externalScript, requiredParameters, 
-                requiredExternalFiles, results, new TreeSet<String>(),
-                floatValuesToo);
+                requiredExternalFiles, results, new TreeSet<String>());
     }
     
     public AnalysisScript(File dir) throws Exception{

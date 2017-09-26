@@ -273,13 +273,6 @@ public class AnalysisFileParser {
                 throw new ParseException("The output directory " +
                         "'" + saveFolder.getAbsolutePath() + "' does not exist.");
             }
-        }else if(word.equals(integersOnlyStr)){
-            boolean value = Boolean.parseBoolean(second);
-            if(value) {
-                info.dataType = Spreadsheet.DataType.Int;
-            }else{
-                info.dataType = Spreadsheet.DataType.Float;
-            }
         }else if(word.equals(labelsOnFirstColStr)){
             boolean value = Boolean.parseBoolean(second);
             info.setLabelsOnFirstCol(value);
@@ -306,7 +299,6 @@ public class AnalysisFileParser {
     public final static String endStr = "[/end]";
     public final static String paramEqualStr = "=";
     public final static String paramModSeparator = "::";
-    public final static String integersOnlyStr = "[only-integers]";
     public final static String labelsOnFirstColStr = "[labels]";
     public final static String headerOnFirstLineStr = "[header]";
     public final static String saveAtStr = "[output]";

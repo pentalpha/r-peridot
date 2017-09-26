@@ -44,7 +44,6 @@ public class RScript implements Serializable{
     public boolean environmentCreated;
     public boolean nonDefaultScript;
     public boolean max2Conditions;
-    public boolean canHandleFloatValues;
     public boolean mandatoryFailed;
     public String info = null;
     public static Map<String, Class> availableParamTypes = defineAvailableParamTypes();
@@ -58,10 +57,8 @@ public class RScript implements Serializable{
             Map<String, Class> requiredParameters, 
             Set<String> requiredExternalFiles,
             Set<String> results,
-            Set<String> requiredScripts,
-            boolean canHandleFloatValues)
+            Set<String> requiredScripts)
     {
-        this.canHandleFloatValues = canHandleFloatValues;
         this.max2Conditions = false;
         this.nonDefaultScript = externalScript;
         this.name = name;
@@ -96,6 +93,7 @@ public class RScript implements Serializable{
         this.requiredScripts = new TreeSet<String>();
         this.requiredParameters = new TreeMap<String, Class>();
         this.requiredExternalFiles = new TreeSet<String>();
+        this.info = "";
         
         File descriptionFile = new File(dir.getAbsolutePath() + File.separator
                                 + "description");
@@ -113,63 +111,60 @@ public class RScript implements Serializable{
             String category;
             String value;
             String value2;
-            category = words[0];
-            value = words[1];
-            if(words.length == 2)
-            {
-                if(category.equals("[NAME]"))
+            if (words.length > 1){
+                category = words[0];
+                value = words[1];
+                if(words.length == 2)
                 {
-                    this.name = value;
-                }else if(category.equals("[EXTERNAL-SCRIPT]")){
-                    this.nonDefaultScript = Boolean.parseBoolean(value);
-                }
-                else if(category.equals("[SCRIPT-NAME]"))
-                {
-                    this.scriptName = value;
-                }
-                else if(category.equals("[RESULT]"))
-                {
-                    this.results.add(value);
-                }
-                else if(category.equals("[MANDATORY-RESULT]"))
-                {
-                    this.results.add(value);
-                    this.mandatoryResults.add(value);
-                }
-                else if(category.equals("[REQUIRED-INPUT-FILE]"))
-                {
-                    this.requiredExternalFiles.add(value);
-                }
-                else if(category.equals("[REQUIRED-SCRIPT]"))
-                {
-                    this.requiredScripts.add(value);
-                }
-                else if(category.equals("[MAX-2-CONDITIONS]"))
-                {
-                    this.max2Conditions = Boolean.parseBoolean(value);
-                }
-                else if(category.equals("[CAN-HANDLE-FLOAT]")){
-                    this.canHandleFloatValues = Boolean.parseBoolean(value);
-                }
-                else if(category.equals("[INFO]")){
-                    
-                    this.info = value;
-                }
-                else
-                {
-                    throw new Exception("Unknown category: " + category);
-                }
-                
-            }
-            else if(words.length == 3)
-            {
-                value2 = words[2];
+                    if(category.equals("[NAME]"))
+                    {
+                        this.name = value;
+                    }else if(category.equals("[EXTERNAL-SCRIPT]")){
+                        this.nonDefaultScript = Boolean.parseBoolean(value);
+                    }
+                    else if(category.equals("[SCRIPT-NAME]"))
+                    {
+                        this.scriptName = value;
+                    }
+                    else if(category.equals("[RESULT]"))
+                    {
+                        this.results.add(value);
+                    }
+                    else if(category.equals("[MANDATORY-RESULT]"))
+                    {
+                        this.results.add(value);
+                        this.mandatoryResults.add(value);
+                    }
+                    else if(category.equals("[REQUIRED-INPUT-FILE]"))
+                    {
+                        this.requiredExternalFiles.add(value);
+                    }
+                    else if(category.equals("[REQUIRED-SCRIPT]"))
+                    {
+                        this.requiredScripts.add(value);
+                    }
+                    else if(category.equals("[MAX-2-CONDITIONS]"))
+                    {
+                        this.max2Conditions = Boolean.parseBoolean(value);
+                    }
+                    else if(category.equals("[INFO]")){
+                        this.info += value + "\n";
+                    }
+                    else
+                    {
+                        throw new Exception("Unknown category: " + category);
+                    }
 
-                if(category.equals("[REQUIRED-PARAMETER]"))
+                }
+                else if(words.length == 3)
                 {
-                    if(AnalysisParameters.availableParamTypes.keySet().contains(value2)){
-                        this.requiredParameters.put(value, AnalysisParameters.availableParamTypes.get(value2));
-                    }/*
+                    value2 = words[2];
+
+                    if(category.equals("[REQUIRED-PARAMETER]"))
+                    {
+                        if(AnalysisParameters.availableParamTypes.keySet().contains(value2)){
+                            this.requiredParameters.put(value, AnalysisParameters.availableParamTypes.get(value2));
+                        }/*
                     if(value2.equals("Integer")){
                         this.requiredParameters.put(value, Integer.class);
                     }
@@ -186,19 +181,25 @@ public class RScript implements Serializable{
                         this.requiredParameters.put(value, GeneIdType.class);
                     }
                     */else
+                        {
+                            throw new Exception("Unknown parameter type: " + value2);
+                        }
+                    }
+                    else
                     {
-                        throw new Exception("Unknown parameter type: " + value2);
+                        throw new Exception("Unknown category: " + category);
                     }
                 }
                 else
                 {
-                    throw new Exception("Unknown category: " + category);
+                    throw new Exception("Number of words in line different from 2 or 3: " + words.length
+                            + ". In:\n" + line + "\nModule: " + dir.getAbsolutePath());
                 }
+            }else{
+                throw new Exception("Number of words in line different from 2 or 3: " + words.length
+                        + ". In:\n" + line + "\nModule: " + dir.getAbsolutePath());
             }
-            else
-            {
-                throw new Exception("Number of words different from 2 or 3: " + words.length + ". In:\n" + line);
-            }
+
             line = reader.readLine();
         }
         
@@ -233,7 +234,6 @@ public class RScript implements Serializable{
         writer.write("[EXTERNAL-SCRIPT]\t" + this.nonDefaultScript + System.lineSeparator());
         writer.write("[SCRIPT-NAME]\t" + this.scriptName + System.lineSeparator());
         writer.write("[MAX-2-CONDITIONS]\t" + this.max2Conditions + System.lineSeparator());
-        writer.write("[CAN-HANDLE-FLOAT]\t" + this.canHandleFloatValues + System.lineSeparator());
         for(String result : this.results){
             if(mandatoryResults.contains(result)){
                 writer.write("[MANDATORY-RESULT]\t"+ result + System.lineSeparator());
@@ -756,7 +756,7 @@ public class RScript implements Serializable{
             LinkedList<RScript> scripts = new LinkedList<>();
             //Package deSeq = new RNASeqPackage("DESeq", "scriptDESeq.R", false);
             //scripts.add(deSeq);
-            AnalysisScript ebSeq = new RNASeqPackage("EBSeq", "scriptEBSeq.R", false, true, true);
+            AnalysisScript ebSeq = new RNASeqPackage("EBSeq", "scriptEBSeq.R", false, true);
             ebSeq.setInfo("From bioconductor.org:[LINE-BREAK]"
                     + "EBSeq: An R package for gene and isoform differential "
                     + "expression analysis of RNA-seq data.[LINE-BREAK]Differential "
@@ -764,7 +764,7 @@ public class RScript implements Serializable{
                     + "RNA-seq data.[LINE-BREAK]Author: Ning Leng, Christina Kendziorski."
                     + "[LINE-BREAK]Maintainer: Ning Leng <lengning1 at gmail.com>.");
             scripts.add(ebSeq);
-            AnalysisScript edgeR = new RNASeqPackage("edgeR", "scriptEdgeR.R", false, false, true);
+            AnalysisScript edgeR = new RNASeqPackage("edgeR", "scriptEdgeR.R", false, false);
             edgeR.setInfo("From bioconductor.org:[LINE-BREAK]"
                     + "edgeR: Empirical AnalysisData of Digital Gene Expression "
                     + "Data in R.[LINE-BREAK]Differential expression analysis of "
@@ -783,7 +783,7 @@ public class RScript implements Serializable{
                     + "<alun at wehi.edu.au>, Mark Robinson <mark.robinson at imls.uzh.ch>, "
                     + "Davis McCarthy <dmccarthy at wehi.edu.au>, Gordon Smyth <smyth at wehi.edu.au>");
             scripts.add(edgeR);
-            AnalysisScript sseq = new RNASeqPackage("sSeq", "scriptSeq.R", false, false, true);
+            AnalysisScript sseq = new RNASeqPackage("sSeq", "scriptSeq.R", false, false);
             sseq.setInfo("From bioconductor.org:[LINE-BREAK]"
                     + "sSeq: Shrinkage estimation of dispersion in Negative "
                     + "Binomial models for RNA-seq experiments with small sample "
@@ -804,7 +804,7 @@ public class RScript implements Serializable{
                     + "embl.de> and Olga Vitek <ovitek at purdue.edu>"
                     + "[LINE-BREAK]Maintainer: Danni Yu <dyu at purdue.edu>");
             scripts.add(sseq);
-            AnalysisScript deSeq = new RNASeqPackage("DESeq", "scriptDESeq.R", false, true, false);
+            AnalysisScript deSeq = new RNASeqPackage("DESeq", "scriptDESeq.R", false, true);
             deSeq.setInfo("From bioconductor.org:[LINE-BREAK]"
                     + "DESeq: Differential gene expression analysis based on "
                     + "the negative binomial distribution.[LINE-BREAK]Estimate "
@@ -814,7 +814,7 @@ public class RScript implements Serializable{
                     + "[LINE-BREAK]Author: Simon Anders, EMBL Heidelberg <sanders at fs.tum.de>."
                     + "[LINE-BREAK]Maintainer: Simon Anders <sanders at fs.tum.de>.");
             scripts.add(deSeq);
-            AnalysisScript deSeq2 = new RNASeqPackage("DESeq2", "scriptDESeq2.R", false, false, true);
+            AnalysisScript deSeq2 = new RNASeqPackage("DESeq2", "scriptDESeq2.R", false, false);
             deSeq2.setInfo("From bioconductor.org:[LINE-BREAK]"
                     + "DESeq2: Differential gene expression analysis based "
                     + "on the negative binomial distribution.[LINE-BREAK]Estimate "

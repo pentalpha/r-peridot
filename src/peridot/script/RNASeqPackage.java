@@ -21,10 +21,10 @@ import java.util.TreeSet;
  */
 public class RNASeqPackage extends AnalysisScript {
     public RNASeqPackage(String name, String scriptPath, boolean externalScript, 
-            boolean max2Conditions, boolean canDoFloatToo)
+            boolean max2Conditions)
     {
         super(name, scriptPath, externalScript, getDefaultParameters(), getDefaultRequiredFiles(), 
-              getDefaultResults(), canDoFloatToo);
+              getDefaultResults());
         this.max2Conditions = max2Conditions;
         this.setResultAsMandatory("res.tsv");
     }

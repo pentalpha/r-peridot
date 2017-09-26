@@ -48,7 +48,7 @@ public class AnalysisFile {
             AnalysisData.createConditionsFile(condFile, conditions, false);
             content += AnalysisFileParser.thresholdStr + " 5\n";
             content += AnalysisFileParser.roundingModeStr + " HALF_UP\n";
-            content += AnalysisFileParser.integersOnlyStr + " " + (info.dataType == Spreadsheet.DataType.Int) + "\n";
+            //content += AnalysisFileParser.integersOnlyStr + " " + (info.dataType == Spreadsheet.DataType.Int) + "\n";
             content += AnalysisFileParser.labelsOnFirstColStr + " " + info.getLabelsOnFirstCol() + "\n";
             content += AnalysisFileParser.headerOnFirstLineStr + " " + info.getHeaderOnFirstLine() + "\n\n";
             content += AnalysisFileParser.conditionsStr + " " + condFile.getAbsolutePath() + "\n\n";
@@ -100,13 +100,14 @@ public class AnalysisFile {
                 "# Comments start with '#'\n";
 
         string += "" +
-                "# Specify count reads:\n" +
-                "[data] path/to/file.tsv\n" +
-                "### TSV and CSV are supported. #################\n\n";
+                "[data] path/to/file\n" +
+                "# Specify count reads table file. ##############\n" +
+                "# Only .tsv and .csv are supported. ############\n\n";
         string += "" +
+                AnalysisFileParser.thresholdStr + " Integer\n" +
                 "# Minimum count read value to be considered. ###\n" +
                 "# Lines without values equal/above are ignored #\n" +
-                AnalysisFileParser.thresholdStr + " Integer\n" +
+                AnalysisFileParser.roundingModeStr + " HALF_UP|HALF_DOWN|UP|DOWN\n" +
                 "# The diff. expression packages require int ####\n" +
                 "# values, but the values at the count reads ####\n" +
                 "# can be real numbers. In that case, r-peridot #\n" +
@@ -119,13 +120,12 @@ public class AnalysisFile {
                 "#         round UP. ############################\n" +
                 "#     HALF_DOWN: Round to the closest integer ##\n" +
                 "#         but if the value ends with *.5, ######\n" +
-                "#         round DOWN. ##########################\n" +
-                AnalysisFileParser.roundingModeStr + " HALF_UP|HALF_DOWN|UP|DOWN\n";
+                "#         round DOWN. ##########################\n";
         string +="" +
                 "# Meta-data about the count reads file:\n" +
-                AnalysisFileParser.integersOnlyStr + " True|False\n" +
-                "# True if there are only integers on the file, #\n" +
-                "# False otherwise. #############################\n" +
+                //AnalysisFileParser.integersOnlyStr + " True|False\n" +
+                //"# True if there are only integers on the file, #\n" +
+                //"# False otherwise. #############################\n" +
                 AnalysisFileParser.labelsOnFirstColStr + " True|False\n" +
                 "# True if there are labels on the first column,#\n" +
                 "# False otherwise. #############################\n" +

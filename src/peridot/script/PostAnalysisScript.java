@@ -21,7 +21,7 @@ public class PostAnalysisScript extends RScript{
             Set<String> requiredScripts)
     {
         super(name, scriptFile, externalScript, requiredParameters, 
-                requiredExternalFiles, results, requiredScripts, true);
+                requiredExternalFiles, results, requiredScripts);
     }
     
     public PostAnalysisScript(File dir) throws Exception{

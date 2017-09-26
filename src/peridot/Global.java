@@ -20,7 +20,7 @@ import java.util.logging.Level;
  * @author pentalpha
  */
 public final class Global {
-    enum RoundingMode {
+    public enum RoundingMode {
         HALF_UP,
         HALF_DOWN,
         UP,
