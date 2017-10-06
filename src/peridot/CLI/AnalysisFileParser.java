@@ -269,9 +269,9 @@ public class AnalysisFileParser {
                 throw new ParseException("The output directory " +
                         "'" + saveFolder.getAbsolutePath() + "' is a file, not a directory.");
             }
-            if(saveFolder.exists() == false){
+            if(saveFolder.getParentFile().exists() == false){
                 throw new ParseException("The output directory " +
-                        "'" + saveFolder.getAbsolutePath() + "' does not exist.");
+                        "'" + saveFolder.getParentFile().getAbsolutePath() + "' does not exist.");
             }
         }else if(word.equals(labelsOnFirstColStr)){
             boolean value = Boolean.parseBoolean(second);

@@ -170,7 +170,7 @@ public final class PeridotCmd {
                 File newSaveFolder = Manager.getAlternativeFileName(saveFolder);
                 return saveResultsAt(newSaveFolder);
             }
-            FileUtils.copyDirectoryToDirectory(Places.finalResultsDir, saveFolder);
+            FileUtils.copyDirectory(Places.finalResultsDir, saveFolder);
             return true;
         } catch (Exception ex) {
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
