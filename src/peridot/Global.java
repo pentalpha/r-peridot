@@ -8,9 +8,13 @@ package peridot;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import peridot.Archiver.Places;
+import peridot.CLI.AnalysisFile;
+import peridot.CLI.AnalysisFileParser;
+import peridot.script.RScript;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;

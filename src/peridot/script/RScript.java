@@ -11,6 +11,7 @@ import peridot.AnalysisParameters;
 import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.GeneIdType;
+import peridot.Global;
 import peridot.Log;
 
 import java.io.*;
@@ -254,7 +255,21 @@ public class RScript implements Serializable{
             String className = pair.getValue().getSimpleName();
             writer.write("[REQUIRED-PARAMETER]\t"+ pair.getKey() + "\t" + className + System.lineSeparator());
         }
-        writer.write("[INFO]\t" + this.info + System.lineSeparator());
+        String infoStr = "[INFO]\t";
+        String[] linesRaw = this.info.split("\n");
+        ArrayList<String> lines = new ArrayList<>();
+        for(int i = 0; i < linesRaw.length; i++){
+            String line = linesRaw[i];
+            if(line.length() > 0){
+                if(!(line.length() == 1 && line.equals("\t"))){
+                    lines.add(line.replace(infoStr, ""));
+                }
+            }
+        }
+
+        for(String line : lines){
+            writer.write(infoStr + line + System.lineSeparator());
+        }
         
         writer.close();
         fileWriter.close();
@@ -749,160 +764,6 @@ public class RScript implements Serializable{
             }
         }
         return params;
-    }
-    
-    public static boolean makeDefaultScriptsFolders(){
-        try{
-            LinkedList<RScript> scripts = new LinkedList<>();
-            //Package deSeq = new RNASeqPackage("DESeq", "scriptDESeq.R", false);
-            //scripts.add(deSeq);
-            AnalysisScript ebSeq = new RNASeqPackage("EBSeq", "scriptEBSeq.R", false, true);
-            ebSeq.setInfo("From bioconductor.org:[LINE-BREAK]"
-                    + "EBSeq: An R package for gene and isoform differential "
-                    + "expression analysis of RNA-seq data.[LINE-BREAK]Differential "
-                    + "Expression analysis at both gene and isoform level using "
-                    + "RNA-seq data.[LINE-BREAK]Author: Ning Leng, Christina Kendziorski."
-                    + "[LINE-BREAK]Maintainer: Ning Leng <lengning1 at gmail.com>.");
-            scripts.add(ebSeq);
-            AnalysisScript edgeR = new RNASeqPackage("edgeR", "scriptEdgeR.R", false, false);
-            edgeR.setInfo("From bioconductor.org:[LINE-BREAK]"
-                    + "edgeR: Empirical AnalysisData of Digital Gene Expression "
-                    + "Data in R.[LINE-BREAK]Differential expression analysis of "
-                    + "RNA-seq expression profiles with biological replication. "
-                    + "Implements a range of statistical methodology based on the "
-                    + "negative binomial distributions, including empirical Bayes "
-                    + "estimation, exact tests, generalized linear models and quasi-likelihood "
-                    + "tests. As well as RNA-seq, it be applied to differential "
-                    + "signal analysis of other types of genomic data that produce "
-                    + "counts, including ChIP-seq, SAGE and CAGE.[LINE-BREAK]Author: "
-                    + "Yunshun Chen <yuchen at wehi.edu.au>, Aaron Lun <alun at "
-                    + "wehi.edu.au>, Davis McCarthy <dmccarthy at wehi.edu.au>, "
-                    + "Xiaobei Zhou <xiaobei.zhou at uzh.ch>, Mark Robinson <mark.robinson "
-                    + "at imls.uzh.ch>, Gordon Smyth <smyth at wehi.edu.au>[LINE-BREAK]"
-                    + "Maintainer: Yunshun Chen <yuchen at wehi.edu.au>, Aaron Lun "
-                    + "<alun at wehi.edu.au>, Mark Robinson <mark.robinson at imls.uzh.ch>, "
-                    + "Davis McCarthy <dmccarthy at wehi.edu.au>, Gordon Smyth <smyth at wehi.edu.au>");
-            scripts.add(edgeR);
-            AnalysisScript sseq = new RNASeqPackage("sSeq", "scriptSeq.R", false, false);
-            sseq.setInfo("From bioconductor.org:[LINE-BREAK]"
-                    + "sSeq: Shrinkage estimation of dispersion in Negative "
-                    + "Binomial models for RNA-seq experiments with small sample "
-                    + "size.[LINE-BREAK]The purpose of this package is to discover "
-                    + "the genes that are differentially expressed between two "
-                    + "conditions in RNA-seq experiments. Gene expression is "
-                    + "measured in counts of transcripts and modeled with the "
-                    + "Negative Binomial (NB) distribution using a shrinkage "
-                    + "approach for dispersion estimation. The method of moment "
-                    + "(MM) estimates for dispersion are shrunk towards an "
-                    + "estimated target, which minimizes the average squared "
-                    + "difference between the shrinkage estimates and the initial "
-                    + "estimates. The exact per-gene probability under the NB "
-                    + "model is calculated, and used to test the hypothesis that "
-                    + "the expected expression of a gene in two conditions "
-                    + "identically follow a NB distribution.[LINE-BREAK]Author: "
-                    + "Danni Yu <dyu at purdue.edu>, Wolfgang Huber <whuber at "
-                    + "embl.de> and Olga Vitek <ovitek at purdue.edu>"
-                    + "[LINE-BREAK]Maintainer: Danni Yu <dyu at purdue.edu>");
-            scripts.add(sseq);
-            AnalysisScript deSeq = new RNASeqPackage("DESeq", "scriptDESeq.R", false, true);
-            deSeq.setInfo("From bioconductor.org:[LINE-BREAK]"
-                    + "DESeq: Differential gene expression analysis based on "
-                    + "the negative binomial distribution.[LINE-BREAK]Estimate "
-                    + "variance-mean dependence in count data from high-throughput "
-                    + "sequencing assays and test for differential expression "
-                    + "based on a model using the negative binomial distribution"
-                    + "[LINE-BREAK]Author: Simon Anders, EMBL Heidelberg <sanders at fs.tum.de>."
-                    + "[LINE-BREAK]Maintainer: Simon Anders <sanders at fs.tum.de>.");
-            scripts.add(deSeq);
-            AnalysisScript deSeq2 = new RNASeqPackage("DESeq2", "scriptDESeq2.R", false, false);
-            deSeq2.setInfo("From bioconductor.org:[LINE-BREAK]"
-                    + "DESeq2: Differential gene expression analysis based "
-                    + "on the negative binomial distribution.[LINE-BREAK]Estimate "
-                    + "variance-mean dependence in count data from high-throughput "
-                    + "sequencing assays and test for differential expression "
-                    + "based on a model using the negative binomial distribution."
-                    + "[LINE-BREAK]Author: Michael Love, Simon Anders, Wolfgang "
-                    + "Huber.[LINE-BREAK]Maintainer: Michael Love "
-                    + "<michaelisaiahlove at gmail.com>.");
-            scripts.add(deSeq2);
-            
-            Set<String> requiredScripts;
-            Set<String> requiredExternalFiles;
-            Set<String> results;
-            
-            requiredScripts = new TreeSet<String>();
-            requiredExternalFiles = new TreeSet<String>();
-            //requiredExternalFiles.add(Places.countReadsInputFileName);
-            results = new TreeSet<String>();
-            results.add("Intersect.tsv");
-            results.add("plots.pdf");
-            results.add("vennDiagramPlot.png");
-            PostAnalysisScript vennDiagram = new PostAnalysisScript("VennDiagram", "vennDiagram.R", false, 
-                    new HashMap<String, Class>(), requiredExternalFiles,
-                    results, requiredScripts);
-            vennDiagram.setResultAsMandatory("Intersect.tsv");
-            vennDiagram.setInfo("VennDiagram: Reads the results from all AnalysisData "
-                    + "Modules and creates Intersect.tsv (a spreadsheet file with "
-                    + "the intersection of the selected reads) and a Venn Diagram "
-                    + "plot these same results.");
-            scripts.add(vennDiagram);
-            
-            requiredScripts = new TreeSet<String>();
-            requiredExternalFiles = new TreeSet<String>();
-            //requiredExternalFiles.add(Places.countReadsInputFileName);
-            //requiredExternalFiles.add(Places.conditionInputFileName);
-            results = new TreeSet<String>();
-            results.add("BoxPlot.png");
-            PostAnalysisScript boxPlot = new PostAnalysisScript("BoxPlot", "scriptBoxPlot.R", false, 
-                    new HashMap<String, Class>(), requiredExternalFiles,
-                    results, requiredScripts);
-            boxPlot.setInfo("BoxPlot: Produces box-and-whisker plot of each sample reads.");
-            scripts.add(boxPlot);
-            
-            requiredScripts = new TreeSet<String>();
-            requiredScripts.add(vennDiagram.name);
-            requiredExternalFiles = new TreeSet<String>();
-            requiredExternalFiles.add("VennDiagram.PostAnalysisScript"
-                    + File.separator + "Intersect.tsv");
-            results = new TreeSet<String>();
-            results.add("PCA.png");
-            results.add("NormalizedCounts.tsv");
-            results.add("Dendrogram.png");
-            results.add("HeatMap.png");
-            results.add("HeatMap.pdf");
-            results.add("aux1.pdf");
-            results.add("aux2.pdf");
-            PostAnalysisScript heatMap = new PostAnalysisScript("HeatMap", "Heatmap.R", false, 
-                    new HashMap<String, Class>(), requiredExternalFiles,
-                    results, requiredScripts);
-            heatMap.setResultAsMandatory("HeatMap.png");
-            heatMap.setInfo("HeatMap: Creates a normalized version of VennDiagram's "
-                    + "\"Intersect.tsv\", a Dendogram plot and a HeatMap plot.");
-            scripts.add(heatMap);
-            
-            PostAnalysisScript postOntology = new PostAnalysisOntology(
-                    "EnrichmentClusterProfiler", 
-                    "clusterProfiler.R", false);
-            postOntology.setInfo("From bioconductor.org:[LINE-BREAK]"
-                    + "ClusterProfiler: Statistical analysis and "
-                    + "visualization of functional profiles for genes and gene "
-                    + "clusters.[LINE-BREAK]This package implements methods to "
-                    + "analyze and visualize functional profiles (GO and KEGG) "
-                    + "of gene and gene clusters.[LINE-BREAK]Author: Guangchuang"
-                    + " Yu [aut, cre], Li-Gen Wang [ctb], Giovanni Dall'Olio [ctb] "
-                    + "(formula interface of compareCluster)[LINE-BREAK]"
-                    + "Maintainer: Guangchuang Yu <guangchuangyu at gmail.com>");
-            scripts.add(postOntology);
-            
-            for(RScript x : scripts){
-                x.createEnvironment(null);
-            }
-            return true;
-        }catch(Exception ex){
-            Log.logger.info("erro");
-            ex.printStackTrace();
-            return false;
-        }
     }
     
     public void toBin(File file) throws IOException{

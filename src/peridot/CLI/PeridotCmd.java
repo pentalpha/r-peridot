@@ -135,7 +135,7 @@ public final class PeridotCmd {
         }
         File descriptionFile = s.getDescriptionFile();
         StringBuilder bString = peridot.Archiver.Manager.fileToString(descriptionFile);
-        System.out.println("Module details:\n" + bString.toString().replace("[LINE-BREAK]", "\n"));
+        System.out.println("Module details:\n" + bString.toString());
         System.out.println("Script file location: \n" + s.getScriptFile().getAbsolutePath());
     }
 

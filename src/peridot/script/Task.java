@@ -233,7 +233,7 @@ public class Task {
     private void checkForSuccess(String name){
         if(scriptExecs.get(name).successFlag.get()){
             successfulScripts.add(name);
-            Log.logger.info(name + " is sucessful");
+            Log.logger.info(name + " is successful");
         }else{
             Set<String> faileds = scriptExecs.get(name).script.getNotExistantResults();
             for(String result : faileds){
@@ -241,7 +241,7 @@ public class Task {
                 this.failedResults.add(result);
             }
             failedScripts.add(name);
-            Log.logger.info(name + " is not sucessful");
+            Log.logger.info(name + " is not successful");
         }
     }
     

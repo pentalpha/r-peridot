@@ -224,8 +224,11 @@ public class AnalysisData {
             //Arrays.sort(sampleNames);
             for(int i = 0; i < sampleNames.length; i++){
                 String sampleName = Global.noSpaces(sampleNames[i].getText());
+                String conditionName = conditions.get(sampleNames[i]);
                 //Log.logger.info("With spaces: " + sampleNames[i].getText() + ", without: " + sampleName);
-                text += sampleName + "\t" + conditions.get(sampleNames[i]) + System.lineSeparator();
+                if(!conditionName.equals("not-use")){
+                    text += sampleName + "\t" + conditionName + System.lineSeparator();
+                }
             }
 
             //Log.logger.info("printing:\n" + text);
@@ -239,14 +242,14 @@ public class AnalysisData {
     
     public void writeExpression(){
         try{
-            this.writeRNASeqWithoutConditions();
+            this.writeCountReadsWithoutConditions();
             this.writeFinalConditions();
         }catch(Exception ex){
             ex.printStackTrace();
         }
     }
     
-    private void writeRNASeqWithoutConditions() throws IOException{
+    private void writeCountReadsWithoutConditions() throws IOException{
         File newRNASeq = Places.countReadsInputFile;
         if(newRNASeq.exists()){
             newRNASeq.delete();
@@ -324,10 +327,12 @@ public class AnalysisData {
         
         String firstLine = "gene-id\t";
         for(int i = 0; i < sortedSampleName.length; i++){
-           firstLine += sortedSampleName[i];
-           if(i != sortedSampleName.length-1){
-               firstLine += "\t";
-           }
+            if(!sortedSampleName[i].equals("not-use")){
+                firstLine += sortedSampleName[i];
+                if(i != sortedSampleName.length-1){
+                    firstLine += "\t";
+                }
+            }
         }
         buffOutput.write(firstLine);
         buffOutput.newLine();
@@ -360,14 +365,14 @@ public class AnalysisData {
             for(int i = 0; i < sortedValues.length; i++){
                 sortedValues[sampleNameNewIndex[i]] = values[i];
             }
-            int[] intSortedValues = roundValues(sortedValues);
+            int[] intSortedValues = roundValuesAndEraseNotUse(sortedValues, sortedSampleName);
             boolean eraseLine = filterValues(intSortedValues);
             if(eraseLine){
                 removeCounter++;
                 Log.logger.info(label + " line dropped by threshold.");
             }else{
                 String lineToWrite = label;
-                for(int i = 0; i < sortedValues.length; i++){
+                for(int i = 0; i < intSortedValues.length; i++){
                     lineToWrite += "\t" + intSortedValues[i];
                 }
                 buffOutput.write(lineToWrite);
@@ -388,12 +393,24 @@ public class AnalysisData {
         conditions = newConditions;
     }
 
-    protected int[] roundValues(String[] values){
-        int[] decimals = new int[values.length];
+    protected int[] roundValuesAndEraseNotUse(String[] values, String[] names){
+        boolean[] isUsable = new boolean[values.length];
+        int usableCount = 0;
         for (int i = 0; i < values.length; i++){
-            decimals[i] = Global.roundFloat(Float.parseFloat(values[i]), roundMode);
-            if(decimals[i] < countReadsThreshold){
-                decimals[i] = 0;
+            isUsable[i] = !(names[i].equals("not-use"));
+            if(isUsable[i]){
+                usableCount++;
+            }
+        }
+        int[] decimals = new int[usableCount];
+        int decimalsIndex = 0;
+        for (int i = 0; i < values.length; i++){
+            if(isUsable[i]){
+                decimals[decimalsIndex] = Global.roundFloat(Float.parseFloat(values[i]), roundMode);
+                if(decimals[decimalsIndex] < countReadsThreshold){
+                    decimals[decimalsIndex] = 0;
+                }
+                decimalsIndex++;
             }
         }
         return decimals;
