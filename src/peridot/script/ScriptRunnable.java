@@ -8,6 +8,7 @@ package peridot.script;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import peridot.Archiver.Places;
+import peridot.Global;
 import peridot.Log;
 
 import java.io.File;
@@ -59,6 +60,8 @@ public class ScriptRunnable implements Runnable {
                 throw new NullPointerException("Fatal Error: Failed to create "
                         + exec.script.name + "'s process.");
             }else{
+                exec.output.appendLine("Command line:\n" + Global.listOfWordsToLine(processBuilder.command())
+                                        + "\n---------------");
                 //Log.logger.info(exec.script.name + "'s process started.");
             }
             exec.afterStart();

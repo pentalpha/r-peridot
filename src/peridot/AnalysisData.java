@@ -28,9 +28,18 @@ public class AnalysisData {
                         int countReadsThreshold) throws IOException
     {
         File newConditionsFile = new File(expressionFile.getAbsolutePath() + ".conditions");
-        this.conditions = conditions;
-        createConditionsFile(newConditionsFile, conditions, false);
+        this.conditions = applyConditionsToExprFileSamples(expressionFile, info, conditions);
+        createConditionsFile(newConditionsFile, conditions, false, true);
         defaultBuilderOperations(expressionFile, newConditionsFile, info, roundMode, countReadsThreshold);
+    }
+
+    public static SortedMap<IndexedString, String> applyConditionsToExprFileSamples(File exprFile, Info info,
+                                                                                    SortedMap<IndexedString, String> cond){
+        SortedMap<IndexedString, String> conditions = AnalysisData.getConditionsFromExpressionFile(exprFile, info);
+        for(Map.Entry<IndexedString, String> entry : cond.entrySet()){
+            conditions.put(entry.getKey(), entry.getValue());
+        }
+        return conditions;
     }
     
     private void defaultBuilderOperations(File expressionFile, File conditionsFile, Info info, String roundMode,
@@ -194,11 +203,12 @@ public class AnalysisData {
     }
     
     protected void writeFinalConditions(){
-        AnalysisData.createConditionsFile(Places.conditionInputFile, conditions, true);
+        AnalysisData.createConditionsFile(Places.conditionInputFile, conditions, true, false);
     }
     
     public static void createConditionsFile(File file,
-                                               SortedMap<IndexedString, String> conditions, boolean makeHeader)
+                                            SortedMap<IndexedString, String> conditions,
+                                            boolean makeHeader, boolean writeNotUses)
     {
         try{
             if(file.exists() == true){
@@ -226,7 +236,7 @@ public class AnalysisData {
                 String sampleName = Global.noSpaces(sampleNames[i].getText());
                 String conditionName = conditions.get(sampleNames[i]);
                 //Log.logger.info("With spaces: " + sampleNames[i].getText() + ", without: " + sampleName);
-                if(!conditionName.equals("not-use")){
+                if(!conditionName.equals("not-use") || writeNotUses){
                     text += sampleName + "\t" + conditionName + System.lineSeparator();
                 }
             }
@@ -244,7 +254,7 @@ public class AnalysisData {
         try{
             this.writeCountReadsWithoutConditions();
             this.writeFinalConditions();
-        }catch(Exception ex){
+        }catch(IOException ex){
             ex.printStackTrace();
         }
     }
@@ -362,9 +372,15 @@ public class AnalysisData {
             }
             
             String[] sortedValues = new String[values.length];
-            for(int i = 0; i < sortedValues.length; i++){
-                sortedValues[sampleNameNewIndex[i]] = values[i];
+            try{
+                for(int i = 0; i < sortedValues.length; i++){
+                    sortedValues[sampleNameNewIndex[i]] = values[i];
+                }
+            }catch (java.lang.ArrayIndexOutOfBoundsException ex){
+                ex.printStackTrace();
+                Log.logger.severe("Less samples tham values!");
             }
+
             int[] intSortedValues = roundValuesAndEraseNotUse(sortedValues, sortedSampleName);
             boolean eraseLine = filterValues(intSortedValues);
             if(eraseLine){

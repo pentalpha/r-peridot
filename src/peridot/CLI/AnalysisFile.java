@@ -45,7 +45,7 @@ public class AnalysisFile {
             content += AnalysisFileParser.dataStr + " " + countReadsFile.getAbsolutePath() + "\n";
             SortedMap<IndexedString, String> conditions = AnalysisData.getConditionsFromExpressionFile(countReadsFile, info);
             File condFile = new File(countReadsFile.getAbsolutePath() + ".conditions");
-            AnalysisData.createConditionsFile(condFile, conditions, false);
+            AnalysisData.createConditionsFile(condFile, conditions, false, true);
             content += AnalysisFileParser.thresholdStr + " 5\n";
             content += AnalysisFileParser.roundingModeStr + " HALF_UP\n";
             //content += AnalysisFileParser.integersOnlyStr + " " + (info.dataType == Spreadsheet.DataType.Int) + "\n";

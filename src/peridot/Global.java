@@ -15,6 +15,7 @@ import peridot.script.RScript;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -311,4 +312,13 @@ public final class Global {
         }
         System.out.println(str);
     }
+
+    public static String listOfWordsToLine(List<String> words){
+        String s = "";
+        for(String str : words){
+            s+=str + " ";
+        }
+        return s;
+    }
+
 }
