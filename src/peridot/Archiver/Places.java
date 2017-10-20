@@ -6,7 +6,7 @@
 package peridot.Archiver;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
+//import org.apache.commons.lang3.SystemUtils;
 import peridot.Log;
 import java.io.File;
 import java.net.URI;
@@ -211,7 +211,7 @@ public final class Places {
         File localRPortable = new File(jarFolder.getAbsolutePath() + File.separator
                 + "r-portable");
 
-        if(SystemUtils.IS_OS_LINUX){
+        if(org.apache.commons.lang3.SystemUtils.IS_OS_LINUX){
             File file = new File("/opt/r-peridot/r-portable");
             if (file.exists()){
                 return file;
@@ -268,14 +268,14 @@ public final class Places {
      */
     public static File getRExec(){
         boolean is64Bits = false;
-        if(SystemUtils.OS_ARCH.contains("64")){
+        if(org.apache.commons.lang3.SystemUtils.OS_ARCH.contains("64")){
             is64Bits = true;
         }
         String path1 = "";
         String path2 = "";
         if(Places.rPortableDir != null){
             path1 = rPortableDir.getAbsolutePath() + File.separator + "bin";
-            if(SystemUtils.IS_OS_WINDOWS){
+            if(org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS){
                 path2 = rPortableDir.getAbsolutePath() + File.separator + "bin";
                 if(is64Bits == true){
                     path1 += File.separator +"x64";
@@ -285,7 +285,7 @@ public final class Places {
                 }
                 path1 += File.separator + "R.exe";
                 path2 += File.separator + "R.exe";
-            }else if(SystemUtils.IS_OS_LINUX){
+            }else if(org.apache.commons.lang3.SystemUtils.IS_OS_LINUX){
                 path2 = rPortableDir.getAbsolutePath();
                 path1 += File.separator + "R";
                 path2 += File.separator + "R";
@@ -300,7 +300,7 @@ public final class Places {
         if(exec.exists()){
             if(exec.isFile()){
                 Log.logger.info("R is " + exec.getAbsolutePath());
-                if(SystemUtils.IS_OS_LINUX){
+                if(org.apache.commons.lang3.SystemUtils.IS_OS_LINUX){
                     //setLinuxEnvironmentVars();
                 }
                 return exec;

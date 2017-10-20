@@ -460,8 +460,13 @@ public class RScript implements Serializable{
     
     public Set<String> getNotExistantResults(){
         TreeSet<String> notExist = new TreeSet<String>();
-        for(String filePath : this.requiredExternalFiles){
-            if(Manager.fileExists(Places.finalResultsDir.getAbsolutePath() + File.separator + filePath) == false){
+        String scriptTypeExtension = ".PostAnalysisScript";
+        if(RScript.getAvailablePackages().contains(name)){
+            scriptTypeExtension = ".AnalysisScript";
+        }
+        for(String filePath : this.results){
+            if(Manager.fileExists(Places.finalResultsDir.getAbsolutePath() + File.separator
+                    + this.name + scriptTypeExtension + File.separator + filePath) == false){
                 notExist.add(filePath);
             }
         }
@@ -472,7 +477,7 @@ public class RScript implements Serializable{
         TreeSet<String> present = new TreeSet<String>();
         for(String filePath : this.requiredExternalFiles){
             for(String otherPath : toVerify){
-                if(otherPath.equals(filePath)){
+                if(otherPath.contains(filePath)){
                     present.add(otherPath);
                 }
             }
@@ -631,6 +636,8 @@ public class RScript implements Serializable{
                         ex.printStackTrace();
                         Log.logger.info("Cant delete " + file.getName() + " results.");
                     }
+                }else if(file.isFile() && file.getAbsolutePath().contains(".output")){
+                    FileUtils.deleteQuietly(file);
                 }
             }
         }

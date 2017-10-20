@@ -1,5 +1,6 @@
 package peridot.CLI.Commands;
 
+import org.apache.commons.lang3.SystemUtils;
 import peridot.Archiver.Places;
 import peridot.CLI.AnalysisFile;
 import peridot.CLI.AnalysisFileParser;
@@ -107,7 +108,12 @@ public class RUN extends Command{
             for(String s : task.successfulScripts){
                 System.out.println("\t" + s);
             }
-
+            if(task.noDiffExpFound.size() > 0){
+                System.out.println("The following modules did not found differential expression:");
+                for(String modName : task.noDiffExpFound){
+                    System.out.println("\t" + modName);
+                }
+            }
         }
 
         boolean success = PeridotCmd.saveResultsAt(analysisFile.outputFolder);

@@ -7,9 +7,12 @@ package peridot.script;
 
 import peridot.AnalysisData;
 import peridot.AnalysisParameters;
+import peridot.Archiver.Manager;
+import peridot.Archiver.Places;
 import peridot.Log;
 import peridot.Output;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
@@ -39,6 +42,7 @@ public class Task {
     
     //populate only on start:
     public ConcurrentLinkedDeque<String> successfulScripts;
+    public ConcurrentLinkedDeque<String> noDiffExpFound;
     public ConcurrentLinkedDeque<String> failedResults;
     public ConcurrentLinkedDeque<String> failedScripts;
     public ConcurrentLinkedDeque<String> runningScripts;
@@ -65,6 +69,7 @@ public class Task {
         processingStatus = new AtomicInteger(-2);
         //MainGUI.goToProcessingPanel();
         successfulScripts = new ConcurrentLinkedDeque<>();
+        noDiffExpFound = new ConcurrentLinkedDeque<>();
         failedScripts = new ConcurrentLinkedDeque<>();
         runningScripts = new ConcurrentLinkedDeque<>();
         finishedScripts = new ConcurrentLinkedDeque<>();
@@ -233,11 +238,25 @@ public class Task {
     private void checkForSuccess(String name){
         if(scriptExecs.get(name).successFlag.get()){
             successfulScripts.add(name);
+            if(RScript.getAvailablePackages().contains(name)){
+                String path = Places.finalResultsDir.getAbsolutePath() + File.separator
+                        + name + ".AnalysisScript" + File.separator + "res.tsv";
+                if(Manager.fileExists(path)){
+                    try{
+                        if(Manager.countLines(path) <= 1){
+                            noDiffExpFound.add(name);
+                        }
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+
+            }
             Log.logger.info(name + " is successful");
         }else{
             Set<String> faileds = scriptExecs.get(name).script.getNotExistantResults();
             for(String result : faileds){
-                Log.logger.severe(result + " wont be generated anymore.");
+                //Log.logger.severe(result + " wont be generated anymore.");
                 this.failedResults.add(result);
             }
             failedScripts.add(name);
