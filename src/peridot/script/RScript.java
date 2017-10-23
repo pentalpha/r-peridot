@@ -45,6 +45,7 @@ public class RScript implements Serializable{
     public boolean environmentCreated;
     public boolean nonDefaultScript;
     public boolean max2Conditions;
+    public boolean needsReplicates;
     public boolean mandatoryFailed;
     public String info = null;
     public static Map<String, Class> availableParamTypes = defineAvailableParamTypes();
@@ -95,6 +96,9 @@ public class RScript implements Serializable{
         this.requiredParameters = new TreeMap<String, Class>();
         this.requiredExternalFiles = new TreeSet<String>();
         this.info = "";
+
+        this.needsReplicates = false;
+        this.max2Conditions = false;
         
         File descriptionFile = new File(dir.getAbsolutePath() + File.separator
                                 + "description");
@@ -147,6 +151,10 @@ public class RScript implements Serializable{
                     else if(category.equals("[MAX-2-CONDITIONS]"))
                     {
                         this.max2Conditions = Boolean.parseBoolean(value);
+                    }
+                    else if(category.equals("[NEEDS-REPLICATES]"))
+                    {
+                        this.needsReplicates = Boolean.parseBoolean(value);
                     }
                     else if(category.equals("[INFO]")){
                         this.info += value + "\n";
@@ -235,6 +243,7 @@ public class RScript implements Serializable{
         writer.write("[EXTERNAL-SCRIPT]\t" + this.nonDefaultScript + System.lineSeparator());
         writer.write("[SCRIPT-NAME]\t" + this.scriptName + System.lineSeparator());
         writer.write("[MAX-2-CONDITIONS]\t" + this.max2Conditions + System.lineSeparator());
+        writer.write("[NEEDS-REPLICATES]\t" + this.needsReplicates + System.lineSeparator());
         for(String result : this.results){
             if(mandatoryResults.contains(result)){
                 writer.write("[MANDATORY-RESULT]\t"+ result + System.lineSeparator());

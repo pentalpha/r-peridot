@@ -18,6 +18,8 @@ public class AnalysisData {
     public SortedMap<IndexedString, String> conditions;
     protected int countReadsThreshold;
     protected Global.RoundingMode roundMode;
+    protected boolean hasReplicates = false;
+    protected boolean moreThanTwoConditions = false;
     public AnalysisData(File expressionFile, File conditionsFile, Info info, String roundMode,
                         int countReadsThreshold) throws IOException
     {
@@ -28,7 +30,7 @@ public class AnalysisData {
                         int countReadsThreshold) throws IOException
     {
         File newConditionsFile = new File(expressionFile.getAbsolutePath() + ".conditions");
-        this.conditions = applyConditionsToExprFileSamples(expressionFile, info, conditions);
+        this.setConditions(applyConditionsToExprFileSamples(expressionFile, info, conditions));
         createConditionsFile(newConditionsFile, conditions, false, true);
         defaultBuilderOperations(expressionFile, newConditionsFile, info, roundMode, countReadsThreshold);
     }
@@ -65,13 +67,41 @@ public class AnalysisData {
         
         if(Manager.fileExists(conditionsFile.getAbsolutePath())){
             this.conditionsFile = conditionsFile;
-            this.conditions = loadConditionsFromFile(conditionsFile);
+            setConditions(loadConditionsFromFile(conditionsFile));
         }else{
             throw new IOException("Conditions file does not exists.");
         }
     }
-    
-    
+
+    public void setConditions(SortedMap<IndexedString, String> newCond) {
+        this.conditions = newCond;
+        HashMap<String, Integer> sampleCountInCondition = new HashMap<>();
+        for (Entry<IndexedString, String> entry : getNamesAndConditions()){
+            if(sampleCountInCondition.containsKey(entry.getValue())){
+                sampleCountInCondition.put(entry.getValue(),sampleCountInCondition.get(entry.getValue()) + 1);
+            }else{
+                sampleCountInCondition.put(entry.getValue(),1);
+            }
+        }
+
+        hasReplicates = false;
+        for(Entry<String, Integer> entry : sampleCountInCondition.entrySet()){
+            if(entry.getValue() > 1){
+                hasReplicates = true;
+                break;
+            }
+        }
+
+        moreThanTwoConditions = (sampleCountInCondition.size() > 2);
+    }
+
+    public boolean hasReplicatesInSamples(){
+        return hasReplicates;
+    }
+
+    public boolean hasMoreThanTwoConditions(){
+        return moreThanTwoConditions;
+    }
     
     public Set<Entry<IndexedString, String>> getNamesAndConditions(){
         return this.conditions.entrySet();
@@ -85,7 +115,7 @@ public class AnalysisData {
         return conditions.keySet().size();
     }
     
-    public void setCondition(String name, String condition){
+    public void setConditionOf(String name, String condition){
        for(Entry<IndexedString, String> sample: conditions.entrySet()){
            if(sample.getKey().getText().equals(name)){
                conditions.put(sample.getKey(), condition);
@@ -94,7 +124,7 @@ public class AnalysisData {
        }
     }
     
-    public String getCondition(String name){
+    public String getConditionOf(String name){
        for(Entry<IndexedString, String> sample: conditions.entrySet()){
            if(sample.getKey().getText().equals(name)){
                return sample.getValue();
@@ -406,7 +436,7 @@ public class AnalysisData {
         outputWriter.close();
 
         Log.logger.info( (float)removeCounter/(float)counter + " of the lines dropped by threshold");
-        conditions = newConditions;
+        this.setConditions(newConditions);
     }
 
     protected int[] roundValuesAndEraseNotUse(String[] values, String[] names){

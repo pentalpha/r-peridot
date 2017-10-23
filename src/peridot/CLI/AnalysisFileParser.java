@@ -79,8 +79,10 @@ public class AnalysisFileParser {
                                 line = scanner.nextLine();
                                 if (line.contains(endStr)) {
                                     break;
-                                }else if (line.substring(0, 1).equals("#") == false){
-                                    all.add(line);
+                                }else if(line.length() >= 1){
+                                    if (line.substring(0, 1).equals("#") == false) {
+                                        all.add(line);
+                                    }
                                 }
                             }
                             parseParamsAndModules(word, all);
@@ -217,7 +219,7 @@ public class AnalysisFileParser {
 
     public void parseParams(Set<String> values) throws ParseException {
         for(String param : values){
-            String[] typeAndParam = param.split(" ");
+            String[] typeAndParam = Global.spliceBySpacesAndTabs(param);
             if(typeAndParam.length != 2){
                 throw new ParseException("Error: No parameter type: " + param);
             }

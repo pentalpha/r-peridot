@@ -21,6 +21,7 @@ public class PostAnalysisOntology extends PostAnalysisScript{
         super(name, scriptPath, externalScript, getDefaultParameters(), 
                 getDefaultRequiredFiles(), getDefaultResults(), getRequiredScripts());
         this.max2Conditions = false;
+        this.needsReplicates = false;
     }
     public PostAnalysisOntology(File dir) throws Exception{
         super(dir);

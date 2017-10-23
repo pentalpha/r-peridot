@@ -263,9 +263,27 @@ public final class Global {
      * @param text String to be separated in two
      * @return  return[0] = first word, return[1] = the rest
      */
+    public static String[] spliceBySpacesAndTabs(String text){
+        String[] spliced = text.split(" ");
+        int total = 0;
+        for(int i = 0; i < spliced.length; i++){
+            total += spliced[i].split("\t").length;
+        }
+        String[] spliceTotal = new String[total];
+        int lastJ = 0;
+        for(int i = 0; i < spliced.length; i++){
+            String[] spliceTemp = spliced[i].split("\t");
+            for(int j = 0; j < spliceTemp.length; j++){
+                spliceTotal[lastJ+j] = spliceTemp[j];
+            }
+            lastJ = lastJ + spliceTemp.length;
+        }
+        return spliceTotal;
+    }
+
     public static String[] firstWordAndTheRest(String text){
         String[] array = new String[2];
-        String[] spliced = text.split(" ");
+        String[] spliced = spliceBySpacesAndTabs(text);
         array[0] = spliced[0];
         if(spliced.length == 1){
             array[1] = null;

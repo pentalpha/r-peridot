@@ -21,11 +21,12 @@ import java.util.TreeSet;
  */
 public class RNASeqPackage extends AnalysisScript {
     public RNASeqPackage(String name, String scriptPath, boolean externalScript, 
-            boolean max2Conditions)
+            boolean max2Conditions, boolean needsReplicates)
     {
         super(name, scriptPath, externalScript, getDefaultParameters(), getDefaultRequiredFiles(), 
               getDefaultResults());
         this.max2Conditions = max2Conditions;
+        this.needsReplicates = needsReplicates;
         this.setResultAsMandatory("res.tsv");
     }
     public RNASeqPackage(File dir) throws Exception{
