@@ -11,12 +11,14 @@ import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.Log;
 import peridot.Output;
+import sun.util.logging.PlatformLogger;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -28,7 +30,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Task {
     
-    public Set<String> scriptsToExec; 
+    public Set<String> queryModules;
+    public Set<String> validQueryModules;
+    public Set<String> modulesToExec;
     public AnalysisParameters params;
     public Map<String, AnalysisParameters> specificParams;
     public AnalysisData expression;
@@ -40,7 +44,7 @@ public class Task {
     public Runnable statusWatcher;
     public Runnable zombieFinder;
     
-    //populate only on start:
+    //populate only on start and later:
     public ConcurrentLinkedDeque<String> successfulScripts;
     public ConcurrentLinkedDeque<String> noDiffExpFound;
     public ConcurrentLinkedDeque<String> failedResults;
@@ -50,7 +54,6 @@ public class Task {
     public ConcurrentHashMap<String, ScriptExec> scriptExecs;
     public ConcurrentHashMap<String, WaitState> waitState;
     public ConcurrentHashMap<String, Output> scriptOutputs;
-    //private ConcurrentHashMap<ScriptExec, ScriptProgressMonitorPanel> scriptMonitor;
     private int remainingAnalysisScripts;
     protected Thread scriptsStatusWatcher;
     //public static Task _instance;
@@ -60,14 +63,15 @@ public class Task {
                             AnalysisData expression)
     {
         //_instance = this;
-        this.scriptsToExec = scriptsToExec;
+        this.queryModules = scriptsToExec;
         this.params = params;
         this.specificParams = specificParams;
         this.expression = expression;
         
         packagesFinishedFlag = new AtomicBoolean(false);
         processingStatus = new AtomicInteger(-2);
-        //MainGUI.goToProcessingPanel();
+        this.modulesToExec = new TreeSet<>();
+        this.validQueryModules = new TreeSet<>();
         successfulScripts = new ConcurrentLinkedDeque<>();
         noDiffExpFound = new ConcurrentLinkedDeque<>();
         failedScripts = new ConcurrentLinkedDeque<>();
@@ -76,10 +80,22 @@ public class Task {
         scriptExecs = new ConcurrentHashMap<String, ScriptExec>();
         waitState = new ConcurrentHashMap<String, WaitState>();
         scriptOutputs = new ConcurrentHashMap<String, Output>();
-        //scriptMonitor = new ConcurrentHashMap<>();
         packagesFinishedFlag = new AtomicBoolean(false);
         defineStatusWatcher();
         defineZombieFinder();
+
+        for(String name : scriptsToExec){
+            if(evaluateScriptInput(name)){
+                validQueryModules.add(name);
+            }
+        }
+
+        for(String scriptName : validQueryModules){
+            boolean canExecute = evaluateScriptForExecution(scriptName);
+            if(canExecute){
+                modulesToExec.add(scriptName);
+            }
+        }
     }
     
     public void start(){
@@ -90,28 +106,8 @@ public class Task {
         failedResults = new ConcurrentLinkedDeque<>();
         //ProcessingPanel.cleanMonitorPanels();
         remainingAnalysisScripts = 0;
-        for(String name : scriptsToExec){
-            RScript script = RScript.availableScripts.get(name);
-            if(script != null){
-                script.passParameters(params);
-                if(specificParams.containsKey(name)){
-                    script.passParameters(specificParams.get(name));
-                }
-                boolean createdConfig = script.createConfig();
-                if(createdConfig == false){
-                    Log.logger.info("An error ocurred while creating the config.txt for " + name);
-                }else{
-                    if(script instanceof AnalysisScript){
-                        remainingAnalysisScripts++;
-                    }
-                    Output output = new Output();
-                    ScriptExec exec = new ScriptExec(script, output, this);
-                    scriptOutputs.put(name, output);
-                    scriptExecs.put(name, exec);
-                    
-                    waitState.put(name, WaitState.WAITING);
-                }
-            }
+        for(String name : modulesToExec){
+            queueScriptForExecution(name);
         }
         updateStates();
         updateStatus();
@@ -119,6 +115,70 @@ public class Task {
         //scriptsStatusWatcher = new Thread(statusWatcher);
         //scriptsStatusWatcher.start();
         new Thread(zombieFinder).start();
+    }
+
+    private boolean evaluateScriptInput(String name){
+        RScript script = RScript.availableScripts.get(name);
+        if(script != null){
+            script.passParameters(params);
+            if(specificParams.containsKey(name)){
+                script.passParameters(specificParams.get(name));
+            }
+            if(script.parametersSufficed()){
+                return true;
+            }else{
+                String paramsList = "";
+                for(String entry : script.requiredParameters.keySet()){
+                    paramsList += entry + "\n";
+                }
+                Log.logger.severe(name + "'s parameters not sufficed. Required parameters are:\n " +
+                        paramsList + "Read the module details for more information.");
+            }
+        }else{
+            Log.logger.severe("No module named '" + name + "' is available.");
+        }
+        return false;
+    }
+
+    private boolean evaluateScriptForExecution(String name){
+        RScript script = RScript.availableScripts.get(name);
+        HashSet<String> modulesNotFound = new HashSet<>();
+        for(String module : script.requiredScripts){
+            if(!validQueryModules.contains(module)){
+                modulesNotFound.add(module);
+            }
+        }
+        if(modulesNotFound.size() == 0){
+            boolean createdConfig = script.createConfig();
+            if(createdConfig){
+                return true;
+            }else{
+                Log.logger.severe("An error occurred while creating config.txt, the parameters file, for " + name
+                        + ". The module will not be executed.");
+            }
+        }else{
+            String notFoundList = "";
+            for(String entry : modulesNotFound){
+                notFoundList += entry + "\n";
+            }
+            Log.logger.severe(name + "'s requirements not sufficed." +
+                    " The following required modules were not selected or have invalid input:\n " +
+                    notFoundList + "The module will not be executed. Read the modules details for more information.");
+        }
+        return false;
+    }
+
+    private void queueScriptForExecution(String name){
+        RScript script = RScript.availableScripts.get(name);
+        if(script instanceof AnalysisScript){
+            remainingAnalysisScripts++;
+        }
+        Output output = new Output();
+        ScriptExec exec = new ScriptExec(script, output, this);
+        scriptOutputs.put(name, output);
+        scriptExecs.put(name, exec);
+
+        waitState.put(name, WaitState.WAITING);
     }
     
     public boolean isNotStarted(){

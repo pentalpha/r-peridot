@@ -85,14 +85,17 @@ public class AnalysisData {
         }
 
         hasReplicates = false;
+        int nConditions = 0;
         for(Entry<String, Integer> entry : sampleCountInCondition.entrySet()){
-            if(entry.getValue() > 1){
-                hasReplicates = true;
-                break;
+            if(entry.getKey().equals("not-use") == false){
+                nConditions++;
+                if(entry.getValue() > 1) {
+                    hasReplicates = true;
+                }
             }
         }
 
-        moreThanTwoConditions = (sampleCountInCondition.size() > 2);
+        moreThanTwoConditions = (nConditions > 2);
     }
 
     public boolean hasReplicatesInSamples(){
@@ -435,7 +438,7 @@ public class AnalysisData {
         buffOutput.close();
         outputWriter.close();
 
-        Log.logger.info( (float)removeCounter/(float)counter + " of the lines dropped by threshold");
+        Log.logger.info( ((float)removeCounter/(float)counter)*100 + "% of the lines dropped by threshold");
         this.setConditions(newConditions);
     }
 
