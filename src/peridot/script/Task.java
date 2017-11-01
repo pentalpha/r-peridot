@@ -11,7 +11,6 @@ import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.Log;
 import peridot.Output;
-import sun.util.logging.PlatformLogger;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -102,7 +101,7 @@ public class Task {
         abortAllFlag = new AtomicBoolean();
         abortAllFlag.set(false);
         _instance = this;
-        RScript.removeScriptResults();
+        RModule.removeScriptResults();
         failedResults = new ConcurrentLinkedDeque<>();
         //ProcessingPanel.cleanMonitorPanels();
         remainingAnalysisScripts = 0;
@@ -118,7 +117,7 @@ public class Task {
     }
 
     private boolean evaluateScriptInput(String name){
-        RScript script = RScript.availableScripts.get(name);
+        RModule script = RModule.availableScripts.get(name);
         if(script != null){
             script.passParameters(params);
             if(specificParams.containsKey(name)){
@@ -141,7 +140,7 @@ public class Task {
     }
 
     private boolean evaluateScriptForExecution(String name){
-        RScript script = RScript.availableScripts.get(name);
+        RModule script = RModule.availableScripts.get(name);
         HashSet<String> modulesNotFound = new HashSet<>();
         for(String module : script.requiredScripts){
             if(!validQueryModules.contains(module)){
@@ -169,8 +168,8 @@ public class Task {
     }
 
     private void queueScriptForExecution(String name){
-        RScript script = RScript.availableScripts.get(name);
-        if(script instanceof AnalysisScript){
+        RModule script = RModule.availableScripts.get(name);
+        if(script instanceof AnalysisModule){
             remainingAnalysisScripts++;
         }
         Output output = new Output();
@@ -270,7 +269,7 @@ public class Task {
     
     public synchronized void addFinished(String name, boolean prefailed){
         Log.logger.finer("Adding " + name + " to finished scripts.");
-        if(RScript.getAvailablePackages().contains(name)){
+        if(RModule.getAvailablePackages().contains(name)){
             remainingAnalysisScripts--;
             Log.logger.fine(remainingAnalysisScripts + " analysis scripts remaining.");
             if(remainingAnalysisScripts <= 0){
@@ -298,9 +297,9 @@ public class Task {
     private void checkForSuccess(String name){
         if(scriptExecs.get(name).successFlag.get()){
             successfulScripts.add(name);
-            if(RScript.getAvailablePackages().contains(name)){
+            if(RModule.getAvailablePackages().contains(name)){
                 String path = Places.finalResultsDir.getAbsolutePath() + File.separator
-                        + name + ".AnalysisScript" + File.separator + "res.tsv";
+                        + name + ".AnalysisModule" + File.separator + "res.tsv";
                 if(Manager.fileExists(path)){
                     try{
                         if(Manager.countLines(path) <= 1){
@@ -397,7 +396,7 @@ public class Task {
         for(Map.Entry<String, WaitState> pair : waitState.entrySet()){
             if(pair.getValue().equals(WaitState.WAITING)){
                 ScriptExec exec = scriptExecs.get(pair.getKey());
-                if(exec.script instanceof AnalysisScript)
+                if(exec.script instanceof AnalysisModule)
                 {
                     toPutReady.add(pair.getKey());
                 }else if(this.packagesFinishedFlag.get()){

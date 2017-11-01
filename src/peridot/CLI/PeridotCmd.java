@@ -7,9 +7,9 @@ import peridot.Archiver.Places;
 import peridot.Global;
 import peridot.Log;
 import peridot.AnalysisData;
-import peridot.script.AnalysisScript;
-import peridot.script.PostAnalysisScript;
-import peridot.script.RScript;
+import peridot.script.AnalysisModule;
+import peridot.script.PostAnalysisModule;
+import peridot.script.RModule;
 import peridot.script.Task;
 
 import java.io.File;
@@ -35,7 +35,7 @@ public final class PeridotCmd {
                              Map<String, AnalysisParameters> specificParams,
                              AnalysisData expression){
         PeridotCmd.clean();
-        RScript.removeScriptResults();
+        RModule.removeScriptResults();
 
         expression.writeExpression();
         //expression.writeFinalConditions();
@@ -49,8 +49,8 @@ public final class PeridotCmd {
         Places.createPeridotDir();
         Places.updateModulesDir(false);
 
-        RScript.loadUserScripts();
-        if(RScript.getAvailableScripts().size() == 0){
+        RModule.loadUserScripts();
+        if(RModule.getAvailableScripts().size() == 0){
             Log.logger.severe("Fatal Error: Modules could not be loaded. " +
                     "We recommend reloading the modules folder.");
             return false;
@@ -79,12 +79,12 @@ public final class PeridotCmd {
             Log.logger.severe("Error: " + folderName + " is not a folder or does not exists.");
             return;
         }
-        RScript s = RScript.availableScripts.get(modName);
+        RModule s = RModule.availableScripts.get(modName);
         if(s == null){
             Log.logger.severe("Error: " + modName + " is not an existent module.");
             return;
         }
-        File file = new File(folderName + File.separator + s.name + "." + RScript.binExtension);
+        File file = new File(folderName + File.separator + s.name + "." + RModule.binExtension);
         if(file.exists()){
             file.delete();
         }
@@ -108,27 +108,27 @@ public final class PeridotCmd {
         }
         Object bin = peridot.Archiver.Persistence.loadObjectFromBin(binFile.getAbsolutePath());
         if(bin == null){
-            Log.logger.log(Level.SEVERE, "Could not load RScript binary. Maybe you don't have" +
+            Log.logger.log(Level.SEVERE, "Could not load RModule binary. Maybe you don't have" +
                             " permission to read this file, or the file is corrupt.");
             return;
         }
 
-        if(bin instanceof AnalysisScript || bin instanceof PostAnalysisScript){
-            RScript script = null;
-            if(bin instanceof AnalysisScript){
-                script = (AnalysisScript)bin;
+        if(bin instanceof AnalysisModule || bin instanceof PostAnalysisModule){
+            RModule script = null;
+            if(bin instanceof AnalysisModule){
+                script = (AnalysisModule)bin;
             }else{
-                script = (PostAnalysisScript)bin;
+                script = (PostAnalysisModule)bin;
             }
             script.createEnvironment(null);
-            RScript.availableScripts.put(script.name, script);
+            RModule.availableScripts.put(script.name, script);
         }else{
-            Log.logger.log(Level.SEVERE, "Could not load RScript binary. Unknown type.");
+            Log.logger.log(Level.SEVERE, "Could not load RModule binary. Unknown type.");
         }
     }
 
     public static void scriptDetails(String modName){
-        RScript s = RScript.availableScripts.get(modName);
+        RModule s = RModule.availableScripts.get(modName);
         if(s == null){
             Log.logger.severe(modName + " is not a valid module.");
             return;
@@ -140,18 +140,18 @@ public final class PeridotCmd {
     }
 
     public static void clean(){
-        for(Map.Entry<String, RScript> pair : RScript.availableScripts.entrySet()){
+        for(Map.Entry<String, RModule> pair : RModule.availableScripts.entrySet()){
             pair.getValue().cleanTempFiles();
         }
     }
 
     public static void listModules(){
         System.out.println("\n- AnalysisData Modules: ");
-        for(String name : RScript.getAvailablePackages()){
+        for(String name : RModule.getAvailablePackages()){
             System.out.println("\t" + name);
         }
         System.out.println("\n- Post-AnalysisData Modules: ");
-        for(String name : RScript.getAvailablePostAnalysisScripts()){
+        for(String name : RModule.getAvailablePostAnalysisScripts()){
             System.out.println("\t" + name);
         }
     }

@@ -115,7 +115,13 @@ public class AnalysisData {
     }
     
     public int getNumberOfSamples(){
-        return conditions.keySet().size();
+        int count = 0;
+        for(Entry<IndexedString, String> entry : conditions.entrySet()){
+            if(!entry.getValue().equals("not-use")){
+                count++;
+            }
+        }
+        return count;
     }
     
     public void setConditionOf(String name, String condition){

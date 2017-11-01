@@ -1,7 +1,7 @@
 package peridot.CLI;
 
 
-import peridot.script.RScript;
+import peridot.script.RModule;
 
 public abstract class Command {
     protected String commandStr;
@@ -30,7 +30,7 @@ public abstract class Command {
     protected abstract void run();
 
     public static boolean isAModule(String name){
-        return RScript.availableScripts.containsKey(name);
+        return RModule.availableScripts.containsKey(name);
     }
 
     public static boolean isHelpArg(String arg){

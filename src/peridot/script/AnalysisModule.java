@@ -14,18 +14,18 @@ import java.util.TreeSet;
  *
  * @author pitagoras
  */
-public class AnalysisScript extends RScript{
+public class AnalysisModule extends RModule {
     
-    public AnalysisScript(String name, String scriptFile, boolean externalScript,
-            Map<String, Class> requiredParameters, 
-            Set<String> requiredExternalFiles,
-            Set<String> results)
+    public AnalysisModule(String name, String scriptFile,
+                          Map<String, Class> requiredParameters,
+                          Set<String> requiredExternalFiles,
+                          Set<String> results)
     {
-        super(name, scriptFile, externalScript, requiredParameters, 
+        super(name, scriptFile, requiredParameters,
                 requiredExternalFiles, results, new TreeSet<String>());
     }
     
-    public AnalysisScript(File dir) throws Exception{
+    public AnalysisModule(File dir) throws Exception{
         super(dir);
     }
 }

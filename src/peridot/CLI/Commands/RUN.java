@@ -1,17 +1,14 @@
 package peridot.CLI.Commands;
 
-import org.apache.commons.lang3.SystemUtils;
 import peridot.Archiver.Places;
 import peridot.CLI.AnalysisFile;
 import peridot.CLI.AnalysisFileParser;
 import peridot.CLI.Command;
 import peridot.CLI.PeridotCmd;
 import peridot.Log;
-import peridot.script.RScript;
 import peridot.script.Task;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 /**
  * Created by pentalpha on 01/05/17.

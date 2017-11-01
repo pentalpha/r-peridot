@@ -11,7 +11,6 @@ import peridot.AnalysisParameters;
 import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.GeneIdType;
-import peridot.Global;
 import peridot.Log;
 
 import java.io.*;
@@ -22,8 +21,8 @@ import java.util.logging.Level;
  *
  * @author pentalpha
  */
-public class RScript implements Serializable{
-    public static HashMap<String, RScript> availableScripts;
+public class RModule implements Serializable{
+    public static HashMap<String, RModule> availableScripts;
     //Nome dos parametros necessarios e suas respectivas classes
     //O script não irá executar se não forem todos passados antes
     public Map<String, Class> requiredParameters = null;
@@ -43,7 +42,6 @@ public class RScript implements Serializable{
     public File scriptFile = null;
     public String name = null;
     public boolean environmentCreated;
-    public boolean nonDefaultScript;
     public boolean max2Conditions;
     public boolean needsReplicates;
     public boolean mandatoryFailed;
@@ -51,18 +49,17 @@ public class RScript implements Serializable{
     public static Map<String, Class> availableParamTypes = defineAvailableParamTypes();
     public StringBuilder scriptContent = null;
     /**
-     *  The extension of the RScript binary file
+     *  The extension of the RModule binary file
      */
     public static final String binExtension = "PeridotModule";
     
-    public RScript(String name, String scriptFile, boolean externalScript,
-            Map<String, Class> requiredParameters, 
-            Set<String> requiredExternalFiles,
-            Set<String> results,
-            Set<String> requiredScripts)
+    public RModule(String name, String scriptFile,
+                   Map<String, Class> requiredParameters,
+                   Set<String> requiredExternalFiles,
+                   Set<String> results,
+                   Set<String> requiredScripts)
     {
         this.max2Conditions = false;
-        this.nonDefaultScript = externalScript;
         this.name = name;
         this.scriptName = scriptFile;
         this.requiredParameters = requiredParameters;
@@ -86,7 +83,7 @@ public class RScript implements Serializable{
         }
     }
     
-    public RScript(File dir) throws Exception
+    public RModule(File dir) throws Exception
     {
         this.environmentCreated = true;
         this.parameters = new TreeMap<String, Object>();
@@ -124,8 +121,6 @@ public class RScript implements Serializable{
                     if(category.equals("[NAME]"))
                     {
                         this.name = value;
-                    }else if(category.equals("[EXTERNAL-SCRIPT]")){
-                        this.nonDefaultScript = Boolean.parseBoolean(value);
                     }
                     else if(category.equals("[SCRIPT-NAME]"))
                     {
@@ -240,7 +235,6 @@ public class RScript implements Serializable{
         
         
         writer.write("[NAME]\t"+ this.name + System.lineSeparator());
-        writer.write("[EXTERNAL-SCRIPT]\t" + this.nonDefaultScript + System.lineSeparator());
         writer.write("[SCRIPT-NAME]\t" + this.scriptName + System.lineSeparator());
         writer.write("[MAX-2-CONDITIONS]\t" + this.max2Conditions + System.lineSeparator());
         writer.write("[NEEDS-REPLICATES]\t" + this.needsReplicates + System.lineSeparator());
@@ -332,7 +326,7 @@ public class RScript implements Serializable{
                     out.println(scriptContent.toString());
                     out.close();
                 }catch(Exception ex){
-                    Log.logger.severe("Could not export script from RScript to script dir.");
+                    Log.logger.severe("Could not export script from RModule to script dir.");
                     Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
                 }
             }
@@ -469,9 +463,9 @@ public class RScript implements Serializable{
     
     public Set<String> getNotExistantResults(){
         TreeSet<String> notExist = new TreeSet<String>();
-        String scriptTypeExtension = ".PostAnalysisScript";
-        if(RScript.getAvailablePackages().contains(name)){
-            scriptTypeExtension = ".AnalysisScript";
+        String scriptTypeExtension = ".PostAnalysisModule";
+        if(RModule.getAvailablePackages().contains(name)){
+            scriptTypeExtension = ".AnalysisModule";
         }
         for(String filePath : this.results){
             if(Manager.fileExists(Places.finalResultsDir.getAbsolutePath() + File.separator
@@ -677,8 +671,8 @@ public class RScript implements Serializable{
     
     public static Vector<String> getAvailablePackages(){
         Vector<String> scripts = new Vector<>();
-        for(Map.Entry<String, RScript> pair : RScript.availableScripts.entrySet()){
-            if(pair.getValue().getWorkingDirectory().getName().contains(".AnalysisScript")){
+        for(Map.Entry<String, RModule> pair : RModule.availableScripts.entrySet()){
+            if(pair.getValue().getWorkingDirectory().getName().contains(".AnalysisModule")){
                 scripts.add(pair.getKey());
                 //Log.logger.info("fount result: " + pair.getKey());
             }
@@ -688,8 +682,8 @@ public class RScript implements Serializable{
     
     public static Vector<String> getAvailablePostAnalysisScripts(){
         Vector<String> scripts = new Vector<>();
-        for(Map.Entry<String, RScript> pair : RScript.availableScripts.entrySet()){
-            if(pair.getValue().getWorkingDirectory().getName().contains(".PostAnalysisScript")){
+        for(Map.Entry<String, RModule> pair : RModule.availableScripts.entrySet()){
+            if(pair.getValue().getWorkingDirectory().getName().contains(".PostAnalysisModule")){
                 scripts.add(pair.getKey());
                 //Log.logger.info("fount result: " + pair.getKey());
             }
@@ -699,8 +693,8 @@ public class RScript implements Serializable{
     
     public static Vector<String> getAvailableScripts(){
         Vector<String> scripts = new Vector<>();
-        for(Map.Entry<String, RScript> pair : RScript.availableScripts.entrySet()){
-            if(pair.getValue() instanceof PostAnalysisScript){
+        for(Map.Entry<String, RModule> pair : RModule.availableScripts.entrySet()){
+            if(pair.getValue() instanceof PostAnalysisModule){
                 scripts.add(pair.getKey());
             }
         }
@@ -714,11 +708,11 @@ public class RScript implements Serializable{
     public static boolean deleteScript(String script){
         try{
             //new File(Places.sgsDir + File.separator + "log.txt").delete();
-            FileUtils.deleteDirectory(RScript.availableScripts.get(script).getWorkingDirectory());
+            FileUtils.deleteDirectory(RModule.availableScripts.get(script).getWorkingDirectory());
             return true;
         }catch(IOException ex){
             Log.logger.severe("Could not delete " 
-                    + RScript.availableScripts.get(script).workingDirectory.getName());
+                    + RModule.availableScripts.get(script).workingDirectory.getName());
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             return false;
         }
@@ -726,7 +720,7 @@ public class RScript implements Serializable{
     
     //load all the scripts in the temp folder and sort them
     public static void loadUserScripts(){
-        HashMap<String, RScript> loadedScripts = new HashMap<String, RScript>();
+        HashMap<String, RModule> loadedScripts = new HashMap<String, RModule>();
         Set<File> subFiles;
         Set<File> subDirs = new TreeSet<File>();
         //Log.logger.info("trying to get subfiles");
@@ -748,12 +742,12 @@ public class RScript implements Serializable{
         for(File file : subDirs){
             //Log.logger.info("iterate subdir " + file.getAbsolutePath());
             try{
-                if(file.getName().contains(".PostAnalysisScript")){
-                    PostAnalysisScript script = new PostAnalysisScript(file);
+                if(file.getName().contains(".PostAnalysisModule")){
+                    PostAnalysisModule script = new PostAnalysisModule(file);
                     loadedScripts.put(script.name, script);
-                }else if(file.getName().contains(".AnalysisScript")){
+                }else if(file.getName().contains(".AnalysisModule")){
                     //Log.logger.info("creating " + file.getName());
-                    AnalysisScript script = new AnalysisScript(file);
+                    AnalysisModule script = new AnalysisModule(file);
                     //Log.logger.info("created");
                     loadedScripts.put(script.name, script);
                 }
@@ -774,7 +768,7 @@ public class RScript implements Serializable{
 
     public static Map<String, Class> getRequiredParametersFromModules(){
         Map<String, Class> params = new HashMap<>();
-        for(RScript script : availableScripts.values()){
+        for(RModule script : availableScripts.values()){
             for(Map.Entry<String, Class> param : script.requiredParameters.entrySet()){
                 params.put(param.getKey(), param.getValue());
             }
@@ -787,12 +781,12 @@ public class RScript implements Serializable{
     }
     
     public String getScriptType(){
-        if(this instanceof AnalysisScript){
-            return "AnalysisScript";
-        }else if(this instanceof PostAnalysisScript){
-            return "PostAnalysisScript";
+        if(this instanceof AnalysisModule){
+            return "AnalysisModule";
+        }else if(this instanceof PostAnalysisModule){
+            return "PostAnalysisModule";
         }else{
-            return "RScript";
+            return "RModule";
         }
     }
 }

@@ -19,17 +19,17 @@ import java.util.TreeSet;
  *
  * @author pentalpha
  */
-public class RNASeqPackage extends AnalysisScript {
-    public RNASeqPackage(String name, String scriptPath, boolean externalScript, 
-            boolean max2Conditions, boolean needsReplicates)
+public class DiffExpressionModule extends AnalysisModule {
+    public DiffExpressionModule(String name, String scriptPath,
+                                boolean max2Conditions, boolean needsReplicates)
     {
-        super(name, scriptPath, externalScript, getDefaultParameters(), getDefaultRequiredFiles(), 
+        super(name, scriptPath, getDefaultParameters(), getDefaultRequiredFiles(),
               getDefaultResults());
         this.max2Conditions = max2Conditions;
         this.needsReplicates = needsReplicates;
         this.setResultAsMandatory("res.tsv");
     }
-    public RNASeqPackage(File dir) throws Exception{
+    public DiffExpressionModule(File dir) throws Exception{
         super(dir);
     }
     

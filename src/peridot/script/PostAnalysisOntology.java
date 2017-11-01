@@ -15,10 +15,10 @@ import java.util.TreeSet;
  *
  * @author pitagoras
  */
-public class PostAnalysisOntology extends PostAnalysisScript{
-    public PostAnalysisOntology(String name, String scriptPath, boolean externalScript)
+public class PostAnalysisOntology extends PostAnalysisModule {
+    public PostAnalysisOntology(String name, String scriptPath)
     {
-        super(name, scriptPath, externalScript, getDefaultParameters(), 
+        super(name, scriptPath, getDefaultParameters(),
                 getDefaultRequiredFiles(), getDefaultResults(), getRequiredScripts());
         this.max2Conditions = false;
         this.needsReplicates = false;
@@ -37,7 +37,7 @@ public class PostAnalysisOntology extends PostAnalysisScript{
     
     public static TreeSet<String> getDefaultRequiredFiles(){
         TreeSet<String> requiredExternalFiles = new TreeSet<>();
-        requiredExternalFiles.add("VennDiagram.PostAnalysisScript/Intersect.tsv");
+        requiredExternalFiles.add("VennDiagram.PostAnalysisModule/Intersect.tsv");
         
         return requiredExternalFiles;
     }

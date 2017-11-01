@@ -17,7 +17,7 @@ import java.util.logging.Level;
  * @author pentalpha
  */
 public class ScriptExec {
-    public RScript script;
+    public RModule script;
     public AtomicBoolean running;
     public AtomicBoolean started;
     public AtomicBoolean savingFlag;
@@ -33,7 +33,7 @@ public class ScriptExec {
     public Output output;
     
     //public ScriptProgressMonitorPanel monitor;
-    public ScriptExec(RScript script, Output output, Task task){
+    public ScriptExec(RModule script, Output output, Task task){
         this.task = task;
         this.script = script;
         this.output = output;

@@ -2,7 +2,7 @@ package peridot.CLI.Commands;
 
 import peridot.CLI.Command;
 import peridot.CLI.PeridotCmd;
-import peridot.script.RScript;
+import peridot.script.RModule;
 
 /**
  * Created by pentalpha on 4/28/17.
@@ -16,7 +16,7 @@ public class IN extends Command{
         this.commandStr = "in";
         this.detail = "R-Peridot's Command: in\n" +
                 "Options:\n" +
-                "\tin [file-path]\tImport a module from *." + RScript.binExtension + " file, into R-Peridot\n" +
+                "\tin [file-path]\tImport a module from *." + RModule.binExtension + " file, into R-Peridot\n" +
                 "\tin -h\t\t\tDisplays this help message\n" +
                 "\tin --help\t\tDisplays this help message\n";
     }

@@ -2,7 +2,7 @@ package peridot.CLI;
 
 import peridot.*;
 import peridot.Archiver.Spreadsheet;
-import peridot.script.RScript;
+import peridot.script.RModule;
 
 import java.io.*;
 import java.util.*;
@@ -54,17 +54,17 @@ public class AnalysisFile {
             content += AnalysisFileParser.conditionsStr + " " + condFile.getAbsolutePath() + "\n\n";
             content += AnalysisFileParser.saveAtStr + " " + countReadsFile.getParentFile().getAbsolutePath() + "\n\n";
             content += AnalysisFileParser.modulesStartStr + "\n";
-            for(String pack : RScript.getAvailablePackages()){
+            for(String pack : RModule.getAvailablePackages()){
                 content += "#" + pack + "\n";
             }
-            for(String script : RScript.getAvailablePostAnalysisScripts()){
+            for(String script : RModule.getAvailablePostAnalysisScripts()){
                 content += "#" + script + "\n";
             }
             content += AnalysisFileParser.endStr + "\n\n";
 
             content += AnalysisFileParser.paramsStartStr + "\n";
             Map<String, Object> defaultValues = AnalysisParameters.getDefaultValues();
-            for(Map.Entry<String, Class> entry : RScript.getRequiredParametersFromModules().entrySet()){
+            for(Map.Entry<String, Class> entry : RModule.getRequiredParametersFromModules().entrySet()){
                 if(defaultValues.containsKey(entry.getKey())){
                     content += entry.getValue().getSimpleName() + " "
                             + entry.getKey() + "=" + defaultValues.get(entry.getKey()).toString() + "\n";

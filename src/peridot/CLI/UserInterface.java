@@ -4,7 +4,7 @@ import peridot.CLI.Commands.IN;
 import peridot.CLI.Commands.LS;
 import peridot.CLI.Commands.OUT;
 import peridot.CLI.Commands.RUN;
-import peridot.script.RScript;
+import peridot.script.RModule;
 
 /**
  * Created by pentalpha on 4/27/17.
@@ -45,8 +45,8 @@ public class UserInterface {
     public static void printMajorHelp(){
         System.out.println("R-Peridot Commands:\n" +
                 "\tCommand:\t\tDescription:\n" +
-                "\tin [args]\t\tImport a module from *." + RScript.binExtension + " file\n" +
-                "\tout [args]\t\tExport a module to a *." + RScript.binExtension + " file\n" +
+                "\tin [args]\t\tImport a module from *." + RModule.binExtension + " file\n" +
+                "\tout [args]\t\tExport a module to a *." + RModule.binExtension + " file\n" +
                 "\tls [args]\t\tList modules or read module details\n" +
                 "\trun [args]\t\tMake an analysis\n" +
                 "\t\nAdd -h or --help to any command (r-peridot [command] -h) for more information.\n");

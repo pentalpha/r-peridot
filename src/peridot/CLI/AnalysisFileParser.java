@@ -2,8 +2,8 @@ package peridot.CLI;
 
 import peridot.*;
 import peridot.Archiver.Spreadsheet;
-import peridot.script.AnalysisScript;
-import peridot.script.RScript;
+import peridot.script.AnalysisModule;
+import peridot.script.RModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -140,10 +140,10 @@ public class AnalysisFileParser {
     public void setModules() throws ParseException {
         boolean anyPackages = false;
         for(String module : modules){
-            if(RScript.availableScripts.get(module) instanceof AnalysisScript){
+            if(RModule.availableScripts.get(module) instanceof AnalysisModule){
                 anyPackages = true;
             }
-            for(String dep : RScript.availableScripts.get(module).requiredScripts){
+            for(String dep : RModule.availableScripts.get(module).requiredScripts){
                 if(modules.contains(dep) == false){
                     throw new ParseException("Error: " + module + " depends on " + dep +
                             ", but " + dep + " was not chosen to be executed.");
@@ -161,7 +161,7 @@ public class AnalysisFileParser {
     public Map<String, Class> getRequiredParamsFromModules(){
         Map<String, Class> req = new HashMap<>();
         for(String modName : analysisFile.scriptsToExec){
-            for(Map.Entry<String, Class> pair : RScript.availableScripts.
+            for(Map.Entry<String, Class> pair : RModule.availableScripts.
                     get(modName).requiredParameters.entrySet()){
                 req.put(pair.getKey(), pair.getValue());
             }
@@ -203,7 +203,7 @@ public class AnalysisFileParser {
     public void parseParamsAndModules(String type, Set<String> values) throws ParseException {
         if(type.equals(modulesStartStr)){
             for(String word : values){
-                if(!RScript.availableScripts.containsKey(word)){
+                if(!RModule.availableScripts.containsKey(word)){
                     throw new ParseException("Error: " + word + " is not a" +
                             "valid module.");
                 }else{
