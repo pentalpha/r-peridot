@@ -6,40 +6,86 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e4f6c08-aa0c-476a-a9ac-fe508fc4faf1" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/peridot/script/AnalysisScript.java" afterPath="$PROJECT_DIR$/src/peridot/script/AnalysisModule.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/peridot/script/PostAnalysisScript.java" afterPath="$PROJECT_DIR$/src/peridot/script/PostAnalysisModule.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/peridot/script/RNASeqPackage.java" afterPath="$PROJECT_DIR$/src/peridot/script/DiffExpressionModule.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/peridot/script/RScript.java" afterPath="$PROJECT_DIR$/src/peridot/script/RModule.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/commands.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/git cheat sheet.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/mod info.txt" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jar/r-peridot.jar" afterPath="$PROJECT_DIR$/jar/r-peridot.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/allclasses-frame.html" afterPath="$PROJECT_DIR$/docs/allclasses-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/allclasses-noframe.html" afterPath="$PROJECT_DIR$/docs/allclasses-noframe.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/constant-values.html" afterPath="$PROJECT_DIR$/docs/constant-values.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/deprecated-list.html" afterPath="$PROJECT_DIR$/docs/deprecated-list.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/help-doc.html" afterPath="$PROJECT_DIR$/docs/help-doc.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-1.html" afterPath="$PROJECT_DIR$/docs/index-files/index-1.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-10.html" afterPath="$PROJECT_DIR$/docs/index-files/index-10.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-11.html" afterPath="$PROJECT_DIR$/docs/index-files/index-11.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-12.html" afterPath="$PROJECT_DIR$/docs/index-files/index-12.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-13.html" afterPath="$PROJECT_DIR$/docs/index-files/index-13.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-14.html" afterPath="$PROJECT_DIR$/docs/index-files/index-14.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-15.html" afterPath="$PROJECT_DIR$/docs/index-files/index-15.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-16.html" afterPath="$PROJECT_DIR$/docs/index-files/index-16.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-17.html" afterPath="$PROJECT_DIR$/docs/index-files/index-17.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/class-use/Output.html" afterPath="$PROJECT_DIR$/docs/peridot/class-use/Output.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/AnalysisScript.html" afterPath="$PROJECT_DIR$/docs/peridot/script/AnalysisScript.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-18.html" afterPath="$PROJECT_DIR$/docs/index-files/index-18.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-19.html" afterPath="$PROJECT_DIR$/docs/index-files/index-19.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-2.html" afterPath="$PROJECT_DIR$/docs/index-files/index-2.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-20.html" afterPath="$PROJECT_DIR$/docs/index-files/index-20.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-21.html" afterPath="$PROJECT_DIR$/docs/index-files/index-21.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-22.html" afterPath="$PROJECT_DIR$/docs/index-files/index-22.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-3.html" afterPath="$PROJECT_DIR$/docs/index-files/index-3.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-4.html" afterPath="$PROJECT_DIR$/docs/index-files/index-4.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-5.html" afterPath="$PROJECT_DIR$/docs/index-files/index-5.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-6.html" afterPath="$PROJECT_DIR$/docs/index-files/index-6.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-7.html" afterPath="$PROJECT_DIR$/docs/index-files/index-7.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-8.html" afterPath="$PROJECT_DIR$/docs/index-files/index-8.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-9.html" afterPath="$PROJECT_DIR$/docs/index-files/index-9.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index.html" afterPath="$PROJECT_DIR$/docs/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-frame.html" afterPath="$PROJECT_DIR$/docs/overview-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-summary.html" afterPath="$PROJECT_DIR$/docs/overview-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-tree.html" afterPath="$PROJECT_DIR$/docs/overview-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/AnalysisParameters.html" afterPath="$PROJECT_DIR$/docs/peridot/AnalysisParameters.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/Manager.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/Manager.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/Persistence.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/Persistence.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/Places.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/Places.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/Spreadsheet.Info.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/Spreadsheet.Info.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/Spreadsheet.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/Spreadsheet.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Command.CmdParseException.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Command.CmdParseException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Command.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Command.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/IN.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/IN.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/LS.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/LS.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/OUT.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/OUT.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/PeridotCmd.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/PeridotCmd.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/UserInterface.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/UserInterface.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/GeneIdType.html" afterPath="$PROJECT_DIR$/docs/peridot/GeneIdType.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Global.html" afterPath="$PROJECT_DIR$/docs/peridot/Global.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/IndexedString.html" afterPath="$PROJECT_DIR$/docs/peridot/IndexedString.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Log.html" afterPath="$PROJECT_DIR$/docs/peridot/Log.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Main.html" afterPath="$PROJECT_DIR$/docs/peridot/Main.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Output.html" afterPath="$PROJECT_DIR$/docs/peridot/Output.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/package-tree.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/PostAnalysisOntology.html" afterPath="$PROJECT_DIR$/docs/peridot/script/PostAnalysisOntology.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/PostAnalysisScript.html" afterPath="$PROJECT_DIR$/docs/peridot/script/PostAnalysisScript.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/RNASeqPackage.html" afterPath="$PROJECT_DIR$/docs/peridot/script/RNASeqPackage.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/RScript.html" afterPath="$PROJECT_DIR$/docs/peridot/script/RScript.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/ScriptExec.html" afterPath="$PROJECT_DIR$/docs/peridot/script/ScriptExec.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/class-use/AnalysisScript.html" afterPath="$PROJECT_DIR$/docs/peridot/script/class-use/AnalysisScript.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/class-use/PostAnalysisScript.html" afterPath="$PROJECT_DIR$/docs/peridot/script/class-use/PostAnalysisScript.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/class-use/RNASeqPackage.html" afterPath="$PROJECT_DIR$/docs/peridot/script/class-use/RNASeqPackage.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/class-use/RScript.html" afterPath="$PROJECT_DIR$/docs/peridot/script/class-use/RScript.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/class-use/Task.html" afterPath="$PROJECT_DIR$/docs/peridot/script/class-use/Task.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/ScriptRunnable.html" afterPath="$PROJECT_DIR$/docs/peridot/script/ScriptRunnable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/Task.WaitState.html" afterPath="$PROJECT_DIR$/docs/peridot/script/Task.WaitState.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/Task.html" afterPath="$PROJECT_DIR$/docs/peridot/script/Task.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/script/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/script/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/script/package-tree.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/serialized-form.html" afterPath="$PROJECT_DIR$/docs/serialized-form.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/AnalysisData.java" afterPath="$PROJECT_DIR$/src/peridot/AnalysisData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/AnalysisFile.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/AnalysisFile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/AnalysisFileParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/Command.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/Command.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/Commands/IN.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/Commands/IN.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/Commands/OUT.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/Commands/OUT.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/Commands/RUN.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/Commands/RUN.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/PeridotCmd.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/PeridotCmd.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/CLI/UserInterface.java" afterPath="$PROJECT_DIR$/src/peridot/CLI/UserInterface.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/Global.java" afterPath="$PROJECT_DIR$/src/peridot/Global.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/PostAnalysisOntology.java" afterPath="$PROJECT_DIR$/src/peridot/script/PostAnalysisOntology.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/ScriptExec.java" afterPath="$PROJECT_DIR$/src/peridot/script/ScriptExec.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/Task.java" afterPath="$PROJECT_DIR$/src/peridot/script/Task.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/r-peridot.iml" afterPath="$PROJECT_DIR$/r-peridot.iml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -50,12 +96,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="credits.md" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/credits.md">
+    <leaf>
+      <file leaf-file-name="IN.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/peridot/CLI/Commands/IN.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+            <state relative-caret-position="221">
+              <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -117,7 +163,7 @@
     </dirStrings>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/jar/r-peridot-scripts" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
@@ -127,7 +173,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/peridot/CLI/Commands/OUT.java" />
         <option value="$PROJECT_DIR$/src/peridot/Archiver/Persistence.java" />
         <option value="$PROJECT_DIR$/src/peridot/GeneIdType.java" />
         <option value="$PROJECT_DIR$/src/peridot/CLI/UserInterface.java" />
@@ -178,6 +223,7 @@
         <option value="$PROJECT_DIR$/jar/r-peridot-scripts/HeatMap.AnalysisModule/description" />
         <option value="$PROJECT_DIR$/jar/r-peridot-scripts/VennDiagram.PostAnalysisModule/vennDiagram.R" />
         <option value="$PROJECT_DIR$/jar/r-peridot-scripts/credits.md" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -204,7 +250,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -295,8 +340,9 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -445,15 +491,16 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32943144" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5843072" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30807248" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30717862" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24080268" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3242424" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="R Packages" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="R Graphics" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.8196995" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -467,6 +514,7 @@
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5843072" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -530,28 +578,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.idea/artifacts/r_peridot.xml" />
-    <entry file="file://$PROJECT_DIR$/.idea/libraries/commons_io_2_5.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/r-peridot.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="13" column="9" lean-forward="false" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/peridot/Archiver/Persistence.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="30" column="48" lean-forward="false" selection-start-line="30" selection-start-column="48" selection-end-line="30" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/peridot/Organism.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
@@ -726,70 +752,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/VennDiagram.PostAnalysisScript/description">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="19" lean-forward="false" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/sSeq.AnalysisScript/description">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="12" lean-forward="false" selection-start-line="0" selection-start-column="12" selection-end-line="0" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/HeatMap.PostAnalysisScript/description">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="15" selection-end-line="0" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/edgeR.AnalysisScript/description">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/EBSeq.AnalysisScript/description">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/DESeq.AnalysisScript/description">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/BoxPlot.PostAnalysisScript/description">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="15" selection-end-line="0" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/DESeq2.AnalysisScript/description">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="14" lean-forward="false" selection-start-line="0" selection-start-column="14" selection-end-line="0" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/VennDiagram.PostAnalysisScript/description" />
+    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/sSeq.AnalysisScript/description" />
+    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/HeatMap.PostAnalysisScript/description" />
+    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/edgeR.AnalysisScript/description" />
+    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/EBSeq.AnalysisScript/description" />
+    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/DESeq.AnalysisScript/description" />
+    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/BoxPlot.PostAnalysisScript/description" />
+    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/DESeq2.AnalysisScript/description" />
     <entry file="file://$PROJECT_DIR$/src/peridot/script/RModule.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
@@ -830,14 +800,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/ClusterProfiler.PostAnalysisScript/description">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/ClusterProfiler.PostAnalysisScript/description" />
     <entry file="file://$PROJECT_DIR$/src/peridot/CLI/Commands/LS.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -858,7 +821,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="104">
           <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -866,7 +828,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -874,7 +835,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="169">
           <caret line="13" column="37" lean-forward="true" selection-start-line="13" selection-start-column="37" selection-end-line="13" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -882,7 +842,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="403">
           <caret line="50" column="10" lean-forward="true" selection-start-line="50" selection-start-column="10" selection-end-line="50" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -890,7 +849,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="143">
           <caret line="11" column="36" lean-forward="false" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -898,7 +856,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="28" column="64" lean-forward="false" selection-start-line="28" selection-start-column="64" selection-end-line="28" selection-end-column="64" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -906,14 +863,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mod info.txt" />
+    <entry file="file://$PROJECT_DIR$/commands.txt" />
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="17" column="85" lean-forward="false" selection-start-line="17" selection-start-column="85" selection-end-line="17" selection-end-column="85" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/credits.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+        <state relative-caret-position="256">
+          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/peridot/CLI/Commands/IN.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
           <folding />
         </state>
       </provider>

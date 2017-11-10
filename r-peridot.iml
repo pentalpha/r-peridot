@@ -10,5 +10,7 @@
     <orderEntry type="library" name="commons-io-2.5" level="project" />
     <orderEntry type="library" name="commons-lang3-3.4" level="project" />
     <orderEntry type="library" name="univocity-parsers-2.2.0" level="project" />
+    <orderEntry type="library" name="R User Library" level="project" />
+    <orderEntry type="library" name="R Skeletons" level="application" />
   </component>
 </module>
