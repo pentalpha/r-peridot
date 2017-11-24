@@ -114,19 +114,14 @@ public class RUN extends Command{
         }
 
         boolean success = PeridotCmd.saveResultsAt(analysisFile.outputFolder);
-        if(!success){
-            Log.logger.severe("Could not save the results to '" + analysisFile.outputFolder.getAbsolutePath() + "'." +
-                    " The results are temporarily stored at " + Places.finalResultsDir.getAbsolutePath());
-        }else{
-            System.out.println("Output directory is " + analysisFile.outputFolder.getAbsolutePath());
-        }
+
     }
 
     public void defineCmdNameAndDetails(){
         this.commandStr = "run";
         this.detail = "R-Peridot's Command: run\n" +
                 "Options:\n" +
-                "\trun path/to/analysis/file\n" +
+                "\trun path/to/analysis/file.af\n" +
                 "\t\tMake an analysis based on a file (.af) with\n" +
                 "\t\tall the necessary information.\n" +
                 "\trun --create-example path/to/count/reads/file\n" +

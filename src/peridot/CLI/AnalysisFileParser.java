@@ -255,25 +255,21 @@ public class AnalysisFileParser {
     public void parseSingleLineInfo(String word, String second) throws ParseException {
         second = second.replace(" ", "");
         if(word.equals(dataStr)){
-            countReadsFile = new File(second);
+            countReadsFile = new File(peridot.Archiver.Manager.makeTildeIntoHomeDir(second));
             if(countReadsFile.exists() == false){
                 System.out.println(second);
                 throw new ParseException(second + " file does not exists.");
             }
         }else if(word.equals(conditionsStr)) {
-            conditionsFile = new File(second);
+            conditionsFile = new File(peridot.Archiver.Manager.makeTildeIntoHomeDir(second));
             if (conditionsFile.exists() == false) {
                 throw new ParseException(conditionsStr + " file does not exists.");
             }
         }else if(word.equals(saveAtStr)){
-            saveFolder = new File(second);
+            saveFolder = new File(peridot.Archiver.Manager.makeTildeIntoHomeDir(second));
             if(saveFolder.isFile()){
                 throw new ParseException("The output directory " +
                         "'" + saveFolder.getAbsolutePath() + "' is a file, not a directory.");
-            }
-            if(saveFolder.getParentFile().exists() == false){
-                throw new ParseException("The output directory " +
-                        "'" + saveFolder.getParentFile().getAbsolutePath() + "' does not exist.");
             }
         }else if(word.equals(labelsOnFirstColStr)){
             boolean value = Boolean.parseBoolean(second);

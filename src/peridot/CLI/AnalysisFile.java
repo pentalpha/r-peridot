@@ -58,7 +58,7 @@ public class AnalysisFile {
             }else{
                 Log.logger.fine("Could not find the directory of " + countReadsFile.getAbsolutePath() + ", leaving "
                 + AnalysisFileParser.saveAtStr + " empty.");
-                content += AnalysisFileParser.saveAtStr + " ~/" + "\n\n";
+                content += AnalysisFileParser.saveAtStr + " " + peridot.Archiver.Places.getUserHomePath() + "\n\n";
             }
 
             content += AnalysisFileParser.modulesStartStr + "\n";

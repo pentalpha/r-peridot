@@ -202,4 +202,14 @@ public final class Manager {
             return !dirStream.iterator().hasNext();
         }
     }
+
+    public static String makeTildeIntoHomeDir(String path){
+        if(path.length() > 0){
+            if (path.charAt(0) == '~'){
+                String userDir = peridot.Archiver.Places.getUserHomePath();
+                return userDir + path.substring(1);
+            }
+        }
+        return path;
+    }
 }

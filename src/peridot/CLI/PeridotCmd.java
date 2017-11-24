@@ -164,16 +164,21 @@ public final class PeridotCmd {
         }
         try {
             if (saveFolder.exists() == false) {
-                FileUtils.forceMkdirParent(saveFolder);
+                //FileUtils.forceMkdirParent(saveFolder);
                 FileUtils.forceMkdir(saveFolder);
             }else if (!Manager.isDirEmpty(saveFolder.toPath())){
+                Log.logger.info(saveFolder.getPath()
+                        + " is not empty, trying to save results in a different directory.");
                 File newSaveFolder = Manager.getAlternativeFileName(saveFolder);
                 return saveResultsAt(newSaveFolder);
             }
             FileUtils.copyDirectory(Places.finalResultsDir, saveFolder);
+            System.out.println("Output directory is " + saveFolder.getAbsolutePath());
             return true;
         } catch (Exception ex) {
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+            Log.logger.severe("Could not save the results to '" + saveFolder.getAbsolutePath() + "'." +
+                    " The results are temporarily stored at " + Places.finalResultsDir.getAbsolutePath());
             return false;
         }
     }

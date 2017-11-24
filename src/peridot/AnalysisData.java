@@ -424,7 +424,7 @@ public class AnalysisData {
             boolean eraseLine = filterValues(intSortedValues);
             if(eraseLine){
                 removeCounter++;
-                Log.logger.info(label + " line dropped by threshold.");
+                Log.logger.fine(label + " line dropped by threshold.");
             }else{
                 String lineToWrite = label;
                 for(int i = 0; i < intSortedValues.length; i++){
