@@ -127,18 +127,20 @@ public class RUN extends Command{
         this.detail = "R-Peridot's Command: run\n" +
                 "Options:\n" +
                 "\trun path/to/analysis/file\n" +
-                "\t\tMake an analysis based on a file with\n" +
+                "\t\tMake an analysis based on a file (.af) with\n" +
                 "\t\tall the necessary information.\n" +
                 "\trun --create-example path/to/count/reads/file\n" +
-                "\t\tCreates a file with most of the\n" +
-                "\t\tinformation ready. The user only have \n" +
-                "\t\tto modify the conditions of each sample,\n" +
-                "\t\tchoose between the modules listed\n" +
+                "\t\tCreates a '.af', named path/to/count/reads/file.af,\n" +
+                "\t\tfile with most of the information ready.\n" +
+                "\t\tThe user only has to modify the conditions of\n" +
+                "\t\teach sample, choose between the modules listed\n" +
                 "\t\tand modify the parameter's default values.\n" +
-                "\t\tThe conditions are created on the file\n." +
-                "\t\tpath/to/count/reads/file.conditions.\n\n" +
+                "\t\tThe conditions file is created at\n." +
+                "\t\tpath/to/count/reads/file.conditions.\n" +
+                "\t\tAll samples are set to not be used, you have to\n" +
+                "\t\tedit this file to set the conditions.\n\n" +
                 "\trun --specification\n" +
-                "\t\tPrints the specification of the analysis file.\n\n" +
+                "\t\tPrints the specification of the analysis file (.af).\n\n" +
                 "\trun --help\n\t\tDisplays this message\n\n";
     }
 }

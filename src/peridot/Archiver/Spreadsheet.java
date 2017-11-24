@@ -39,7 +39,7 @@ public class Spreadsheet {
         String[] row = Global.splitWithTabOrCur(line);
         String firstWord = row[0];
         if(Global.lineIsWords(row)){
-            Log.logger.info("The first line is made of words");
+            Log.logger.fine("The first line is made of words");
             return true;
         }
         

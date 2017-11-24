@@ -52,11 +52,12 @@ public final class Global {
     public static void openFileWithSysApp(File file){
         String cmd = "";
         if(SystemUtils.IS_OS_WINDOWS){
-            cmd = "CMD /C START " + file.getAbsolutePath();
+            cmd = "CMD /C START \"\" \"" + file.getAbsolutePath() + "\"";
         }else if(SystemUtils.IS_OS_LINUX){
             cmd = "xdg-open " + file.getAbsolutePath();
         }
         try{
+            Log.logger.info("Executing " + cmd);
             Runtime.getRuntime().exec(cmd);
         }catch (Exception ex){
             Log.logger.severe("Could not open " + file.getName() + " with external program.");

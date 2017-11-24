@@ -48,8 +48,8 @@ public class UserInterface {
                 "\tin [args]\t\tImport a module from *." + RModule.binExtension + " file\n" +
                 "\tout [args]\t\tExport a module to a *." + RModule.binExtension + " file\n" +
                 "\tls [args]\t\tList modules or read module details\n" +
-                "\trun [args]\t\tMake an analysis\n" +
-                "\t\nAdd -h or --help to any command (r-peridot [command] -h) for more information.\n");
+                "\trun [args]\t\tMake an analysis defined by an .af file.\n" +
+                "\t\nAdd -h or --help to any command (r-peridot [command] -h) for more detailed information.\n");
     }
 }
 

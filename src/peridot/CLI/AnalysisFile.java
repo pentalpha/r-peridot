@@ -42,6 +42,7 @@ public class AnalysisFile {
         try {
             String content = "";
             Spreadsheet.Info info = Spreadsheet.getInfo(countReadsFile);
+            File saveDir = countReadsFile.getParentFile();
             content += AnalysisFileParser.dataStr + " " + countReadsFile.getAbsolutePath() + "\n";
             SortedMap<IndexedString, String> conditions = AnalysisData.getConditionsFromExpressionFile(countReadsFile, info);
             File condFile = new File(countReadsFile.getAbsolutePath() + ".conditions");
@@ -52,7 +53,14 @@ public class AnalysisFile {
             content += AnalysisFileParser.labelsOnFirstColStr + " " + info.getLabelsOnFirstCol() + "\n";
             content += AnalysisFileParser.headerOnFirstLineStr + " " + info.getHeaderOnFirstLine() + "\n\n";
             content += AnalysisFileParser.conditionsStr + " " + condFile.getAbsolutePath() + "\n\n";
-            content += AnalysisFileParser.saveAtStr + " " + countReadsFile.getParentFile().getAbsolutePath() + "\n\n";
+            if(saveDir != null){
+                content += AnalysisFileParser.saveAtStr + " " + saveDir.getAbsolutePath() + "\n\n";
+            }else{
+                Log.logger.fine("Could not find the directory of " + countReadsFile.getAbsolutePath() + ", leaving "
+                + AnalysisFileParser.saveAtStr + " empty.");
+                content += AnalysisFileParser.saveAtStr + " ~/" + "\n\n";
+            }
+
             content += AnalysisFileParser.modulesStartStr + "\n";
             for(String pack : RModule.getAvailablePackages()){
                 content += "#" + pack + "\n";
