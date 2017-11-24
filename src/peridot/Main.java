@@ -1,11 +1,8 @@
 package peridot;
 
-import peridot.Archiver.Places;
 import peridot.CLI.PeridotCmd;
 import peridot.CLI.UserInterface;
 import peridot.script.Task;
-
-import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 

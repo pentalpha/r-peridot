@@ -42,7 +42,10 @@ public class AnalysisFile {
         try {
             String content = "";
             Spreadsheet.Info info = Spreadsheet.getInfo(countReadsFile);
-            File saveDir = countReadsFile.getParentFile();
+            File parentDir = countReadsFile.getParentFile();
+            if (parentDir == null){
+                parentDir = new File(peridot.Archiver.Manager.getCurrentWorkingDir());
+            }
             content += AnalysisFileParser.dataStr + " " + countReadsFile.getAbsolutePath() + "\n";
             SortedMap<IndexedString, String> conditions = AnalysisData.getConditionsFromExpressionFile(countReadsFile, info);
             File condFile = new File(countReadsFile.getAbsolutePath() + ".conditions");
@@ -53,13 +56,9 @@ public class AnalysisFile {
             content += AnalysisFileParser.labelsOnFirstColStr + " " + info.getLabelsOnFirstCol() + "\n";
             content += AnalysisFileParser.headerOnFirstLineStr + " " + info.getHeaderOnFirstLine() + "\n\n";
             content += AnalysisFileParser.conditionsStr + " " + condFile.getAbsolutePath() + "\n\n";
-            if(saveDir != null){
-                content += AnalysisFileParser.saveAtStr + " " + saveDir.getAbsolutePath() + "\n\n";
-            }else{
-                Log.logger.fine("Could not find the directory of " + countReadsFile.getAbsolutePath() + ", leaving "
-                + AnalysisFileParser.saveAtStr + " empty.");
-                content += AnalysisFileParser.saveAtStr + " " + peridot.Archiver.Places.getUserHomePath() + "\n\n";
-            }
+            content += AnalysisFileParser.saveAtStr + " "
+                    + parentDir.getAbsolutePath()
+                    + File.separator + countReadsFile.getName() + "-output" + "\n\n";
 
             content += AnalysisFileParser.modulesStartStr + "\n";
             for(String pack : RModule.getAvailablePackages()){
