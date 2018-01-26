@@ -252,14 +252,6 @@ public final class Global {
         Log.logger.info(s);
     }
 
-
-    /**
-     * Turns a string into an array of two strings where the
-     * first is the first word of the string and the second
-     * one is the rest of the original string
-     * @param text String to be separated in two
-     * @return  return[0] = first word, return[1] = the rest
-     */
     public static String[] spliceBySpacesAndTabs(String text){
         String[] spliced = text.split(" ");
         int total = 0;
@@ -278,6 +270,13 @@ public final class Global {
         return spliceTotal;
     }
 
+    /**
+     * Turns a string into an array of two strings where the
+     * first is the first word of the string and the second
+     * one is the rest of the original string
+     * @param text String to be separated in two
+     * @return  return[0] = first word, return[1] = the rest
+     */
     public static String[] firstWordAndTheRest(String text){
         String[] array = new String[2];
         String[] spliced = spliceBySpacesAndTabs(text);

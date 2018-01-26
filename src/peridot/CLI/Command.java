@@ -30,7 +30,7 @@ public abstract class Command {
     protected abstract void run();
 
     public static boolean isAModule(String name){
-        return RModule.availableScripts.containsKey(name);
+        return RModule.availableModules.containsKey(name);
     }
 
     public static boolean isHelpArg(String arg){

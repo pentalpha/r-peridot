@@ -159,7 +159,7 @@ public class ScriptRunnable implements Runnable {
         }
         Log.logger.fine(commandString);
     }
-    
+
     public ProcessBuilder makeProcessBuilder(){
         processBuilder = null;
 

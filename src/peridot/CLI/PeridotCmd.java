@@ -11,6 +11,7 @@ import peridot.script.AnalysisModule;
 import peridot.script.PostAnalysisModule;
 import peridot.script.RModule;
 import peridot.script.Task;
+import peridot.script.r.Interpreter;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,17 +46,34 @@ public final class PeridotCmd {
         return task;
     }
 
-    public static boolean loadAll(){
+    public static void createNecessaryDirs(){
+        //this should happen statically and before everything else!
         Places.createPeridotDir();
         Places.updateModulesDir(false);
+    }
 
+    public static boolean loadModules(){
         RModule.loadUserScripts();
-        if(RModule.getAvailableScripts().size() == 0){
+        if(RModule.getAvailableModules().size() == 0){
             Log.logger.severe("Fatal Error: Modules could not be loaded. " +
-                    "We recommend reloading the modules folder.");
+                    "We recommend to reset the modules folder.");
             return false;
         }
         Log.logger.finest("Modules loaded");
+        return true;
+    }
+
+    public static boolean loadInterpreters(){
+        Interpreter.interpreters = Interpreter.getAvailableInterpreters();
+        Interpreter.defaultInterpreter = Interpreter.loadDefaultInterpreter();
+
+        if(Interpreter.isDefaultInterpreterDefined() == false){
+            System.out.println("No R environment chosen yet. Choose one of the following:");
+            if(PeridotCmd.setDefaultInterpreter() == false){
+                System.out.println("No valid R environment chosen, exiting.");
+                return false;
+            }
+        }
         return true;
     }
 
@@ -68,7 +86,7 @@ public final class PeridotCmd {
         if(result){
             return true;
         }else{
-            Log.logger.severe("Could not delete " + Places.scriptsDir);
+            Log.logger.severe("Could not delete " + Places.modulesDir);
             return false;
         }
     }
@@ -79,7 +97,7 @@ public final class PeridotCmd {
             Log.logger.severe("Error: " + folderName + " is not a folder or does not exists.");
             return;
         }
-        RModule s = RModule.availableScripts.get(modName);
+        RModule s = RModule.availableModules.get(modName);
         if(s == null){
             Log.logger.severe("Error: " + modName + " is not an existent module.");
             return;
@@ -121,14 +139,14 @@ public final class PeridotCmd {
                 script = (PostAnalysisModule)bin;
             }
             script.createEnvironment(null);
-            RModule.availableScripts.put(script.name, script);
+            RModule.availableModules.put(script.name, script);
         }else{
             Log.logger.log(Level.SEVERE, "Could not load RModule binary. Unknown type.");
         }
     }
 
     public static void scriptDetails(String modName){
-        RModule s = RModule.availableScripts.get(modName);
+        RModule s = RModule.availableModules.get(modName);
         if(s == null){
             Log.logger.severe(modName + " is not a valid module.");
             return;
@@ -140,18 +158,18 @@ public final class PeridotCmd {
     }
 
     public static void clean(){
-        for(Map.Entry<String, RModule> pair : RModule.availableScripts.entrySet()){
+        for(Map.Entry<String, RModule> pair : RModule.availableModules.entrySet()){
             pair.getValue().cleanTempFiles();
         }
     }
 
     public static void listModules(){
         System.out.println("\n- AnalysisData Modules: ");
-        for(String name : RModule.getAvailablePackages()){
+        for(String name : RModule.getAvailableAnalysisModules()){
             System.out.println("\t" + name);
         }
         System.out.println("\n- Post-AnalysisData Modules: ");
-        for(String name : RModule.getAvailablePostAnalysisScripts()){
+        for(String name : RModule.getAvailablePostAnalysisModules()){
             System.out.println("\t" + name);
         }
     }
@@ -181,5 +199,39 @@ public final class PeridotCmd {
                     " The results are temporarily stored at " + Places.finalResultsDir.getAbsolutePath());
             return false;
         }
+    }
+
+    public static void listInterpreters(){
+        System.out.println("Available R environments:");
+        int i = 0;
+        for(Interpreter interpreter : Interpreter.interpreters){
+            i++;
+            String str = "["+i+"] " + interpreter.toString();
+            if(Interpreter.isDefaultInterpreterDefined()){
+                if(Interpreter.defaultInterpreter.exe.equals(interpreter.exe)){
+                    str = "* " + str;
+                }
+            }
+            System.out.println(str);
+        }
+        if(Interpreter.isDefaultInterpreterDefined()){
+            System.out.println("* = Default interpreter");
+        }
+    }
+
+    public static void addInterpreter(){
+        System.out.println("R environment addition not available yet");
+    }
+
+    public static void removeInterpreter(){
+        System.out.println("R environment removal not available yet");
+    }
+
+    public static void updateInterpreter(){
+        System.out.println("R package installation not available yet");
+    }
+
+    public static boolean setDefaultInterpreter(){
+        return false;
     }
 }

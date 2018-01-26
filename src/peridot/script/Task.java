@@ -117,7 +117,7 @@ public class Task {
     }
 
     private boolean evaluateScriptInput(String name){
-        RModule script = RModule.availableScripts.get(name);
+        RModule script = RModule.availableModules.get(name);
         if(script != null){
             script.passParameters(params);
             if(specificParams.containsKey(name)){
@@ -140,7 +140,7 @@ public class Task {
     }
 
     private boolean evaluateScriptForExecution(String name){
-        RModule script = RModule.availableScripts.get(name);
+        RModule script = RModule.availableModules.get(name);
         HashSet<String> modulesNotFound = new HashSet<>();
         for(String module : script.requiredScripts){
             if(!validQueryModules.contains(module)){
@@ -168,7 +168,7 @@ public class Task {
     }
 
     private void queueScriptForExecution(String name){
-        RModule script = RModule.availableScripts.get(name);
+        RModule script = RModule.availableModules.get(name);
         if(script instanceof AnalysisModule){
             remainingAnalysisScripts++;
         }
@@ -269,7 +269,7 @@ public class Task {
     
     public synchronized void addFinished(String name, boolean prefailed){
         Log.logger.finer("Adding " + name + " to finished scripts.");
-        if(RModule.getAvailablePackages().contains(name)){
+        if(RModule.getAvailableAnalysisModules().contains(name)){
             remainingAnalysisScripts--;
             Log.logger.fine(remainingAnalysisScripts + " analysis scripts remaining.");
             if(remainingAnalysisScripts <= 0){
@@ -297,7 +297,7 @@ public class Task {
     private void checkForSuccess(String name){
         if(scriptExecs.get(name).successFlag.get()){
             successfulScripts.add(name);
-            if(RModule.getAvailablePackages().contains(name)){
+            if(RModule.getAvailableAnalysisModules().contains(name)){
                 String path = Places.finalResultsDir.getAbsolutePath() + File.separator
                         + name + ".AnalysisModule" + File.separator + "res.tsv";
                 if(Manager.fileExists(path)){

@@ -140,10 +140,10 @@ public class AnalysisFileParser {
     public void setModules() throws ParseException {
         boolean anyPackages = false;
         for(String module : modules){
-            if(RModule.availableScripts.get(module) instanceof AnalysisModule){
+            if(RModule.availableModules.get(module) instanceof AnalysisModule){
                 anyPackages = true;
             }
-            for(String dep : RModule.availableScripts.get(module).requiredScripts){
+            for(String dep : RModule.availableModules.get(module).requiredScripts){
                 if(modules.contains(dep) == false){
                     throw new ParseException("Error: " + module + " depends on " + dep +
                             ", but " + dep + " was not chosen to be executed.");
@@ -161,7 +161,7 @@ public class AnalysisFileParser {
     public Map<String, Class> getRequiredParamsFromModules(){
         Map<String, Class> req = new HashMap<>();
         for(String modName : analysisFile.scriptsToExec){
-            for(Map.Entry<String, Class> pair : RModule.availableScripts.
+            for(Map.Entry<String, Class> pair : RModule.availableModules.
                     get(modName).requiredParameters.entrySet()){
                 req.put(pair.getKey(), pair.getValue());
             }
@@ -203,7 +203,7 @@ public class AnalysisFileParser {
     public void parseParamsAndModules(String type, Set<String> values) throws ParseException {
         if(type.equals(modulesStartStr)){
             for(String word : values){
-                if(!RModule.availableScripts.containsKey(word)){
+                if(!RModule.availableModules.containsKey(word)){
                     throw new ParseException("Error: " + word + " is not a" +
                             "valid module.");
                 }else{

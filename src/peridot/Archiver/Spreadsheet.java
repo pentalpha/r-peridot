@@ -78,6 +78,30 @@ public class Spreadsheet {
         return allRows;
     }
 
+    public static String[] getFirstRowFromTSV(File tableFile){
+        String[] row;
+        TsvParserSettings settings = new TsvParserSettings();
+        settings.getFormat().setLineSeparator("\n");
+        TsvParser parser = new TsvParser(settings);
+        parser.beginParsing(tableFile);
+        row = parser.parseNext();
+        parser.stopParsing();
+
+        return row;
+    }
+
+    public static String[] getFirstRowFromCSV(File tableFile){
+        String[] row;
+        CsvParserSettings settings = new CsvParserSettings();
+        settings.getFormat().setLineSeparator("\n");
+        CsvParser parser = new CsvParser(settings);
+        parser.beginParsing(tableFile);
+        row = parser.parseNext();
+        parser.stopParsing();
+
+        return row;
+    }
+
     /**
      * Assuming that the table has no first cell (line 0, column 0), corrects the first line.
      * @param allRows   Reference to a List of String[] with all the cells from a spreadsheet file.
@@ -264,7 +288,6 @@ public class Spreadsheet {
 
         /**
          *
-         * @param dataType          Rationals+Integer or Integers only
          * @param labelsOnFirstCol  If there are labels on the first column
          * @param headerOnFirstLine If there are headers on the first line
          * @param firstCellPresent  If the first cell (line 0, column 0) has

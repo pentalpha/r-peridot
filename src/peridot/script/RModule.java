@@ -12,6 +12,7 @@ import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.GeneIdType;
 import peridot.Log;
+import peridot.script.r.Package;
 
 import java.io.*;
 import java.util.*;
@@ -22,10 +23,166 @@ import java.util.logging.Level;
  * @author pentalpha
  */
 public class RModule implements Serializable{
-    public static HashMap<String, RModule> availableScripts;
+    ///////////////////////////////////////////////
+    //static fields and methods ///////////////////
+    ///////////////////////////////////////////////
+    public static HashMap<String, RModule> availableModules;
+    public static Map<String, Class> availableParamTypes = defineAvailableParamTypes();
+    /**
+     *  The extension of the RModule binary file
+     */
+    public static final String binExtension = "PeridotModule";
+
+    private static Map<String, Class> defineAvailableParamTypes(){
+        Map<String, Class> params = new TreeMap<>();
+        params.put(Integer.class.getSimpleName(), Integer.class);
+        params.put(Float.class.getSimpleName(), Float.class);
+        params.put(GeneIdType.class.getSimpleName(), GeneIdType.class);
+        return params;
+    }
+
+    public static void removeScriptResults(){
+        File dir = Places.finalResultsDir;
+        if(dir.exists()){
+            for(File file : FileUtils.listFilesAndDirs(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)){
+                if(file.isDirectory() && (file.getAbsolutePath().equals(dir.getAbsolutePath()) == false)){
+                    try{
+                        FileUtils.deleteDirectory(file);
+                        //file.delete();
+                    }catch(IOException ex){
+                        ex.printStackTrace();
+                        Log.logger.info("Cant delete " + file.getName() + " results.");
+                    }
+                }else if(file.isFile() && file.getAbsolutePath().contains(".output")){
+                    FileUtils.deleteQuietly(file);
+                }
+            }
+        }
+    }
+
+    public static Vector<String> getAvailableAnalysisModules(){
+        Vector<String> scripts = new Vector<>();
+        for(Map.Entry<String, RModule> pair : RModule.availableModules.entrySet()){
+            if(pair.getValue().getWorkingDirectory().getName().contains(".AnalysisModule")){
+                scripts.add(pair.getKey());
+                //Log.logger.info("fount result: " + pair.getKey());
+            }
+        }
+        return scripts;
+    }
+
+    public static Vector<String> getAvailablePostAnalysisModules(){
+        Vector<String> scripts = new Vector<>();
+        for(Map.Entry<String, RModule> pair : RModule.availableModules.entrySet()){
+            if(pair.getValue().getWorkingDirectory().getName().contains(".PostAnalysisModule")){
+                scripts.add(pair.getKey());
+                //Log.logger.info("fount result: " + pair.getKey());
+            }
+        }
+        return scripts;
+    }
+
+    public static Vector<String> getAvailableModules(){
+        Vector<String> scripts = new Vector<>();
+        for(Map.Entry<String, RModule> pair : RModule.availableModules.entrySet()){
+            if(pair.getValue() instanceof PostAnalysisModule){
+                scripts.add(pair.getKey());
+            }
+        }
+        return scripts;
+    }
+
+    public static void updateUserScripts(){
+        loadUserScripts();
+    }
+
+    public static boolean deleteScript(String script){
+        try{
+            //new File(Places.sgsDir + File.separator + "log.txt").delete();
+            FileUtils.deleteDirectory(RModule.availableModules.get(script).getWorkingDirectory());
+            return true;
+        }catch(IOException ex){
+            Log.logger.severe("Could not delete "
+                    + RModule.availableModules.get(script).workingDirectory.getName());
+            Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
+        }
+    }
+
+    //load all the scripts in the temp folder and sort them
+    public static void loadUserScripts(){
+        HashMap<String, RModule> loadedScripts = new HashMap<String, RModule>();
+        Set<File> subFiles;
+        Set<File> subDirs = new TreeSet<File>();
+        //Log.logger.info("trying to get subfiles");
+        subFiles = new TreeSet<File>(FileUtils.listFilesAndDirs(Places.modulesDir,
+                TrueFileFilter.TRUE, TrueFileFilter.TRUE));
+        //Log.logger.info("iterating subfiles subfiles");
+        for(File file : subFiles){
+            String filePath = file.getAbsolutePath();
+            if((filePath.equals(Places.modulesDir.getAbsolutePath()) == false)
+                    && (file.getAbsolutePath().contains("results") == false)
+                    && (file.getAbsolutePath().contains("results"+File.separator) == false)
+                    && (file.isDirectory() == true))
+            {
+                subDirs.add(file);
+            }
+        }
+
+
+        for(File file : subDirs){
+            //Log.logger.info("iterate subdir " + file.getAbsolutePath());
+            try{
+                if(file.getName().contains(".PostAnalysisModule")){
+                    PostAnalysisModule script = new PostAnalysisModule(file);
+                    loadedScripts.put(script.name, script);
+                }else if(file.getName().contains(".AnalysisModule")){
+                    //Log.logger.info("creating " + file.getName());
+                    AnalysisModule script = new AnalysisModule(file);
+                    //Log.logger.info("created");
+                    loadedScripts.put(script.name, script);
+                }
+            }catch(Exception ex){
+                Log.logger.info("ERROR\nCould not import " + file.getName() + ", because: ");
+                Log.logger.info(ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+
+        availableModules = loadedScripts;
+        if(loadedScripts.size() <= 0){
+            Log.logger.severe("Could not load any script from user folder.");
+        }
+        //sortAvailableScripts();
+        //return loadedScripts;
+    }
+
+    public static Map<String, Class> getRequiredParametersFromModules(){
+        Map<String, Class> params = new HashMap<>();
+        for(RModule script : availableModules.values()){
+            for(Map.Entry<String, Class> param : script.requiredParameters.entrySet()){
+                params.put(param.getKey(), param.getValue());
+            }
+        }
+        return params;
+    }
+
+    public static Set<Package> requiredPackages(){
+        Set<Package> req = new TreeSet<>();
+        for(RModule module : RModule.availableModules.values()){
+            req.addAll(module.requiredPackages);
+        }
+        return req;
+    }
+
+    ///////////////////////////////////////////
+    // instance fields and methods ////////////
+    ///////////////////////////////////////////
+
     //Nome dos parametros necessarios e suas respectivas classes
     //O script não irá executar se não forem todos passados antes
     public Map<String, Class> requiredParameters = null;
+    public Set<Package> requiredPackages = null;
     public Map<String, Object> parameters = null;
     //O caminho dos arquivos externos necessarios para a execução interna do script
     //O script não irá executar se não forem todos passados antes
@@ -46,12 +203,8 @@ public class RModule implements Serializable{
     public boolean needsReplicates;
     public boolean mandatoryFailed;
     public String info = null;
-    public static Map<String, Class> availableParamTypes = defineAvailableParamTypes();
     public StringBuilder scriptContent = null;
-    /**
-     *  The extension of the RModule binary file
-     */
-    public static final String binExtension = "PeridotModule";
+
     
     public RModule(String name, String scriptFile,
                    Map<String, Class> requiredParameters,
@@ -92,6 +245,7 @@ public class RModule implements Serializable{
         this.requiredScripts = new TreeSet<String>();
         this.requiredParameters = new TreeMap<String, Class>();
         this.requiredExternalFiles = new TreeSet<String>();
+        this.requiredPackages = new TreeSet<>();
         this.info = "";
 
         this.needsReplicates = false;
@@ -164,32 +318,17 @@ public class RModule implements Serializable{
                 {
                     value2 = words[2];
 
-                    if(category.equals("[REQUIRED-PARAMETER]"))
-                    {
+                    if(category.equals("[REQUIRED-PARAMETER]")) {
                         if(AnalysisParameters.availableParamTypes.keySet().contains(value2)){
                             this.requiredParameters.put(value, AnalysisParameters.availableParamTypes.get(value2));
-                        }/*
-                    if(value2.equals("Integer")){
-                        this.requiredParameters.put(value, Integer.class);
-                    }
-                    else if(value2.equals("Float")){
-                        this.requiredParameters.put(value, Float.class);
-                    }
-                    else if(value2.equals("String")){
-                        this.requiredParameters.put(value, String.class);
-                    }
-                    else if(value2.equals("Boolean")){
-                        this.requiredParameters.put(value, Boolean.class);
-                    }
-                    else if(value2.equals("GeneIdType")){
-                        this.requiredParameters.put(value, GeneIdType.class);
-                    }
-                    */else
-                        {
+                        }
+                        else{
                             throw new Exception("Unknown parameter type: " + value2);
                         }
-                    }
-                    else
+                    }else if(category.equals("[PACKAGE]")) {
+                        Package pack = new Package(value, value2);
+                        this.requiredPackages.add(pack);
+                    }else
                     {
                         throw new Exception("Unknown category: " + category);
                     }
@@ -257,6 +396,9 @@ public class RModule implements Serializable{
             //System.out.println(pair.getKey());
             String className = pair.getValue().getSimpleName();
             writer.write("[REQUIRED-PARAMETER]\t"+ pair.getKey() + "\t" + className + System.lineSeparator());
+        }
+        for(Package pack : this.requiredPackages){
+            writer.write("[PACKAGE]\t" + pack.name + "\t" + pack.version.toString() + System.lineSeparator());
         }
         String infoStr = "[INFO]\t";
         String[] linesRaw = this.info.split("\n");
@@ -343,13 +485,7 @@ public class RModule implements Serializable{
         }
     }
     
-    private static Map<String, Class> defineAvailableParamTypes(){
-        Map<String, Class> params = new TreeMap<>();
-        params.put(Integer.class.getSimpleName(), Integer.class);
-        params.put(Float.class.getSimpleName(), Float.class);
-        params.put(GeneIdType.class.getSimpleName(), GeneIdType.class);
-        return params;
-    }
+
     
     public Vector<String> getParamsDescription(){
         Vector<String> list = new Vector<>();
@@ -386,7 +522,7 @@ public class RModule implements Serializable{
         if(workingDirectory != null){
             return workingDirectory.getAbsolutePath();
         }
-        return Places.scriptsDir + File.separator + name 
+        return Places.modulesDir + File.separator + name
                                 + "." + getScriptType();
     }
     public File getWorkingDirectory(){
@@ -464,7 +600,7 @@ public class RModule implements Serializable{
     public Set<String> getNotExistantResults(){
         TreeSet<String> notExist = new TreeSet<String>();
         String scriptTypeExtension = ".PostAnalysisModule";
-        if(RModule.getAvailablePackages().contains(name)){
+        if(RModule.getAvailableAnalysisModules().contains(name)){
             scriptTypeExtension = ".AnalysisModule";
         }
         for(String filePath : this.results){
@@ -627,25 +763,6 @@ public class RModule implements Serializable{
         }
     }
     
-    public static void removeScriptResults(){
-        File dir = Places.finalResultsDir;
-        if(dir.exists()){
-            for(File file : FileUtils.listFilesAndDirs(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)){
-                if(file.isDirectory() && (file.getAbsolutePath().equals(dir.getAbsolutePath()) == false)){
-                    try{
-                        FileUtils.deleteDirectory(file);
-                        //file.delete();
-                    }catch(IOException ex){
-                        ex.printStackTrace();
-                        Log.logger.info("Cant delete " + file.getName() + " results.");
-                    }
-                }else if(file.isFile() && file.getAbsolutePath().contains(".output")){
-                    FileUtils.deleteQuietly(file);
-                }
-            }
-        }
-    }
-    
     public void cleanTempFiles(){
         Iterator<File> iterator = FileUtils.iterateFiles(getWorkingDirectory(), null, false);
         while(iterator.hasNext()){
@@ -669,112 +786,7 @@ public class RModule implements Serializable{
         }
     }
     
-    public static Vector<String> getAvailablePackages(){
-        Vector<String> scripts = new Vector<>();
-        for(Map.Entry<String, RModule> pair : RModule.availableScripts.entrySet()){
-            if(pair.getValue().getWorkingDirectory().getName().contains(".AnalysisModule")){
-                scripts.add(pair.getKey());
-                //Log.logger.info("fount result: " + pair.getKey());
-            }
-        }
-        return scripts;
-    }
-    
-    public static Vector<String> getAvailablePostAnalysisScripts(){
-        Vector<String> scripts = new Vector<>();
-        for(Map.Entry<String, RModule> pair : RModule.availableScripts.entrySet()){
-            if(pair.getValue().getWorkingDirectory().getName().contains(".PostAnalysisModule")){
-                scripts.add(pair.getKey());
-                //Log.logger.info("fount result: " + pair.getKey());
-            }
-        }
-        return scripts;
-    }
-    
-    public static Vector<String> getAvailableScripts(){
-        Vector<String> scripts = new Vector<>();
-        for(Map.Entry<String, RModule> pair : RModule.availableScripts.entrySet()){
-            if(pair.getValue() instanceof PostAnalysisModule){
-                scripts.add(pair.getKey());
-            }
-        }
-        return scripts;
-    }
-    
-    public static void updateUserScripts(){
-        loadUserScripts();
-    }
-    
-    public static boolean deleteScript(String script){
-        try{
-            //new File(Places.sgsDir + File.separator + "log.txt").delete();
-            FileUtils.deleteDirectory(RModule.availableScripts.get(script).getWorkingDirectory());
-            return true;
-        }catch(IOException ex){
-            Log.logger.severe("Could not delete " 
-                    + RModule.availableScripts.get(script).workingDirectory.getName());
-            Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
-        }
-    }
-    
-    //load all the scripts in the temp folder and sort them
-    public static void loadUserScripts(){
-        HashMap<String, RModule> loadedScripts = new HashMap<String, RModule>();
-        Set<File> subFiles;
-        Set<File> subDirs = new TreeSet<File>();
-        //Log.logger.info("trying to get subfiles");
-        subFiles = new TreeSet<File>(FileUtils.listFilesAndDirs(Places.scriptsDir,
-                                     TrueFileFilter.TRUE, TrueFileFilter.TRUE));
-        //Log.logger.info("iterating subfiles subfiles");
-        for(File file : subFiles){
-            String filePath = file.getAbsolutePath();
-            if((filePath.equals(Places.scriptsDir.getAbsolutePath()) == false)
-                && (file.getAbsolutePath().contains("results") == false)
-                && (file.getAbsolutePath().contains("results"+File.separator) == false)
-                && (file.isDirectory() == true))
-            {
-                subDirs.add(file);
-            }
-        }
-        
-        
-        for(File file : subDirs){
-            //Log.logger.info("iterate subdir " + file.getAbsolutePath());
-            try{
-                if(file.getName().contains(".PostAnalysisModule")){
-                    PostAnalysisModule script = new PostAnalysisModule(file);
-                    loadedScripts.put(script.name, script);
-                }else if(file.getName().contains(".AnalysisModule")){
-                    //Log.logger.info("creating " + file.getName());
-                    AnalysisModule script = new AnalysisModule(file);
-                    //Log.logger.info("created");
-                    loadedScripts.put(script.name, script);
-                }
-            }catch(Exception ex){
-                Log.logger.info("ERROR\nCould not import " + file.getName() + ", because: ");
-                Log.logger.info(ex.getMessage());
-                ex.printStackTrace();
-            }
-        }
-        
-        availableScripts = loadedScripts;
-        if(loadedScripts.size() <= 0){
-            Log.logger.severe("Could not load any script from user folder.");
-        }
-        //sortAvailableScripts();
-        //return loadedScripts;
-    }
 
-    public static Map<String, Class> getRequiredParametersFromModules(){
-        Map<String, Class> params = new HashMap<>();
-        for(RModule script : availableScripts.values()){
-            for(Map.Entry<String, Class> param : script.requiredParameters.entrySet()){
-                params.put(param.getKey(), param.getValue());
-            }
-        }
-        return params;
-    }
     
     public void toBin(File file) throws IOException{
         peridot.Archiver.Persistence.saveObjectAsBin(file, this);

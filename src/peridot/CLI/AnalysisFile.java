@@ -61,10 +61,10 @@ public class AnalysisFile {
                     + File.separator + countReadsFile.getName() + "-output" + "\n\n";
 
             content += AnalysisFileParser.modulesStartStr + "\n";
-            for(String pack : RModule.getAvailablePackages()){
+            for(String pack : RModule.getAvailableAnalysisModules()){
                 content += "#" + pack + "\n";
             }
-            for(String script : RModule.getAvailablePostAnalysisScripts()){
+            for(String script : RModule.getAvailablePostAnalysisModules()){
                 content += "#" + script + "\n";
             }
             content += AnalysisFileParser.endStr + "\n\n";
