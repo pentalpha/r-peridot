@@ -1,6 +1,6 @@
 package peridot.script.r;
 
-public class Package {
+public class Package{
     public VersionNumber version;
     public String name;
 
@@ -30,4 +30,5 @@ public class Package {
             return false;
         }
     }
+
 }

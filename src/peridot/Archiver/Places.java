@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -221,8 +222,8 @@ public final class Places {
     public static String[] getWin64And32ExecsFrom(String rWindowsDir){
         String[] exes = new String[2];
         String binDir = rWindowsDir + File.separator + "bin";
-        exes[1] = binDir + File.separator +"x64" + File.separator + "R.exe";
-        exes[2] = binDir + File.separator +"i386" + File.separator + "R.exe";
+        exes[0] = binDir + File.separator +"x64" + File.separator + "R.exe";
+        exes[1] = binDir + File.separator +"i386" + File.separator + "R.exe";
 
         return exes;
     }
@@ -245,9 +246,9 @@ public final class Places {
         for(int i = 0; i < defaultRportableDir.length; i++){
             if(defaultRportableDir[i] != null){
                 String[] win64and32execs = getWin64And32ExecsFrom(defaultRportableDir[i]);
-                for(int j = 0; j < win64and32execs.length; i++){
-                    if(win64and32execs[i] != null){
-                        exes.add(win64and32execs[i]);
+                for(int j = 0; j < win64and32execs.length; j++){
+                    if(win64and32execs[j] != null){
+                        exes.add(win64and32execs[j]);
                     }
                 }
             }
@@ -263,9 +264,9 @@ public final class Places {
                         && subs[i].getName().contains("R-3"))
                 {
                     String[] win64and32execs = getWin64And32ExecsFrom(subs[i].getAbsolutePath());
-                    for(int j = 0; j < win64and32execs.length; i++){
+                    for(int j = 0; j < win64and32execs.length; j++){
                         if(win64and32execs[i] != null){
-                            exes.add(win64and32execs[i]);
+                            exes.add(win64and32execs[j]);
                         }
                     }
                 }
@@ -288,7 +289,7 @@ public final class Places {
     }
 
     public static Set<String> getDefaultRexecs(){
-        TreeSet<String> exes = new TreeSet<>();
+        HashSet<String> exes = new HashSet<>();
         if(org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS){
             exes.addAll(windowsRexes());
         }else if(org.apache.commons.lang3.SystemUtils.IS_OS_LINUX){
@@ -398,7 +399,7 @@ public final class Places {
         }
         if(exec.exists()){
             if(exec.isFile()){
-                Log.logger.info("R is " + exec.getAbsolutePath());
+                //Log.logger.info("R is " + exec.getAbsolutePath());
                 if(org.apache.commons.lang3.SystemUtils.IS_OS_LINUX){
                     //setLinuxEnvironmentVars();
                 }

@@ -168,7 +168,7 @@ public class RModule implements Serializable{
     }
 
     public static Set<Package> requiredPackages(){
-        Set<Package> req = new TreeSet<>();
+        Set<Package> req = new HashSet<>();
         for(RModule module : RModule.availableModules.values()){
             req.addAll(module.requiredPackages);
         }
@@ -245,7 +245,7 @@ public class RModule implements Serializable{
         this.requiredScripts = new TreeSet<String>();
         this.requiredParameters = new TreeMap<String, Class>();
         this.requiredExternalFiles = new TreeSet<String>();
-        this.requiredPackages = new TreeSet<>();
+        this.requiredPackages = new HashSet<>();
         this.info = "";
 
         this.needsReplicates = false;
@@ -310,7 +310,7 @@ public class RModule implements Serializable{
                     }
                     else
                     {
-                        throw new Exception("Unknown category: " + category);
+                        throw new Exception("Unknown category: " + category + " " + value);
                     }
 
                 }

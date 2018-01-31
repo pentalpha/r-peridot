@@ -8,6 +8,7 @@ package peridot.script;
 import peridot.Archiver.Places;
 import peridot.Log;
 import peridot.Output;
+import peridot.script.r.Interpreter;
 
 import java.io.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -31,9 +32,11 @@ public class ScriptExec {
     Runnable isRunningRunnable;
     Task task;
     public Output output;
+    public Interpreter interpreter;
     
     //public ScriptProgressMonitorPanel monitor;
-    public ScriptExec(RModule script, Output output, Task task){
+    public ScriptExec(RModule script, Output output, Task task, Interpreter interpreter){
+        this.interpreter = interpreter;
         this.task = task;
         this.script = script;
         this.output = output;

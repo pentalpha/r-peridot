@@ -11,6 +11,7 @@ import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.Log;
 import peridot.Output;
+import peridot.script.r.Interpreter;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -173,7 +174,7 @@ public class Task {
             remainingAnalysisScripts++;
         }
         Output output = new Output();
-        ScriptExec exec = new ScriptExec(script, output, this);
+        ScriptExec exec = new ScriptExec(script, output, this, Interpreter.defaultInterpreter);
         scriptOutputs.put(name, output);
         scriptExecs.put(name, exec);
 

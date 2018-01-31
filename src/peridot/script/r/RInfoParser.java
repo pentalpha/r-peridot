@@ -2,10 +2,7 @@ package peridot.script.r;
 
 import peridot.Global;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by pentalpha on 26/01/2018.
@@ -28,7 +25,7 @@ public class RInfoParser {
     }
 
     private void splitInfo(String info){
-        String[] infoLines = info.split("\n");
+        String[] infoLines = info.split(System.lineSeparator());
 
         String currentCommand = null;
         List<String> commandOutput = null;
@@ -42,8 +39,9 @@ public class RInfoParser {
                     }
                     currentCommand = infoLines[i];
                     commandOutput = new ArrayList<>();
+                }else{
+                    commandOutput.add(infoLines[i]);
                 }
-                commandOutput.add(infoLines[i]);
             }
 
         }
@@ -72,6 +70,18 @@ public class RInfoParser {
     }
 
     private void readPackages(List<String> packsTable){
-
+        Set<Package> packs = new HashSet<>();
+        for(int i = 1; i < packsTable.size(); i++){
+            String[] splice = Global.spliceBySpacesAndTabs(packsTable.get(i));
+            if(splice.length == 3){
+                Package pack = new Package(splice[1], splice[2]);
+                packs.add(pack);
+            }
+        }
+        if(packs.size() > 0){
+            this.packages = packs;
+        }else{
+            this.packages = null;
+        }
     }
 }

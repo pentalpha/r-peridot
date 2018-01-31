@@ -16,6 +16,7 @@ import peridot.script.r.Interpreter;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -25,6 +26,12 @@ public final class PeridotCmd {
         throw new AssertionError();
     }
 
+    public static String loadingState = "not loaded";
+
+    public static void changeLoadingState(String newState){
+        loadingState = newState;
+        System.out.println("["+newState+"]");
+    }
 
     public static Task start(AnalysisFile analysisFile){
         return PeridotCmd.start(analysisFile.scriptsToExec,
@@ -48,11 +55,13 @@ public final class PeridotCmd {
 
     public static void createNecessaryDirs(){
         //this should happen statically and before everything else!
+        changeLoadingState("Preparing directories");
         Places.createPeridotDir();
         Places.updateModulesDir(false);
     }
 
     public static boolean loadModules(){
+        changeLoadingState("Loading Modules");
         RModule.loadUserScripts();
         if(RModule.getAvailableModules().size() == 0){
             Log.logger.severe("Fatal Error: Modules could not be loaded. " +
@@ -64,9 +73,9 @@ public final class PeridotCmd {
     }
 
     public static boolean loadInterpreters(){
-        Interpreter.interpreters = Interpreter.getAvailableInterpreters();
-        Interpreter.defaultInterpreter = Interpreter.loadDefaultInterpreter();
-
+        changeLoadingState("Loading R Environments");
+        Interpreter.getAvailableInterpreters();
+        Interpreter.loadDefaultInterpreter();
         if(Interpreter.isDefaultInterpreterDefined() == false){
             System.out.println("No R environment chosen yet. Choose one of the following:");
             if(PeridotCmd.setDefaultInterpreter() == false){
@@ -74,6 +83,7 @@ public final class PeridotCmd {
                 return false;
             }
         }
+        System.out.println("Current R environment:\n\t"+Interpreter.defaultInterpreter.exe);
         return true;
     }
 
@@ -203,35 +213,59 @@ public final class PeridotCmd {
 
     public static void listInterpreters(){
         System.out.println("Available R environments:");
-        int i = 0;
-        for(Interpreter interpreter : Interpreter.interpreters){
-            i++;
-            String str = "["+i+"] " + interpreter.toString();
-            if(Interpreter.isDefaultInterpreterDefined()){
-                if(Interpreter.defaultInterpreter.exe.equals(interpreter.exe)){
-                    str = "* " + str;
-                }
-            }
-            System.out.println(str);
-        }
-        if(Interpreter.isDefaultInterpreterDefined()){
-            System.out.println("* = Default interpreter");
-        }
+        System.out.println(Interpreter.getInterpretersStr());
     }
 
-    public static void addInterpreter(){
-        System.out.println("R environment addition not available yet");
+    public static void addInterpreter(String env){
+        if(Interpreter.addInterpreter(env)){
+            System.out.println("'" + env + "' Added successfully!");
+        }else{
+            System.out.println("Invalid R environment, not adding it.");
+        }
+        //System.out.println("R environment addition not available yet");
     }
 
     public static void removeInterpreter(){
-        System.out.println("R environment removal not available yet");
+        System.out.println("Choose a R environment to be removed from R-Peridot.");
+        System.out.println(Interpreter.getInterpretersStr());
+        int n = getInterpreterNumber();
+        if(Interpreter.removeInterpreter(n-1)){
+            System.out.println("Successfully removed from R-Peridot.");
+        }else{
+            System.out.println("Invalid environment to remove from R-Peridot.");
+        }
     }
 
     public static void updateInterpreter(){
-        System.out.println("R package installation not available yet");
+        System.out.println("R package installation/updating not available yet.");
     }
 
     public static boolean setDefaultInterpreter(){
-        return false;
+        System.out.println("Choose a R environment to be used by R-Peridot.");
+        System.out.println(Interpreter.getInterpretersStr());
+        int n = getInterpreterNumber();
+        if(n < 1 || n > Interpreter.interpreters.size()){
+            return false;
+        }else{
+            Interpreter.setDefault(n-1);
+            return true;
+        }
+    }
+
+    private static int getInterpreterNumber(){
+        int n = -1;
+        boolean repeat = true;
+        while(repeat){
+            Scanner keyboard = new Scanner(System.in);
+            System.out.println("Number of the R environment: ");
+            n = keyboard.nextInt();
+            if(n < 0 || n > Interpreter.interpreters.size()){
+                repeat = true;
+                System.out.println("Invalid R environment number.");
+            }else{
+                repeat = false;
+            }
+        }
+        return n;
     }
 }

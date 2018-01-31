@@ -49,6 +49,7 @@ public class Main {
             PeridotConfig.save();
         }catch (IOException ex){
             Log.logger.severe("Error while saving the current configurations");
+            ex.printStackTrace();
         }
         finished.set(true);
     }

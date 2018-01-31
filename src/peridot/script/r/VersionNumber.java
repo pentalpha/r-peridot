@@ -5,8 +5,8 @@ public class VersionNumber implements Comparable<VersionNumber>{
     private String fullVersion;
 
     public VersionNumber(String version){
-        version = version.replace('-','.');
-        String[] strNumbers = version.split(".");
+        version = version.replace('.','-');
+        String[] strNumbers = version.split("-");
         numbers = new int[strNumbers.length];
         fullVersion = "";
         for(int i = 0; i < strNumbers.length; i++){

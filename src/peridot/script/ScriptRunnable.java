@@ -105,8 +105,8 @@ public class ScriptRunnable implements Runnable {
 
     public void defineCommand(){
         boolean needsEnv = false;
-        String rPath;
-        if(Places.rExec != null){
+        String rPath = this.exec.interpreter.exe;
+        /*if(Places.rExec != null){
             if(Places.rExec.exists()){
                 rPath = Places.rExec.getAbsolutePath();
                 if(SystemUtils.IS_OS_LINUX){
@@ -117,7 +117,8 @@ public class ScriptRunnable implements Runnable {
             }
         }else{
             rPath = "R";
-        }
+        }*/
+
         String notFirstExec;
         if(firstRun){
             notFirstExec = "0";

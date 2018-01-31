@@ -11,6 +11,7 @@ import peridot.Archiver.Places;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -267,7 +268,15 @@ public final class Global {
             }
             lastJ = lastJ + spliceTemp.length;
         }
-        return spliceTotal;
+
+        List<String> notEmpty = new ArrayList<>();
+        for(int i = 0; i < spliceTotal.length; i++){
+            if(spliceTotal[i].length() > 0){
+                notEmpty.add(spliceTotal[i]);
+            }
+        }
+        String[] splice = notEmpty.toArray(new String[1]);
+        return splice;
     }
 
     /**
@@ -335,4 +344,56 @@ public final class Global {
         return s;
     }
 
+    public static boolean endsWithQuotes(String str){
+        if(str.length()==0){
+            return false;
+        }else{
+            return str.charAt(str.length()-1) == '\"';
+        }
+    }
+
+    public static boolean startsWithQuotes(String str){
+        if(str.length()==0){
+            return false;
+        }else{
+            return str.charAt(0) == '\"';
+        }
+    }
+
+    public static String[] joinArgsBetweenQuotes(String[] args){
+        List<String> newArgs = new ArrayList<>();
+        //String tempString = "";
+        //boolean betweenQuotes = false;
+        for(int i = 0; i < args.length; i++){
+            String arg = args[i];
+            //boolean ends = endsWithQuotes(args[i]);
+            boolean starts = startsWithQuotes(args[i]);
+            /*if(betweenQuotes){
+                tempString += " " + args[i];
+            }else{
+                tempString = args[i];
+            }*/
+            if(starts){
+                arg = arg.substring(1);
+                String newArg = "";
+                while(!endsWithQuotes(arg)){
+                    if(i >= args.length){
+                        break;
+                    }
+                    newArg += " " + arg;
+                    i++;
+                    arg = args[i];
+                }
+                if(endsWithQuotes(arg)){
+                    if(arg.length()>1) {
+                        newArg += " " + arg.substring(0, arg.length() - 2);
+                    }
+                }
+                newArgs.add(newArg);
+            }else{
+                newArgs.add(arg);
+            }
+        }
+        return newArgs.toArray(new String[1]);
+    }
 }

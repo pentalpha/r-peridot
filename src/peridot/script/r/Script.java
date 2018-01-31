@@ -50,7 +50,7 @@ public class Script {
 
     public String waitForOutput(int secondsToWait){
         output = new Output();
-        Thread stopperThread = new Thread(() ->{
+        /*Thread stopperThread = new Thread(() ->{
             if(secondsToWait > 0){
                 try {
                     Thread.sleep(secondsToWait * 1000);
@@ -62,7 +62,7 @@ public class Script {
                     output.appendLine("[SCRIPT_TIMEOUT]");
                 }
             }
-        });
+        });*/
 
         if(process != null){
             InputStream iStream = process.getInputStream();
@@ -71,7 +71,7 @@ public class Script {
             try{
                 stopListeningFlag = new AtomicBoolean();
                 stopListeningFlag.set(false);
-                stopperThread.run();
+                //stopperThread.run();
                 int c;
                 while((c = buffReader.read()) != -1 && stopListeningFlag.get() == false){
                     output.appendChar((char)c);
@@ -81,11 +81,11 @@ public class Script {
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
 
-            try{
+            /*try{
                 stopperThread.join();
             }catch (InterruptedException ex){
 
-            }
+            }*/
         }
         return output.getText();
     }

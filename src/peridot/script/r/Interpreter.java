@@ -3,6 +3,8 @@ package peridot.script.r;
 import org.apache.commons.lang3.tuple.Pair;
 import peridot.Archiver.PeridotConfig;
 import peridot.Archiver.Places;
+import peridot.CLI.PeridotCmd;
+import peridot.Log;
 import peridot.script.RModule;
 
 import java.io.File;
@@ -30,18 +32,22 @@ public class Interpreter {
         return interpreters != null;
     }
 
-    public static Interpreter loadDefaultInterpreter(){
+    public static void loadDefaultInterpreter(){
         if(PeridotConfig.get().defaultInterpreter != null){
             for(Interpreter interpreter : interpreters){
                 if(interpreter.exe.equals(PeridotConfig.get().defaultInterpreter)){
-                    return interpreter;
+                    Interpreter.defaultInterpreter = interpreter;
+                    //Log.logger.info(PeridotConfig.get().defaultInterpreter + "\nequals to\n"+interpreter.exe);
+                    return;
+                }else{
+                    //Log.logger.info(PeridotConfig.get().defaultInterpreter + "\ndifferent from\n"+interpreter.exe);
                 }
             }
         }
-        return null;
+        Interpreter.defaultInterpreter = null;
     }
 
-    public static List<Interpreter> getAvailableInterpreters(){
+    public static void getAvailableInterpreters(){
         Set<String> execs = PeridotConfig.get().availableInterpreters;
         List<Interpreter> interpreters = new ArrayList<>();
         for(String exec : execs){
@@ -51,9 +57,9 @@ public class Interpreter {
             }
         }
 
-        Comparator<Interpreter> comparator = reverseOrder(comparing(Interpreter::getRVersion));
+        Comparator<Interpreter> comparator = comparing(Interpreter::getRVersion).reversed();
         Collections.sort(interpreters, comparator);
-        return interpreters;
+        Interpreter.interpreters = interpreters;
     }
 
     public static boolean addInterpreter(String exec){
@@ -77,7 +83,8 @@ public class Interpreter {
 
     public static boolean removeInterpreter(int i){
         if(i >= 0 && i < interpreters.size()){
-            return interpreters.remove(i) != null;
+            boolean removed = interpreters.remove(i) != null;
+            return removed;
         }else{
             return false;
         }
@@ -89,6 +96,25 @@ public class Interpreter {
             return true;
         }
         return false;
+    }
+
+    public static String getInterpretersStr(){
+        String s = "";
+        int i = 0;
+        for(Interpreter interpreter : Interpreter.interpreters){
+            i++;
+            String str = "["+i+"] " + interpreter.toString();
+            if(Interpreter.isDefaultInterpreterDefined()){
+                if(Interpreter.defaultInterpreter.exe.equals(interpreter.exe)){
+                    str = "* " + str;
+                }
+            }
+            s += str;
+        }
+        if(Interpreter.isDefaultInterpreterDefined()){
+            s += "* = Default interpreter";
+        }
+        return s;
     }
 
     //Non-static values
@@ -166,13 +192,13 @@ public class Interpreter {
         }
         //notInstalledPacks.addAll(RModule.requiredPackages());
         //Set<String> requiredNames //TODO
-        Set<Package> installed = new TreeSet<>();
+        Set<Package> installed = new HashSet<>();
         for(Package pack : this.availablePackages){
             if(required.keySet().contains(pack.name)){
                 installed.add(required.get(pack.name));
             }
         }
-        Set<Package> notInstalledPacks = new TreeSet<>();
+        Set<Package> notInstalledPacks = new HashSet<>();
         notInstalledPacks.addAll(RModule.requiredPackages());
         notInstalledPacks.removeAll(installed);
         return notInstalledPacks;
@@ -180,14 +206,16 @@ public class Interpreter {
 
     @Override
     public String toString(){
-
         String str = this.exe + ":\n" +
                         "\tVersion: " + this.rVersion.toString() +
                         "\tScore: " + String.format("%.2f", value*10) +
                         "\n";
         Set<Package> toInstall = getPackagesToInstall();
-        for(Package pack : toInstall){
-            str += "\t\t"+pack.name+"\t"+pack.version.toString()+"\n";
+        if(toInstall.size() > 0){
+            str += "\tTo Install:\n";
+            for(Package pack : toInstall){
+                str += "\t\t"+pack.name+"\t"+pack.version.toString()+"\n";
+            }
         }
 
         return str;
@@ -221,21 +249,24 @@ public class Interpreter {
         //normalize by the number of required packages
         value = value / nRequiredPackages;
 
+        float rValue = 0.0f;
         //compare with the minimal and preferred R versions
         if(this.rVersion.compareTo(PeridotConfig.minimalRVersion) < 0){
             //R is too old
-            value = value * 0.25f;
+            rValue = 0;
         }else{
             int comparison = this.rVersion.compareTo(PeridotConfig.preferredRVersion);
             if(comparison > 0){
                 //newer than expected, not bad, but can come with unexpected behaviour
-                value = value * 0.9f;
+                rValue = 0.9f;
             }else if(comparison < 0){
                 //R is old, but may still work
-                value = value * 0.75f;
+                rValue = 0.5f;
+            }else if(comparison == 0){
+                rValue = 1.0f;
             }
         }
-        this.value = value;
+        this.value = value * 0.6f + rValue * 0.4f;
         return value;
     }
 

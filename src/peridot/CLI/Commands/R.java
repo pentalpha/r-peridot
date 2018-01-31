@@ -12,17 +12,20 @@ public class R extends Command {
     }
 
     public void evaluateArgs() throws CmdParseException{
-        if(args.length > 1){
-            fail("'r-peridot ls' takes only zero or one arguments.");
+        if(args.length >= 3){
+            System.out.println(args[0] + "     " + args[1] + "    " + args[2]);
+            fail("Too many arguments for 'r-peridot r'");
         }else{
             if(args.length == 1) {
                 if (isHelpArg(args[0]) == false &&
-                        !(args[0].equals("update") || args[0].equals("add")
-                                || args[0].equals("rm") || args[0].equals("choose")
-                            )
+                        !(args[0].equals("update") || args[0].equals("rm") || args[0].equals("choose"))
                         )
                 {
-                    fail("Expected '--help', 'update', 'add' or 'rm': " + args[0]);
+                    fail("Expected '--help', 'update', 'rm' or 'choose': " + args[0]);
+                }
+            }else if(args.length == 2){
+                if(!args[0].equals("add")){
+                    fail("Expected a 'r-peridot add <path/to/environment>': " + args[0] + " " + args[1]);
                 }
             }
         }
@@ -36,12 +39,14 @@ public class R extends Command {
                 this.printDetails();
             }else if(args[0].equals("update")){
                 PeridotCmd.updateInterpreter();
-            }else if(args[0].equals("add")){
-                PeridotCmd.addInterpreter();
             }else if(args[0].equals("rm")){
                 PeridotCmd.removeInterpreter();
             }else if(args[0].equals("choose")){
                 PeridotCmd.setDefaultInterpreter();
+            }
+        }else if(args.length == 2){
+            if(args[0].equals("add")){
+                PeridotCmd.addInterpreter(args[1]);
             }
         }
     }
@@ -55,8 +60,8 @@ public class R extends Command {
                 "\tr update\tInstall packages required by\n" +
                 "\t\t\t\tthe modules in one/all R environments\n" +
                 "\tr choose\tChoose default R environment\n" +
-                "\tr add\tAdd a new R environment\n" +
-                "\tr rm\tRemove a new R environment\n" +
+                "\tr add <path/to/environment>\n\t\t\t\tAdd a new R environment\n" +
+                "\tr rm\t\tRemove a new R environment\n" +
                 "\tr --help\tPrint this help message\n";
     }
 }

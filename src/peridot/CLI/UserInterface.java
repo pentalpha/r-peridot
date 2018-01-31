@@ -1,16 +1,16 @@
 package peridot.CLI;
 
-import peridot.CLI.Commands.IN;
-import peridot.CLI.Commands.LS;
-import peridot.CLI.Commands.OUT;
-import peridot.CLI.Commands.RUN;
+import peridot.CLI.Commands.*;
+import peridot.Global;
 import peridot.script.RModule;
 
 /**
  * Created by pentalpha on 4/27/17.
  */
 public class UserInterface {
+
     public UserInterface(String[] args){
+        args = Global.joinArgsBetweenQuotes(args);
         String command = args[0];
         String[] theRest = new String[args.length-1];
         Command cmd;
@@ -27,6 +27,8 @@ public class UserInterface {
             cmd = new OUT(theRest);
         }else if(command.equals("run")){
             cmd = new RUN(theRest);
+        }else if(command.equals("r")){
+            cmd = new R(theRest);
         }else{
             printInvalidCommand(command);
         }
@@ -49,6 +51,7 @@ public class UserInterface {
                 "\tout [args]\t\tExport a module to a *." + RModule.binExtension + " file\n" +
                 "\tls [args]\t\tList modules or read module details\n" +
                 "\trun [args]\t\tMake an analysis defined by an .af file.\n" +
+                "\tr [args]\t\tList, add, remove or update R environments for R-Peridot.\n" +
                 "\t\nAdd -h or --help to any command (r-peridot [command] -h) for more detailed information.\n");
     }
 }
