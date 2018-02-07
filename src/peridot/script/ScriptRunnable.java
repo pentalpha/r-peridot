@@ -139,7 +139,7 @@ public class ScriptRunnable implements Runnable {
         commandArray = c;
 
         if(needsEnv){
-            String[] envVars = Places.getLinuxEnvForRPortable();
+            String[] envVars = exec.interpreter.getLinuxEnvVars();
             String[] commandArray2 = new String[commandArray.length+1+envVars.length];
             commandArray2[0] = "env";
             for(int i = 0; i < envVars.length; i++){

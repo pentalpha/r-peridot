@@ -634,16 +634,21 @@ public class RModule implements Serializable{
     
     //copia os resultados salvos na pasta (getWorkingDirectory())/temp em uma pasta externa, de forma permanente
     private void saveResultsAt(String newFolder){
-        for(String result : this.results){
-            try{
-                File resultFile = new File(this.resultsFolder.getAbsolutePath() + File.separator + result);
-                File destination = new File(newFolder + File.separator + result);
-                if(resultFile.exists()){
-                    new File(newFolder).mkdir();
-                    FileUtils.copyFile(resultFile, destination);
+        Collection<File> subs = FileUtils.listFiles(resultsFolder,null,true);
+        if(subs != null){
+            new File(newFolder).mkdir();
+            for(File sub : subs){
+                if(sub.isFile()) {
+                    String subLocation = sub.getAbsolutePath();
+                    String destLocation = subLocation.replace(resultsFolder.getAbsolutePath(), newFolder);
+                    File destination = new File(destLocation);
+                    try {
+                        FileUtils.copyFile(sub, destination);
+                    } catch (Exception ex) {
+                        Log.logger.severe("Failed copying " + sub.getAbsolutePath() + " to " + destination.getAbsolutePath());
+                        ex.printStackTrace();
+                    }
                 }
-            }catch(Exception ex){
-                ex.printStackTrace();
             }
         }
     }

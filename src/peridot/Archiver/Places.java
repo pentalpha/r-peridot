@@ -53,7 +53,7 @@ public final class Places {
     /**
      * The directory of r-portable, if there is a detectable r-portable on this system.
      */
-    public static File rPortableDir = getRPortableFolder();
+    //public static File rPortableDir = getRPortableFolder();
 
     /**
      * The name of the file that stores the count reads for the modules to use.
@@ -80,11 +80,6 @@ public final class Places {
             + ".r-peridot-files" 
             + File.separator + "results" 
             + File.separator + conditionInputFileName);
-
-    /**
-     * The R executable to be used by R-Peridot.
-     */
-    public static File rExec = getRExec();
 
     /**
      * The directory in which r-peridot is located.
@@ -331,7 +326,7 @@ public final class Places {
      * @return  The directory in which r-peridot is located.
      *          null if could not find it.
      */
-    public static File getRPortableFolder(){
+    /*public static File getRPortableFolder(){
         File userRPortable = new File(getUserHomePath() + File.separator
                 + "r-portable");
         File jarFolder = getJarFolder();
@@ -357,7 +352,7 @@ public final class Places {
 
             return null;
         }
-    }
+    }*/
 
     /**
      * Looks for the R executable file in [rPortableDir]/bin,
@@ -366,7 +361,7 @@ public final class Places {
      * @return  The R executable file.
      *          null if could not find it.
      */
-    public static File getRExec(){
+    /*public static File getRExec(){
         boolean is64Bits = false;
         if(org.apache.commons.lang3.SystemUtils.OS_ARCH.contains("64")){
             is64Bits = true;
@@ -408,13 +403,13 @@ public final class Places {
         }
         Log.logger.warning("R portable not found, using system PATH instead.");
         return null;
-    }
+    }*/
 
     /**
      * @return Array of Linux Environment Variables for R-Portable.
      */
-    public static String[] getLinuxEnvForRPortable(){
+    /*public static String[] getLinuxEnvForRPortable(){
         String[] strings = {"R_HOME='" + Places.rPortableDir.getAbsolutePath() + "'"};
         return strings;
-    }
+    }*/
 }
