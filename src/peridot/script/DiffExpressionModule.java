@@ -41,7 +41,7 @@ public class DiffExpressionModule extends AnalysisModule {
         TreeMap<String, Class> parameters = new TreeMap<String, Class>();
         parameters.put("pValue", Float.class);
         parameters.put("fdr", Float.class);
-        parameters.put("log2FoldChange", Float.class);
+        parameters.put("foldChange", Float.class);
         parameters.put("tops", Integer.class);
         
         return parameters;

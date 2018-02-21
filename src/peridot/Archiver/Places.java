@@ -50,6 +50,10 @@ public final class Places {
             + ".r-peridot-files"
             + File.separator + "scripts"
             + File.separator + "installedPackages.R");
+    public static File installPackageScript = new File(getUserHomePath() + File.separator
+            + ".r-peridot-files"
+            + File.separator + "scripts"
+            + File.separator + "installPackage.R");
     /**
      * The directory of r-portable, if there is a detectable r-portable on this system.
      */
@@ -290,6 +294,7 @@ public final class Places {
         }else if(org.apache.commons.lang3.SystemUtils.IS_OS_LINUX){
             exes.addAll(linuxRexes());
         }
+        exes.add("R");
         return exes;
     }
 

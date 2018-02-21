@@ -6,6 +6,7 @@ import peridot.CLI.AnalysisFileParser;
 import peridot.CLI.Command;
 import peridot.CLI.PeridotCmd;
 import peridot.Log;
+import peridot.Operations;
 import peridot.script.Task;
 
 import java.io.File;
@@ -46,10 +47,10 @@ public class RUN extends Command{
                 File countReadsFile = new File(args[1]);
                 if (countReadsFile.exists() == false){
                    fail("The file '" + countReadsFile.getAbsolutePath() + "' does not exists.");
-                }else if (peridot.Archiver.Spreadsheet.fileIsCSVorTSV(countReadsFile) == false){
+                }/*else if (peridot.Archiver.Spreadsheet.fileIsCSVorTSV(countReadsFile) == false){
                     fail(countReadsFile.getName() + ": invalid file extension." +
                             " Try again with a .csv or .tsv file");
-                }
+                }*/
             }
         }
 
@@ -73,7 +74,7 @@ public class RUN extends Command{
                             "does not have all the necessary information to run an" +
                             " analysis.");
                 }else{
-                    peridot.script.Task task = PeridotCmd.start(analysisFile);
+                    peridot.script.Task task = Operations.start(analysisFile);
                     waitForEnd(task, analysisFile);
                 }
             }
@@ -113,7 +114,7 @@ public class RUN extends Command{
             }
         }
 
-        boolean success = PeridotCmd.saveResultsAt(analysisFile.outputFolder);
+        boolean success = Operations.saveResultsAt(analysisFile.outputFolder);
 
     }
 

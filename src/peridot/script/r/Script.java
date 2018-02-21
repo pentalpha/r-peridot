@@ -16,16 +16,28 @@ import java.util.logging.Level;
 public class Script {
     private Output output;
     public File scriptFile;
+    public AtomicBoolean running;
     String[] commandArray;
     ProcessBuilder processBuilder;
     Process process;
     AtomicBoolean stopListeningFlag;
+    private String[] userArgs;
 
     public Script (File scriptFile){
+        output = new Output();
+        running = new AtomicBoolean(false);
         this.scriptFile = scriptFile;
+        userArgs = new String[0];
     }
 
-    public void run(Interpreter interpreter) throws Exception{
+    public Script (File scriptFile, String[] args, boolean autoPrintToBash){
+        output = new Output(autoPrintToBash);
+        running = new AtomicBoolean(false);
+        this.scriptFile = scriptFile;
+        userArgs = args;
+    }
+
+    public void run(Interpreter interpreter, boolean wait) throws Exception{
         defineCommand(interpreter);
         processBuilder = makeProcessBuilder(commandArray, scriptFile.getParentFile());
         if(processBuilder == null){
@@ -36,35 +48,15 @@ public class Script {
         if(process == null){
             throw new NullPointerException("Fatal Error: Failed to create "
                     + scriptFile.getName() + "'s process.");
+        }else{
+            afterStart(wait);
         }
-        afterStart();
     }
 
-    private void afterStart(){
-
-    }
-
-    public String waitForOutput() throws Exception{
-        return waitForOutput(-1);
-    }
-
-    public String waitForOutput(int secondsToWait){
-        output = new Output();
-        /*Thread stopperThread = new Thread(() ->{
-            if(secondsToWait > 0){
-                try {
-                    Thread.sleep(secondsToWait * 1000);
-                }catch (InterruptedException ex){
-                    return;
-                }
-                if(stopListeningFlag != null){
-                    stopListeningFlag.set(true);
-                    output.appendLine("[SCRIPT_TIMEOUT]");
-                }
-            }
-        });*/
-
+    private void update(){
         if(process != null){
+            running.set(true);
+            int lines = 0;
             InputStream iStream = process.getInputStream();
             InputStreamReader iStreamReader = new InputStreamReader(iStream);
             BufferedReader buffReader = new BufferedReader(iStreamReader);
@@ -72,26 +64,68 @@ public class Script {
                 stopListeningFlag = new AtomicBoolean();
                 stopListeningFlag.set(false);
                 //stopperThread.run();
-                int c;
-                while((c = buffReader.read()) != -1 && stopListeningFlag.get() == false){
-                    output.appendChar((char)c);
+                String c;
+                while((c = buffReader.readLine()) != null && stopListeningFlag.get() == false){
+                    output.appendLine(c);
+                    lines += 1;
                 }
             }catch(IOException ex){
                 output.appendLine( "IOException in "+scriptFile.getName()+" instance. ");
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
-
-            /*try{
-                stopperThread.join();
-            }catch (InterruptedException ex){
-
-            }*/
+            afterEnd();
         }
+    }
+
+    private void afterStart(boolean wait){
+        output = new Output();
+        if(!wait){
+            new Thread(() ->{
+                update();
+            }).start();
+        }else{
+            update();
+        }
+    }
+
+    public Output waitForOutput(){
+        while(running.get()){
+            //waiting
+        }
+        return output;
+    }
+
+    private void afterEnd(){
+        if(running.get() == false){
+            return;
+        }
+        running.set(false);
+    }
+
+    public String getOutputString(){
         return output.getText();
     }
 
-    public String getOutput(){
-        return output.getText();
+    public Output getOutputStream() {return output;}
+
+    private String[] getCommandArray(String rPath){
+        String[] c = {rPath,
+                "--no-save",
+                "--no-restore",
+                "--quiet",
+                "--file="+scriptFile.getAbsolutePath(),
+                "--args"
+        };
+
+        String[] cmds = new String[c.length + userArgs.length];
+        for(int i = 0; i < c.length;i++){
+            cmds[i] = c[i];
+        }
+
+        for(int i = 0; i < userArgs.length; i++){
+            cmds[i+c.length] = userArgs[i];
+        }
+        return cmds;
     }
 
     public void defineCommand(Interpreter interpreter){
@@ -103,13 +137,7 @@ public class Script {
             }
         }
 
-        String[] c = {rPath,
-                "--no-save",
-                "--no-restore",
-                "--quiet",
-                "--file="+scriptFile.getAbsolutePath()
-        };
-        commandArray = c;
+        commandArray = getCommandArray(rPath);
 
         if(needsEnv){
             String[] envVars = interpreter.getLinuxEnvVars();
@@ -207,5 +235,13 @@ public class Script {
         }
         processBuilder.redirectErrorStream(true);
         return processBuilder;
+    }
+
+    public void kill(){
+        if(process != null){
+            if(process.isAlive() && running.get()){
+                process.destroy();
+            }
+        }
     }
 }

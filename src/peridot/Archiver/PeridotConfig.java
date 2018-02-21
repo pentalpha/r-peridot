@@ -18,12 +18,12 @@ public class PeridotConfig implements Serializable{
     public String defaultInterpreter;
     public Set<String> availableInterpreters;
     public String packagesRepository;
-    public static VersionNumber preferredRVersion = new VersionNumber("3.4.0");
-    public static VersionNumber minimalRVersion = new VersionNumber("3.0.0");
+    public static VersionNumber preferredRVersion = new VersionNumber("3.4.1");
+    public static VersionNumber minimalRVersion = new VersionNumber("3.4.0");
 
 
     public PeridotConfig(){
-        this.packagesRepository = "http://www.bioinformatics-brazil.org/r-peridot/R/drat/";
+        this.packagesRepository = "http://localhost/R/drat/";
         this.availableInterpreters = Places.getDefaultRexecs();
         this.defaultInterpreter = null;
     }

@@ -120,18 +120,15 @@ public final class Global {
         return string;
     }
 
+
+
     /**
-     * Splits a line with tabulation or ',', the one who splits more.
+     * Splits a line with tabulation.
      * @param line  Line to be Spliced.
      * @return      Spliced line.
      */
-    public static String[] splitWithTabOrCur(String line){
-        String[] row = line.split("\t");
-        String[] row2 = line.split(",");
-        if(row2.length > row.length){
-            row = row2;
-        }
-        return row;
+    public static String[] split(String line, String sep){
+        return Global.joinArgsBetweenQuotes(line.split(sep));
     }
 
     /**

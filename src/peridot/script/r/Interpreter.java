@@ -3,8 +3,10 @@ package peridot.script.r;
 import org.apache.commons.lang3.tuple.Pair;
 import peridot.Archiver.PeridotConfig;
 import peridot.Archiver.Places;
+import peridot.CLI.Commands.OUT;
 import peridot.CLI.PeridotCmd;
 import peridot.Log;
+import peridot.Output;
 import peridot.script.RModule;
 
 import java.io.File;
@@ -131,7 +133,7 @@ public class Interpreter {
     public Interpreter(String exe){
         this.exe = exe;
 
-        String testOutput = null;
+        Output testOutput = null;
 
         /*if(!this.exe.exists()){
             validInterpreter = false;
@@ -154,13 +156,13 @@ public class Interpreter {
         }
     }
 
-    String readPackagesAvailable() throws Exception{
+    private Output readPackagesAvailable() throws Exception{
         Script readPackagesScript = new Script(Places.readPackagesScript);
-        readPackagesScript.run(this);
-        return readPackagesScript.waitForOutput(5);
+        readPackagesScript.run(this, true);
+        return readPackagesScript.getOutputStream();
     }
 
-    boolean readPackagesFromOutput(String output){
+    boolean readPackagesFromOutput(Output output){
         RInfoParser parser = new RInfoParser(output);
         if(parser.validOutput()){
             this.rVersion = parser.rVersion;

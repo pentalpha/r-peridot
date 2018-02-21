@@ -5,22 +5,15 @@
  */
 package peridot.Archiver;
 
-import com.univocity.parsers.csv.CsvParser;
-import com.univocity.parsers.csv.CsvParserSettings;
-import com.univocity.parsers.tsv.TsvParser;
-import com.univocity.parsers.tsv.TsvParserSettings;
 import peridot.Global;
 import peridot.Log;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  *  Collection of utilities to handle spreadsheet-like files, .csv or .tsv.
- *  Uses Univocity's parsers.
  *  @author pentalpha
  */
 public class Spreadsheet {
@@ -35,8 +28,8 @@ public class Spreadsheet {
      * @param line  line from a .csv or .tsv file.
      * @return      If the line is made mostly of words, not numbers.
      */
-    public static boolean lineIsHeader(String line){
-        String[] row = Global.splitWithTabOrCur(line);
+    public static boolean lineIsHeader(String line, String sep){
+        String[] row = Global.split(line, sep);
         String firstWord = row[0];
         if(Global.lineIsWords(row)){
             Log.logger.fine("The first line is made of words");
@@ -46,13 +39,28 @@ public class Spreadsheet {
         return false;
     }
 
-
+    public static List<String[]> getRowsFromTable(File tableFile, String separator){
+        List<String[]> allRows = new LinkedList<>();
+        try{
+            FileReader inputReader = new FileReader(tableFile);
+            BufferedReader buffInput = new BufferedReader(inputReader);
+            String line = buffInput.readLine();
+            while(line != null){
+                String[] cells = Global.split(line, separator);
+                allRows.add(cells);
+            }
+        }catch (Exception ex){
+            Log.logger.severe("Could not read input from file " + tableFile.getAbsolutePath());
+            ex.printStackTrace();
+        }
+        return allRows;
+    }
 
     /**
      * @param tableFile .csv file, values separated by ','
      * @return          List of String[], with all the cells of the tableFile
      */
-    public static List<String[]> getRowsFromCSV(File tableFile){
+    /*public static List<String[]> getRowsFromCSV(File tableFile){
         List<String[]> allRows;
         CsvParserSettings settings = new CsvParserSettings();
         settings.getFormat().setLineSeparator("\n");
@@ -61,13 +69,13 @@ public class Spreadsheet {
         correctNoFirstCell(allRows);
         
         return allRows;
-    }
+    }*/
 
     /**
      * @param tableFile .tsv file, values separated by tabulation
      * @return          List of String[], with all the cells of the tableFile
      */
-    public static List<String[]> getRowsFromTSV(File tableFile){
+    /*public static List<String[]> getRowsFromTSV(File tableFile){
         List<String[]> allRows;
         TsvParserSettings settings = new TsvParserSettings();
         settings.getFormat().setLineSeparator("\n");
@@ -76,9 +84,9 @@ public class Spreadsheet {
         correctNoFirstCell(allRows);
 
         return allRows;
-    }
+    }*/
 
-    public static String[] getFirstRowFromTSV(File tableFile){
+    /*public static String[] getFirstRowFromTSV(File tableFile){
         String[] row;
         TsvParserSettings settings = new TsvParserSettings();
         settings.getFormat().setLineSeparator("\n");
@@ -100,7 +108,7 @@ public class Spreadsheet {
         parser.stopParsing();
 
         return row;
-    }
+    }*/
 
     /**
      * Assuming that the table has no first cell (line 0, column 0), corrects the first line.
@@ -142,7 +150,7 @@ public class Spreadsheet {
      * @param f Spreadsheet file
      * @return  True if f is a .csv or .tsv file
      */
-    public static boolean fileIsCSVorTSV(File f){
+    /*public static boolean fileIsCSVorTSV(File f){
        return fileIsCSV(f) || fileIsTSV(f);
     }
 
@@ -154,20 +162,20 @@ public class Spreadsheet {
     public static boolean fileIsTSV(File f){
         return (f.getName().endsWith(".tsv")) 
                || (f.getName().endsWith(".TSV"));
-    }
+    }*/
 
     /**
      *
      * @param file  Spreadsheet file.
      * @return      Only the first row of the spreadsheet.
      */
-    public static String[] getFirstRowFromFile(File file){
+    public static String[] getFirstRowFromFile(File file, String sep){
         String[] line = null;
         try{
             FileReader reader = new FileReader(file);
             BufferedReader buffReader = new BufferedReader(reader);
             String firstLine = buffReader.readLine();
-            line = Global.splitWithTabOrCur(firstLine);
+            line = Global.split(firstLine,sep);
             buffReader.close();
             reader.close();
         }catch(Exception ex){
@@ -180,8 +188,8 @@ public class Spreadsheet {
      * @param line  String of text, not spliced.
      * @return      True if line contains the names of the samples.
      */
-    public static boolean lineIsSampleNames(String line){
-        String[] row  = peridot.Global.splitWithTabOrCur(line);
+    public static boolean lineIsSampleNames(String line, String sep){
+        String[] row  = Global.split(line, sep);
         return lineIsSampleNames(row);
     }
 
@@ -239,7 +247,7 @@ public class Spreadsheet {
      * @return              Spreadsheet.Info instance with the info.
      * @throws IOException
      */
-    public static Spreadsheet.Info getInfo(File tableFile) throws IOException{
+    /*public static Spreadsheet.Info getInfo(File tableFile) throws IOException{
         Spreadsheet.Info info = new Spreadsheet.Info();
 
         FileReader inputReader = new FileReader(tableFile);
@@ -255,23 +263,37 @@ public class Spreadsheet {
         }else{
             info.setHeaderOnFirstLine(true);
         }
-        /*if(Global.lineIsDoubles(Global.splitWithTabOrCur(line2))){
-            info.dataType = DataType.Float;
-        }else{
-            info.dataType = DataType.Int;
-        }*/
+
         info.setLabelsOnFirstCol(true);
         return info;
-    }
+    }*/
 
     /**
      * Meta-information about a spreadsheet file.
      */
     public static class Info{
+        public static String getSeparatorOfLine(String line){
+            int tabValues = Global.joinArgsBetweenQuotes(line.split("\t")).length;
+            int commaValues = Global.joinArgsBetweenQuotes(line.split(",")).length;
+            int spaceValues = Global.joinArgsBetweenQuotes(line.split(" ")).length;
+            int semicollonValues = Global.joinArgsBetweenQuotes(line.split(";")).length;
+            int max = Math.max(Math.max(Math.max(tabValues, commaValues), spaceValues), semicollonValues);
+            if(max == tabValues){
+                return "\t";
+            }else if(max == commaValues){
+                return ",";
+            }else if(max == spaceValues){
+                return " ";
+            }else if(max == semicollonValues){
+                return ";";
+            }else{
+                return "\t";
+            }
+        }
         /**
-         * Rationals or Integers
+         * Cell separator char
          */
-        //public DataType dataType;
+        public String separator;
         /**
          * If there are labels on the first column
          */
@@ -287,6 +309,30 @@ public class Spreadsheet {
         private Boolean firstCellPresent;
 
         /**
+         *  R-Peridot tries to guess the Spreadsheet.Info of a spreadsheet.
+         * @param tableFile     The .csv or .tsv file to be analyzed.
+         * @return              Spreadsheet.Info instance with the info.
+         * @throws IOException
+         */
+        public Info(File tableFile) throws IOException{
+            FileReader inputReader = new FileReader(tableFile);
+            BufferedReader tableInput = new BufferedReader(inputReader);
+            String line = tableInput.readLine();
+            String line2 = tableInput.readLine();
+            tableInput.close();
+            inputReader.close();
+            separator = getSeparatorOfLine(line);
+            setFirstCellPresent(!(Global.split(line, separator).length < Global.split(line2, separator).length));
+            if(getFirstCellPresent()){
+                setHeaderOnFirstLine(lineIsHeader(line, separator));
+            }else{
+                setHeaderOnFirstLine(true);
+            }
+
+            setLabelsOnFirstCol(true);
+        }
+
+        /**
          *
          * @param labelsOnFirstCol  If there are labels on the first column
          * @param headerOnFirstLine If there are headers on the first line
@@ -294,11 +340,14 @@ public class Spreadsheet {
          *                          a header, label or value on it.
          */
         public Info(boolean labelsOnFirstCol,
-                    boolean headerOnFirstLine, boolean firstCellPresent){
+                    boolean headerOnFirstLine,
+                    boolean firstCellPresent,
+                    String  sep){
             //this.dataType = dataType;
             this.labelsOnFirstCol = new Boolean(labelsOnFirstCol);
             this.headerOnFirstLine = new Boolean(headerOnFirstLine);
             this.firstCellPresent = new Boolean(firstCellPresent);
+            this.separator = sep;
         }
 
         /**
@@ -311,7 +360,7 @@ public class Spreadsheet {
         public boolean allInfoSet(){
             return labelsOnFirstCol != null
                     && headerOnFirstLine != null
-                    /*&& dataType != null*/;
+                    && separator != null;
         }
 
         public boolean getFirstCellPresent(){

@@ -144,7 +144,7 @@ public class AnalysisData {
     
     public int getNumberOfGenes(){
         try{
-            if(Spreadsheet.rowIsNames(Spreadsheet.getFirstRowFromFile(conditionsFile))){
+            if(Spreadsheet.rowIsNames(Spreadsheet.getFirstRowFromFile(conditionsFile, "\t"))){
                 return Manager.countLines(expressionFile.getAbsolutePath()) - 1;
             }else{
                 return Manager.countLines(expressionFile.getAbsolutePath());
@@ -211,7 +211,7 @@ public class AnalysisData {
         SortedMap<IndexedString, String> map;
         map = new TreeMap<>();
         
-        String[] firstRow = Spreadsheet.getFirstRowFromFile(file);
+        String[] firstRow = Spreadsheet.getFirstRowFromFile(file, info.separator);
         int nConditions;
         if(info.getFirstCellPresent() == false || info.getLabelsOnFirstCol() == false){
             nConditions = firstRow.length;
@@ -393,7 +393,7 @@ public class AnalysisData {
         int counter = 1;
         int removeCounter = 0;
         while(line != null){
-            String[] lineSplited = Global.splitWithTabOrCur(line);
+            String[] lineSplited = Global.split(line, info.separator);
             String[] values;
             String label;
             if(info.getLabelsOnFirstCol()){

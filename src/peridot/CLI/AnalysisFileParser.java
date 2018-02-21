@@ -33,6 +33,7 @@ public class AnalysisFileParser {
     Map<String, Class> paramTypes;
     Map<String, String> params;
     Map<String, Map<String, String>> specificParams;
+    String separatorChar;
 
     public AnalysisFileParser(File file){
         analysisFile = null;
@@ -131,6 +132,9 @@ public class AnalysisFileParser {
     public void setExpression() throws IOException{
         if(conditionsFile != null && countReadsFile != null && info.allInfoSet()){
             info.setFirstCellPresent(!info.getHeaderOnFirstLine() || !info.getLabelsOnFirstCol());
+            if(separatorChar != null){
+                info.separator = separatorChar;
+            }
             analysisFile.expression = new AnalysisData(countReadsFile, conditionsFile, info, roundingMode, threshold);
             hasData = true;
             hasConditions = true;
@@ -283,6 +287,19 @@ public class AnalysisFileParser {
         }else if(word.equals(roundingModeStr)){
             String value = second;
             roundingMode = value;
+        }else if(word.equals(sepStr)){
+            //String value = second;
+            if(second.equals("\"\"") || second.equals("\" \"")){
+                separatorChar = " ";
+            }else if(second.equals("\",\"")){
+                separatorChar = ",";
+            }else if(second.equals("\"\\t\"")){
+                separatorChar = "\t";
+            }else if(second.equals("\";\"")){
+                separatorChar = ";";
+            }else{
+                separatorChar = null;
+            }
         }else {
             Log.logger.warning("Unknown category: " + word + ". Ignoring.");
         }
@@ -302,6 +319,7 @@ public class AnalysisFileParser {
     public final static String saveAtStr = "[output]";
     public final static String thresholdStr = "[count-reads-threshold]";
     public final static String roundingModeStr = "[rounding-mode]";
+    public final static String sepStr = "[separator]";
 
     public static class ParseException extends Exception{
         public ParseException(String message){

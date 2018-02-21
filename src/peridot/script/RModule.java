@@ -12,6 +12,7 @@ import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.GeneIdType;
 import peridot.Log;
+import peridot.script.r.Interpreter;
 import peridot.script.r.Package;
 
 import java.io.*;
@@ -183,6 +184,7 @@ public class RModule implements Serializable{
     //O script não irá executar se não forem todos passados antes
     public Map<String, Class> requiredParameters = null;
     public Set<Package> requiredPackages = null;
+
     public Map<String, Object> parameters = null;
     //O caminho dos arquivos externos necessarios para a execução interna do script
     //O script não irá executar se não forem todos passados antes
@@ -658,7 +660,7 @@ public class RModule implements Serializable{
                         + this.name + "." + this.getClass().getSimpleName());
     }
     
-    //utiliza requiredParameters para criar o ConfigFile com os parametros
+    //uses requiredParameters to create the ConfigFile with the parameters
     protected void createConfigFile(){
         if(parametersSufficed() && workingDirectory.exists()){
             try{
@@ -804,6 +806,24 @@ public class RModule implements Serializable{
             return "PostAnalysisModule";
         }else{
             return "RModule";
+        }
+    }
+
+    public boolean requiredPackagesInstalled(){
+        if(Interpreter.isDefaultInterpreterDefined()) {
+            Set<Package> installed = Interpreter.defaultInterpreter.availablePackages;
+            Set<String> installedNames = new TreeSet<>();
+            for(Package pack : installed){
+                installedNames.add(pack.name);
+            }
+            for(Package pack : requiredPackages){
+                if(installedNames.contains(pack.name) == false){
+                    return false;
+                }
+            }
+            return true;
+        }else{
+            return false;
         }
     }
 }

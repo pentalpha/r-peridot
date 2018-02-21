@@ -41,12 +41,13 @@ public class AnalysisFile {
     public static void createExampleFileFor(File countReadsFile){
         try {
             String content = "";
-            Spreadsheet.Info info = Spreadsheet.getInfo(countReadsFile);
+            Spreadsheet.Info info = new Spreadsheet.Info(countReadsFile);
             File parentDir = countReadsFile.getParentFile();
             if (parentDir == null){
                 parentDir = new File(peridot.Archiver.Manager.getCurrentWorkingDir());
             }
             content += AnalysisFileParser.dataStr + " " + countReadsFile.getAbsolutePath() + "\n";
+            content += AnalysisFileParser.sepStr + " " + info.separator;
             SortedMap<IndexedString, String> conditions = AnalysisData.getConditionsFromExpressionFile(countReadsFile, info);
             File condFile = new File(countReadsFile.getAbsolutePath() + ".conditions");
             AnalysisData.createConditionsFile(condFile, conditions, false, true);
@@ -109,7 +110,12 @@ public class AnalysisFile {
         string += "" +
                 "[data] path/to/file\n" +
                 "# Specify count reads table file. ##############\n" +
-                "# Only .tsv and .csv are supported. ############\n\n";
+                "# Only plain text with cells separated by ######\n" +
+                "# tabs, spaces, commas and semi-colons are #####\n" +
+                "# supported. ###################################\n" +
+                "[separator] \",\"\n" +
+                "# Cell separator character, can be \" \", \"\\t\",####\n" +
+                "# \",\" or \";\". ##################################\n";
         string += "" +
                 AnalysisFileParser.thresholdStr + " Integer\n" +
                 "# Minimum count read value to be considered. ###\n" +

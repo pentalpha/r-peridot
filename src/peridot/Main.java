@@ -4,6 +4,7 @@ import peridot.Archiver.PeridotConfig;
 import peridot.CLI.PeridotCmd;
 import peridot.CLI.UserInterface;
 import peridot.script.Task;
+import peridot.script.r.InstallationBatch;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -31,15 +32,21 @@ public class Main {
                         }
                     }
                 }
+                if(InstallationBatch.lastInstallation != null){
+                    InstallationBatch.lastInstallation.stop();
+                    while(InstallationBatch.lastInstallation.isRunning()){
+
+                    }
+                }
             }
         });
 
-        PeridotCmd.createNecessaryDirs();
-        if(PeridotCmd.loadModules()){
-            if(args.length == 0){
-                UserInterface.printNoCommand();
-            }else{
-                if(PeridotCmd.loadInterpreters()){
+        Operations.createNecessaryDirs();
+        if(Operations.loadModules()){
+            if(Operations.loadInterpreters(() -> PeridotCmd.setDefaultInterpreter())){
+                if(args.length == 0){
+                    UserInterface.printNoCommand();
+                }else{
                     UserInterface ui = new peridot.CLI.UserInterface(args);
                 }
             }

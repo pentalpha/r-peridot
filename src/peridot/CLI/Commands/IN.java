@@ -2,6 +2,7 @@ package peridot.CLI.Commands;
 
 import peridot.CLI.Command;
 import peridot.CLI.PeridotCmd;
+import peridot.Operations;
 import peridot.script.RModule;
 
 /**
@@ -31,7 +32,7 @@ public class IN extends Command{
         if(isHelpArg(args[0])){
             this.printDetails();
         }else{
-            PeridotCmd.importModule(args[0]);
+            Operations.importModule(args[0]);
         }
     }
 }
