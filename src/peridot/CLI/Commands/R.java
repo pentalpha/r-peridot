@@ -19,10 +19,10 @@ public class R extends Command {
             if(args.length == 1) {
                 if (isHelpArg(args[0]) == false &&
                         !(args[0].equals("update") || args[0].equals("rm")
-                                || args[0].equals("choose") ||args[0].equals("run"))
+                                || args[0].equals("choose"))
                         )
                 {
-                    fail("Expected '--help', 'update', 'run', 'rm' or 'choose': " + args[0]);
+                    fail("Expected '--help', 'update', 'rm' or 'choose': " + args[0]);
                 }
             }else if(args.length == 2){
                 if(!args[0].equals("add")){
@@ -44,8 +44,6 @@ public class R extends Command {
                 PeridotCmd.removeInterpreter();
             }else if(args[0].equals("choose")){
                 PeridotCmd.setDefaultInterpreter();
-            }else if(args[0].equals("run")){
-                PeridotCmd.runDefaultR();
             }
         }else if(args.length == 2){
             if(args[0].equals("add")){

@@ -194,7 +194,7 @@ public class Operations {
         }
     }
 
-    public static boolean openR(Interpreter interpreter){
+    /*public static boolean openR(Interpreter interpreter){
         try{
             if(SystemUtils.IS_OS_WINDOWS){
                 Runtime.getRuntime().exec("cmd.exe /c start " + interpreter.exe + " --no-save");
@@ -208,5 +208,5 @@ public class Operations {
             ex.printStackTrace();
             return false;
         }
-    }
+    }*/
 }

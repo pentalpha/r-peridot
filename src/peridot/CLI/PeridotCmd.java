@@ -158,7 +158,7 @@ public final class PeridotCmd {
         }
     }
 
-    public static void runDefaultR(){
-        Operations.openR(Interpreter.defaultInterpreter);
-    }
+    //public static void runDefaultR(){
+    //    Operations.openR(Interpreter.defaultInterpreter);
+    //}
 }
