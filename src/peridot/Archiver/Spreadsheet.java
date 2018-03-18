@@ -9,6 +9,7 @@ import peridot.Global;
 import peridot.Log;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class Spreadsheet {
         return false;
     }
 
-    public static List<String[]> getRowsFromTable(File tableFile, String separator){
+    private static List<String[]> getRowsFromTable(File tableFile, String separator){
         List<String[]> allRows = new LinkedList<>();
         try{
             FileReader inputReader = new FileReader(tableFile);
@@ -55,60 +56,6 @@ public class Spreadsheet {
         }
         return allRows;
     }
-
-    /**
-     * @param tableFile .csv file, values separated by ','
-     * @return          List of String[], with all the cells of the tableFile
-     */
-    /*public static List<String[]> getRowsFromCSV(File tableFile){
-        List<String[]> allRows;
-        CsvParserSettings settings = new CsvParserSettings();
-        settings.getFormat().setLineSeparator("\n");
-        CsvParser parser = new CsvParser(settings);
-        allRows = parser.parseAll(tableFile);
-        correctNoFirstCell(allRows);
-        
-        return allRows;
-    }*/
-
-    /**
-     * @param tableFile .tsv file, values separated by tabulation
-     * @return          List of String[], with all the cells of the tableFile
-     */
-    /*public static List<String[]> getRowsFromTSV(File tableFile){
-        List<String[]> allRows;
-        TsvParserSettings settings = new TsvParserSettings();
-        settings.getFormat().setLineSeparator("\n");
-        TsvParser parser = new TsvParser(settings);
-        allRows = parser.parseAll(tableFile);
-        correctNoFirstCell(allRows);
-
-        return allRows;
-    }*/
-
-    /*public static String[] getFirstRowFromTSV(File tableFile){
-        String[] row;
-        TsvParserSettings settings = new TsvParserSettings();
-        settings.getFormat().setLineSeparator("\n");
-        TsvParser parser = new TsvParser(settings);
-        parser.beginParsing(tableFile);
-        row = parser.parseNext();
-        parser.stopParsing();
-
-        return row;
-    }
-
-    public static String[] getFirstRowFromCSV(File tableFile){
-        String[] row;
-        CsvParserSettings settings = new CsvParserSettings();
-        settings.getFormat().setLineSeparator("\n");
-        CsvParser parser = new CsvParser(settings);
-        parser.beginParsing(tableFile);
-        row = parser.parseNext();
-        parser.stopParsing();
-
-        return row;
-    }*/
 
     /**
      * Assuming that the table has no first cell (line 0, column 0), corrects the first line.
@@ -145,24 +92,6 @@ public class Spreadsheet {
         }
         return names;
     }
-
-    /**
-     * @param f Spreadsheet file
-     * @return  True if f is a .csv or .tsv file
-     */
-    /*public static boolean fileIsCSVorTSV(File f){
-       return fileIsCSV(f) || fileIsTSV(f);
-    }
-
-    public static boolean fileIsCSV(File f){
-        return (f.getName().endsWith(".csv")) 
-               || (f.getName().endsWith(".CSV"));
-    }
-
-    public static boolean fileIsTSV(File f){
-        return (f.getName().endsWith(".tsv")) 
-               || (f.getName().endsWith(".TSV"));
-    }*/
 
     /**
      *
@@ -268,28 +197,103 @@ public class Spreadsheet {
         return info;
     }*/
 
+    /////////////////////////////////////////////////////////////////
+            ///////// INSTANCE FIELDS & METHODS //////////
+    /////////////////////////////////////////////////////////////////
+
+    private Info info;
+    private List<String[]> rows;
+    public File tableFile;
+
+    public Spreadsheet(File tableFile) throws IOException{
+        this.info = new Info(tableFile);
+        this.tableFile = tableFile;
+    }
+
+    public Spreadsheet(File tableFile, Info info){
+        this.info = info;
+        this.tableFile = tableFile;
+    }
+
+    private void setSeparator(String sep){
+        info.separator = sep;
+        if(rows != null){
+            this.reloadRows();
+        }
+    }
+
+    public String getSeparator(){
+        return info.separator;
+    }
+
+    private void reloadRows(){
+        this.rows = Spreadsheet.getRowsFromTable(tableFile, info.separator);
+    }
+
+    public List<String[]> getRows(){
+        if(rows == null){
+            reloadRows();
+        }
+        return rows;
+    }
+
+    public void setInfo(Info info){
+        boolean reload = true;
+        if(info.separator.equals(this.info.separator)){
+            reload = false;
+        }
+
+        this.info = info;
+        if(reload){
+            boolean alreadyLoaded = rows != null;
+            rows = null;
+            if(alreadyLoaded){
+                reloadRows();
+            }
+        }
+    }
+
+    public Info getInfo(){
+        return info;
+    }
+
     /**
      * Meta-information about a spreadsheet file.
      */
     public static class Info{
-        public static String getSeparatorOfLine(String line){
-            int tabValues = Global.joinArgsBetweenQuotes(line.split("\t")).length;
-            int commaValues = Global.joinArgsBetweenQuotes(line.split(",")).length;
-            int spaceValues = Global.joinArgsBetweenQuotes(line.split(" ")).length;
-            int semicollonValues = Global.joinArgsBetweenQuotes(line.split(";")).length;
-            int max = Math.max(Math.max(Math.max(tabValues, commaValues), spaceValues), semicollonValues);
-            if(max == tabValues){
-                return "\t";
-            }else if(max == commaValues){
+
+        public static String guessLineSeparator(File tableFile){
+            ArrayList<String> lines = Global.getFirstLinesFromFile(tableFile, 20);
+
+            if(lines == null){
+                Log.logger.warning("Could not precisely determine the line separator of '" + tableFile.getAbsolutePath()
+                + "' because R-Peridot failed to read it.");
                 return ",";
-            }else if(max == spaceValues){
-                return " ";
-            }else if(max == semicollonValues){
-                return ";";
-            }else{
-                return "\t";
             }
+
+            String[] separators = {"\t", "," , " " , ";"};
+            float[] avgCellsPerLine = {-1.0f, -1.0f, -1.0f, -1.0f};
+            for(int i = 0; i < separators.length; i++){
+                for(String line : lines){
+                    String[] split = Global.joinArgsBetweenQuotes(line.split(separators[i]));
+                    if(avgCellsPerLine[i] < 0.0f){
+                        avgCellsPerLine[i] = (float)split.length;
+                    }else{
+                        avgCellsPerLine[i] = avgCellsPerLine[i] * (float)split.length;
+                    }
+                }
+            }
+
+            int max = 0;
+            for(int i = 1; i < separators.length; i++){
+                if(avgCellsPerLine[i] >= avgCellsPerLine[max]){
+                    max = i;
+                }
+            }
+
+            return separators[max];
         }
+
         /**
          * Cell separator char
          */
@@ -321,7 +325,7 @@ public class Spreadsheet {
             String line2 = tableInput.readLine();
             tableInput.close();
             inputReader.close();
-            separator = getSeparatorOfLine(line);
+            separator = guessLineSeparator(tableFile);
             setFirstCellPresent(!(Global.split(line, separator).length < Global.split(line2, separator).length));
             if(getFirstCellPresent()){
                 setHeaderOnFirstLine(lineIsHeader(line, separator));

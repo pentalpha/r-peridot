@@ -697,9 +697,6 @@ public class RModule implements Serializable{
         
     }
     
-    
-    
-    
     private boolean copyExternalScriptToWorkingDir(String path, String name){
         try{
             File external = new File(path);
@@ -809,21 +806,26 @@ public class RModule implements Serializable{
         }
     }
 
-    public boolean requiredPackagesInstalled(){
+    public Set<Package> requiredPackagesNotInstalled(){
         if(Interpreter.isDefaultInterpreterDefined()) {
             Set<Package> installed = Interpreter.defaultInterpreter.availablePackages;
             Set<String> installedNames = new TreeSet<>();
+            Set<Package> notInstalledPacks = new TreeSet<>();
             for(Package pack : installed){
                 installedNames.add(pack.name);
             }
             for(Package pack : requiredPackages){
                 if(installedNames.contains(pack.name) == false){
-                    return false;
+                    notInstalledPacks.add(pack);
                 }
             }
-            return true;
+            return notInstalledPacks;
         }else{
-            return false;
+            return requiredPackages;
         }
+    }
+
+    public boolean requiredPackagesInstalled(){
+        return requiredPackagesNotInstalled().size() > 0;
     }
 }

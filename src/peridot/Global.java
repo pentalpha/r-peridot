@@ -9,8 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import peridot.Archiver.Places;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.FileHandler;
@@ -392,5 +391,94 @@ public final class Global {
             }
         }
         return newArgs.toArray(new String[1]);
+    }
+
+    public static ArrayList<String> getFirstLinesFromFile(File tableFile, int nLines){
+        FileReader inputReader;
+        try{
+            inputReader =  new FileReader(tableFile);
+        }catch (FileNotFoundException ex){
+            Log.logger.severe("File does not exist");
+            ex.printStackTrace();
+            return null;
+        }
+        BufferedReader tableInput = new BufferedReader(inputReader);
+        ArrayList<String> lines = new ArrayList<>();
+        try{
+            String line = tableInput.readLine();
+            for(int i = 1; i <= nLines && line != null; i++){
+                lines.add(line);
+                line = tableInput.readLine();
+            }
+            inputReader.close();
+        }catch (IOException ex){
+            Log.logger.severe("IOException while reading file");
+            ex.printStackTrace();
+            return null;
+        }
+
+        if(lines.size() == 0){
+            Log.logger.severe("Could not read any line from file");
+            return null;
+        }
+
+        return lines;
+    }
+
+    public static boolean fileIsPlainText(File file){
+        if(file.getName().contains(".csv") || file.getName().contains(".tsv")
+                || file.getName().contains(".txt")){
+            return true;
+        }else if (file.getName().contains(".pdf")){
+            return false;
+        }
+
+        FileReader inputStream = null;
+
+        int validChars = 0;
+        int invalidChars = 0;
+
+        try {
+            inputStream = new FileReader(file);
+            int c;
+            int maxChars = 2000;
+
+            while ((c = inputStream.read()) != -1) {
+                        //(10)Line feed  (11)Vertical tab (13)Carriage return (32)Space (126)tilde
+                if ((c == 10 || c == 11 || c == 13 || (c >= 32 && c <= 126))
+                        //(153)Superscript two (160)ϊ  (255) No break space
+                    || (c == 153 || c >= 160 && c <= 255)
+                        //(884)ʹ (885)͵ (890)ͺ (894); (900)' (974)ώ
+                    || (c == 884 || c == 885 || c == 890 || c == 894 || c >= 900 && c <= 974 ))
+                {
+                    validChars++;
+                }else{
+                    invalidChars++;
+                }
+
+                if(maxChars <= 0){
+                    break;
+                }else{
+                    maxChars--;
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException ex) {
+                }
+            }
+        }
+
+        int total = validChars+invalidChars;
+        if(total == 0){
+            return false;
+        }
+
+        return ((float)validChars / (float)total) >= 0.95f;
     }
 }

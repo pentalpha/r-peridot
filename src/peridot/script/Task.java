@@ -12,6 +12,7 @@ import peridot.Archiver.Places;
 import peridot.Log;
 import peridot.Output;
 import peridot.script.r.Interpreter;
+import peridot.script.r.Package;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -149,12 +150,23 @@ public class Task {
             }
         }
         if(modulesNotFound.size() == 0){
-            boolean createdConfig = script.createConfig();
-            if(createdConfig){
-                return true;
+            if(script.requiredPackagesInstalled()){
+                boolean createdConfig = script.createConfig();
+                if(createdConfig){
+                    return true;
+                }else{
+                    Log.logger.severe("An error occurred while creating config.txt, the parameters file, for " + name
+                            + ". The module will not be executed.");
+                }
             }else{
-                Log.logger.severe("An error occurred while creating config.txt, the parameters file, for " + name
-                        + ". The module will not be executed.");
+                Set<Package> notInstalled = script.requiredPackagesNotInstalled();
+                String notFoundList = "";
+                for(Package entry : notInstalled){
+                    notFoundList += entry.name + "\t" + entry.version + "\n";
+                }
+                Log.logger.severe(name + "'s requirements not sufficed." +
+                        " The following required packages are not installed in the R environment:\n " +
+                        notFoundList + "The module will not be executed. Please install the required packages in the R environment.");
             }
         }else{
             String notFoundList = "";
