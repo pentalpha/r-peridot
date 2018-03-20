@@ -1,11 +1,9 @@
 package peridot;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
 import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.CLI.AnalysisFile;
-import peridot.CLI.PeridotCmd;
 import peridot.script.AnalysisModule;
 import peridot.script.PostAnalysisModule;
 import peridot.script.RModule;

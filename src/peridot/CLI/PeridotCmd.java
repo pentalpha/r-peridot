@@ -1,21 +1,17 @@
 package peridot.CLI;
 
-import org.apache.commons.io.FileUtils;
-import peridot.*;
-import peridot.Archiver.Manager;
-import peridot.Archiver.Places;
-import peridot.script.AnalysisModule;
-import peridot.script.PostAnalysisModule;
+import peridot.Log;
+import peridot.Operations;
 import peridot.script.RModule;
-import peridot.script.Task;
 import peridot.script.r.InstallationBatch;
 import peridot.script.r.Interpreter;
 import peridot.script.r.Package;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.logging.Level;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public final class PeridotCmd {
 

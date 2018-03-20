@@ -1,11 +1,19 @@
 package peridot.CLI;
 
-import peridot.*;
+import peridot.AnalysisData;
+import peridot.AnalysisParameters;
 import peridot.Archiver.Spreadsheet;
+import peridot.IndexedString;
+import peridot.Log;
 import peridot.script.RModule;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
 import java.util.logging.Level;
 
 /**

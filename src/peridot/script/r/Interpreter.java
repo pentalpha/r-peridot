@@ -1,17 +1,13 @@
 package peridot.script.r;
 
-import org.apache.commons.lang3.tuple.Pair;
 import peridot.Archiver.PeridotConfig;
 import peridot.Archiver.Places;
-import peridot.CLI.Commands.OUT;
-import peridot.CLI.PeridotCmd;
-import peridot.Log;
 import peridot.Output;
 import peridot.script.RModule;
 
 import java.io.File;
 import java.util.*;
-import static java.util.Collections.reverseOrder;
+
 import static java.util.Comparator.comparing;
 
 public class Interpreter {
@@ -206,12 +202,14 @@ public class Interpreter {
         return notInstalledPacks;
     }
 
-    @Override
-    public String toString(){
-        String str = this.exe + ":\n" +
-                        "\tVersion: " + this.rVersion.toString() +
-                        "\tScore: " + String.format("%.2f", value*10) +
-                        "\n";
+    public String titleString(){
+        return this.exe + ":\n" +
+                "\tVersion: " + this.rVersion.toString() +
+                "\tScore: " + String.format("%.2f", value*10);
+    }
+
+    public String packagesToInstallString(){
+        String str = "";
         Set<Package> toInstall = getPackagesToInstall();
         if(toInstall.size() > 0){
             str += "\tTo Install:\n";
@@ -219,6 +217,13 @@ public class Interpreter {
                 str += "\t\t"+pack.name+"\t"+pack.version.toString()+"\n";
             }
         }
+        return str;
+    }
+
+    @Override
+    public String toString(){
+        String str = titleString() + "\n";
+        str += packagesToInstallString();
 
         return str;
     }

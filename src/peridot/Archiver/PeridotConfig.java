@@ -1,6 +1,5 @@
 package peridot.Archiver;
 
-import peridot.Log;
 import peridot.script.r.Interpreter;
 import peridot.script.r.VersionNumber;
 
@@ -8,7 +7,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**

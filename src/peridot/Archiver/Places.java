@@ -6,8 +6,8 @@
 package peridot.Archiver;
 
 import org.apache.commons.io.FileUtils;
-//import org.apache.commons.lang3.SystemUtils;
 import peridot.Log;
+
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
+
+//import org.apache.commons.lang3.SystemUtils;
 
 /**
  * Archiver.Places holds file and directories paths.

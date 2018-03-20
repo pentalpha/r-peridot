@@ -1,10 +1,8 @@
 package peridot.CLI.Commands;
 
-import peridot.Archiver.Places;
 import peridot.CLI.AnalysisFile;
 import peridot.CLI.AnalysisFileParser;
 import peridot.CLI.Command;
-import peridot.CLI.PeridotCmd;
 import peridot.Log;
 import peridot.Operations;
 import peridot.script.Task;

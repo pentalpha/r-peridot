@@ -3,7 +3,10 @@ package peridot.script.r;
 import peridot.Global;
 import peridot.Output;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by pentalpha on 26/01/2018.

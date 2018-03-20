@@ -1,7 +1,6 @@
 package peridot.CLI.Commands;
 
 import peridot.CLI.Command;
-import peridot.CLI.PeridotCmd;
 import peridot.Operations;
 import peridot.script.RModule;
 

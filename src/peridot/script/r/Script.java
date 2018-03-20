@@ -1,8 +1,6 @@
 package peridot.script.r;
 
 import org.apache.commons.lang3.SystemUtils;
-import peridot.Archiver.Places;
-import peridot.Global;
 import peridot.Log;
 import peridot.Output;
 

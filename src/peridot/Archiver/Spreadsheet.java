@@ -8,7 +8,10 @@ package peridot.Archiver;
 import peridot.Global;
 import peridot.Log;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -290,7 +293,7 @@ public class Spreadsheet {
 
         /**
          *  R-Peridot tries to guess the Spreadsheet.Info of a spreadsheet.
-         * @param tableFile     The .csv or .tsv file to be analyzed.
+         * @param tableFile The .csv or .tsv file to be analyzed.
          * @throws IOException If failed to read the table file.
          */
         public Info(File tableFile) throws IOException{
