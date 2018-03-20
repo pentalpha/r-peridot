@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by pentalpha on 24/01/2018.
+ * Changing, saving and loading configurations like preferred R environment and packages repository
+ * @author pentalpha
  */
 public class PeridotConfig implements Serializable{
     public String defaultInterpreter;

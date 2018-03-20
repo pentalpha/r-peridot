@@ -4,6 +4,7 @@ import peridot.CLI.Command;
 import peridot.CLI.PeridotCmd;
 
 /**
+ * Command to list all available modules, or the details of a specific modules.
  * Created by pentalpha on 4/28/17.
  */
 public class LS extends Command {

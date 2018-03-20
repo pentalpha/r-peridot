@@ -19,7 +19,8 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 
 /**
- * Archiver.Places determines, creates and stores important global files and directories of R-Peridot.
+ * Archiver.Places holds file and directories paths.
+ * It also search possible locations for R environments.
  * @author pentalpha
  */
 public final class Places {
@@ -173,7 +174,6 @@ public final class Places {
      * module already on scripts dir if overwrite = true.
      *
      * @param overwrite If already loaded modules should be overwritten.
-     * @throws Exception
      */
     private static void updateModulesFolder(boolean overwrite) throws Exception{
         File[] subs = defaultModulesDir.listFiles();

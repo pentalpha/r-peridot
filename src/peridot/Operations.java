@@ -22,6 +22,9 @@ import java.util.Set;
 import java.util.logging.Level;
 
 /**
+ * Main operations for R-Peridot.
+ * This class is supposed to be used by the CLI and the GUI,
+ * as a common high-level interface for both.
  * Created by pentalpha on 20/02/2018.
  */
 public class Operations {

@@ -30,7 +30,7 @@ public final class Manager {
      * Build a String from the contents of a file
      * @param   file    Text file to be read
      * @return          The text read on the file
-     * @throws  IOException
+     * @throws  IOException In case of error reading the file.
      */
     private static StringBuilder readFile(File file) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader (file));
@@ -88,6 +88,7 @@ public final class Manager {
      * 
      * @param path Absolute path to the file
      * @return If a file with the same path already existed
+     * @throws IOException  If it could not create the file.
      */
     public static boolean makeNewFile(String path) throws IOException{
         //Log.info("trying to create " + path);
@@ -142,7 +143,7 @@ public final class Manager {
      * Counts the number of lines in a text file
      * @param filename  The full path to the file
      * @return  The number of lines
-     * @throws IOException
+     * @throws IOException When failed to count the number of lines
      */
     public static int countLines(String filename) throws IOException {
         //Log.info("counting lines of " + filename);

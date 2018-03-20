@@ -8,7 +8,7 @@ package peridot.Archiver;
 import java.io.*;
 
 /**
- *  Utilities to manage importing and exporting of Objects
+ *  Utilities to import and export Objects
  * @author pentalpha
  */
 public final class Persistence{
@@ -20,7 +20,7 @@ public final class Persistence{
      * Save an Object as a binary file
      * @param file  The file where the Object will be stored
      * @param data  The Java's Object to be stored in file
-     * @throws IOException
+     * @throws IOException In case of error while saving the object.
      */
     public static void saveObjectAsBin(File file, 
                                    Object data)

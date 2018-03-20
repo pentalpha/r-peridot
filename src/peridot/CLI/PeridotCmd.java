@@ -58,16 +58,14 @@ public final class PeridotCmd {
 
     private static int getInterpreterNumber(){
         int n = -1;
-        boolean repeat = true;
-        while(repeat){
+        while(true){
             Scanner keyboard = new Scanner(System.in);
             System.out.println("Number of the R environment: ");
             n = keyboard.nextInt();
-            if(n < 0 || n > Interpreter.interpreters.size()){
-                repeat = true;
-                System.out.println("Invalid R environment number.");
+            if(n > 0 || n <= Interpreter.interpreters.size()){
+                break;
             }else{
-                repeat = false;
+                System.out.println("Invalid R environment number.");
             }
         }
         return n;

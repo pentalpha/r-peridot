@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 /**
+ * A file with all the definitions necessary to do an analysis.
  * Created by pentalpha on 01/05/17.
  */
 public class AnalysisFile {

@@ -68,8 +68,8 @@ public class InstallationBatch {
                    }else if(installation.status == PackageInstaller.Status.ALREADY_INSTALLED){
                        Log.logger.info("Already installed: " + installation.getPackageName() + totalStr);
                    }else if(installation.status == PackageInstaller.Status.FAILED){
+                       Log.logger.severe(installation.getOutputStr());
                        Log.logger.severe("Failed to install: " + installation.getPackageName() + totalStr);
-                       //Log.logger.severe(installation.getOutputStr());
                    }
                }else{
                    status = Status.FINISHED;

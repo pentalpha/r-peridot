@@ -6,7 +6,7 @@
 package peridot;
 
 /**
- *
+ * A Comparable String, with an integer index.
  * @author pentalpha
  */
 public class IndexedString implements Comparable<IndexedString>{

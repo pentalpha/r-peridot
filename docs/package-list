@@ -3,3 +3,4 @@ peridot.Archiver
 peridot.CLI
 peridot.CLI.Commands
 peridot.script
+peridot.script.r

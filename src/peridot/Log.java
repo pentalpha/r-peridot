@@ -12,7 +12,9 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 /**
- *
+ * Logging of errors, warnings and other information.
+ * This is the preferred method to sending text output,
+ * the use of System.out directly is only recommended for the CLI classes.
  * @author pentalpha
  */
 public final class Log {

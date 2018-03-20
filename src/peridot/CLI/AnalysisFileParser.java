@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 /**
+ * Parses an AnalysisFile file to the AnalysisFile object.
  * Created by pentalpha on 02/05/17.
  */
 public class AnalysisFileParser {

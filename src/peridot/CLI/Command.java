@@ -3,6 +3,9 @@ package peridot.CLI;
 
 import peridot.script.RModule;
 
+/**
+ * Parent class of all R-Peridot commands
+ */
 public abstract class Command {
     protected String commandStr;
     protected String detail;

@@ -6,6 +6,7 @@ import peridot.Operations;
 import peridot.script.RModule;
 
 /**
+ * Command to import R-Peridot modules
  * Created by pentalpha on 4/28/17.
  */
 public class IN extends Command{

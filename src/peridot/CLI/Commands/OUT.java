@@ -6,6 +6,7 @@ import peridot.Operations;
 import peridot.script.RModule;
 
 /**
+ * Command to export, to a file, an R-Peridot Module.
  * Created by pentalpha on 4/28/17.
  */
 public class OUT extends Command {

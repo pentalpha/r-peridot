@@ -5,6 +5,7 @@ import peridot.Global;
 import peridot.script.RModule;
 
 /**
+ * The main class for the R-Peridot CLI.
  * Created by pentalpha on 4/27/17.
  */
 public class UserInterface {

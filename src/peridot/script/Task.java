@@ -252,8 +252,7 @@ public class Task {
     }
     
     /**
-     * 
-     * @return  
+     * Synchronized method to update the atomic status of the task.
      */
     private synchronized void updateStatus(){
         if(finishedScripts.size() == scriptExecs.size()){

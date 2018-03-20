@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 /**
- *
+ * Manages the count reads file and all the meta-information about it.
  * @author pentalpha
  */
 public class AnalysisData {
@@ -230,7 +230,7 @@ public class AnalysisData {
                 }
             }
         }else{
-            names = Spreadsheet.getDefaultColunnNames(nConditions);
+            names = Spreadsheet.getDefaultColumnNames(nConditions);
         }
         
         map.clear();

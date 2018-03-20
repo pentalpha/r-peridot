@@ -15,6 +15,8 @@ public class Main {
     public static AtomicBoolean finished;
     public static void main(String[] args) {
         finished = new AtomicBoolean(false);
+
+        //Manages SIGINTs. Stops any installation or task.
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 Task task = Task.getRunningTask();

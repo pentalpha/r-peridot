@@ -27,6 +27,7 @@ public class Spreadsheet {
 
     /**
      * @param line  line from a .csv or .tsv file.
+     * @param sep   Cell separator.
      * @return      If the line is made mostly of words, not numbers.
      */
     public static boolean lineIsHeader(String line, String sep){
@@ -96,6 +97,7 @@ public class Spreadsheet {
     /**
      *
      * @param file  Spreadsheet file.
+     * @param sep   Cell separator.
      * @return      Only the first row of the spreadsheet.
      */
     public static String[] getFirstRowFromFile(File file, String sep){
@@ -115,6 +117,7 @@ public class Spreadsheet {
 
     /**
      * @param line  String of text, not spliced.
+     * @param sep   Cell separator.
      * @return      True if line contains the names of the samples.
      */
     public static boolean lineIsSampleNames(String line, String sep){
@@ -162,40 +165,13 @@ public class Spreadsheet {
      * @param n Number of elements on the new header
      * @return  A header in the "Column X" form.
      */
-    public static String[] getDefaultColunnNames(int n){
+    public static String[] getDefaultColumnNames(int n){
         String[] defaultNames = new String[n];
         for(int i = 0; i < defaultNames.length; i++){
             defaultNames[i] = "Colunn " + (i+1);
         }
         return defaultNames;
     }
-
-    /**
-     *  R-Peridot tries to guess the Spreadsheet.Info of a spreadsheet.
-     * @param tableFile     The .csv or .tsv file to be analyzed.
-     * @return              Spreadsheet.Info instance with the info.
-     * @throws IOException
-     */
-    /*public static Spreadsheet.Info getInfo(File tableFile) throws IOException{
-        Spreadsheet.Info info = new Spreadsheet.Info();
-
-        FileReader inputReader = new FileReader(tableFile);
-        BufferedReader tableInput = new BufferedReader(inputReader);
-        String line = tableInput.readLine();
-        String line2 = tableInput.readLine();
-        tableInput.close();
-        inputReader.close();
-
-        info.setFirstCellPresent(!(Global.splitWithTabOrCur(line).length < Global.splitWithTabOrCur(line2).length));
-        if(info.getFirstCellPresent()){
-            info.setHeaderOnFirstLine(lineIsHeader(line));
-        }else{
-            info.setHeaderOnFirstLine(true);
-        }
-
-        info.setLabelsOnFirstCol(true);
-        return info;
-    }*/
 
     /////////////////////////////////////////////////////////////////
             ///////// INSTANCE FIELDS & METHODS //////////
@@ -315,8 +291,7 @@ public class Spreadsheet {
         /**
          *  R-Peridot tries to guess the Spreadsheet.Info of a spreadsheet.
          * @param tableFile     The .csv or .tsv file to be analyzed.
-         * @return              Spreadsheet.Info instance with the info.
-         * @throws IOException
+         * @throws IOException If failed to read the table file.
          */
         public Info(File tableFile) throws IOException{
             FileReader inputReader = new FileReader(tableFile);
@@ -342,6 +317,7 @@ public class Spreadsheet {
          * @param headerOnFirstLine If there are headers on the first line
          * @param firstCellPresent  If the first cell (line 0, column 0) has
          *                          a header, label or value on it.
+         * @param sep   Cell separator.
          */
         public Info(boolean labelsOnFirstCol,
                     boolean headerOnFirstLine,

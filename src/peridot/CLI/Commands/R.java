@@ -4,6 +4,7 @@ import peridot.CLI.Command;
 import peridot.CLI.PeridotCmd;
 
 /**
+ * Command to manage R environments.
  * Created by pentalpha on 25/01/2018.
  */
 public class R extends Command {

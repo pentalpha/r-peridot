@@ -12,6 +12,7 @@ import peridot.script.Task;
 import java.io.File;
 
 /**
+ * Command to create a example Analysis File or run an Analysis File to make an analysis.
  * Created by pentalpha on 01/05/17.
  */
 public class RUN extends Command{

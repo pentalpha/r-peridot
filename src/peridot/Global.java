@@ -124,6 +124,7 @@ public final class Global {
     /**
      * Splits a line with tabulation.
      * @param line  Line to be Spliced.
+     * @param sep   Cell separator.
      * @return      Spliced line.
      */
     public static String[] split(String line, String sep){
@@ -223,6 +224,7 @@ public final class Global {
 
     /**
      * Prints an array of integers.
+     * @param array Integers to be printed.
      */
     public static void printArray(int[] array){
         String s = "";
@@ -237,6 +239,7 @@ public final class Global {
 
     /**
      * Prints an array of Strings.
+     * @param array Strings to be printed.
      */
     public static void printArray(String[] array){
         String s = "";

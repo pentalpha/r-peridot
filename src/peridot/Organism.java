@@ -3,6 +3,9 @@ package peridot;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * An Organism type. The only ones currently available are Human, Mouse and Fly.
+ */
 public class Organism {
     public String speciesName;
 
