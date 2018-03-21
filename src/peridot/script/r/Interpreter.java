@@ -81,7 +81,23 @@ public class Interpreter {
 
     public static boolean removeInterpreter(int i){
         if(i >= 0 && i < interpreters.size()){
+            boolean removeDefault = false;
+            {
+                Interpreter toRm = interpreters.get(i);
+                if(isDefaultInterpreterDefined()){
+                    if(toRm.exe.equals(defaultInterpreter.exe)){
+                        removeDefault = true;
+                    }
+                }
+            }
+
             boolean removed = interpreters.remove(i) != null;
+
+            if(removed){
+                if(removeDefault){
+                    defaultInterpreter = null;
+                }
+            }
             return removed;
         }else{
             return false;

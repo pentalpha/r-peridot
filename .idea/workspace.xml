@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e4f6c08-aa0c-476a-a9ac-fe508fc4faf1" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jar/r-peridot.jar" afterPath="$PROJECT_DIR$/jar/r-peridot.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/Archiver/PeridotConfig.java" afterPath="$PROJECT_DIR$/src/peridot/Archiver/PeridotConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/r/PackageInstaller.java" afterPath="$PROJECT_DIR$/src/peridot/script/r/PackageInstaller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/r/VersionNumber.java" afterPath="$PROJECT_DIR$/src/peridot/script/r/VersionNumber.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/r/Interpreter.java" afterPath="$PROJECT_DIR$/src/peridot/script/r/Interpreter.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,7 +25,11 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
               <caret line="26" column="3" lean-forward="false" selection-start-line="26" selection-start-column="3" selection-end-line="26" selection-end-column="3" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#3110#3111#0" expanded="false" />
+                <element signature="e#3155#3156#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -36,17 +39,24 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="986">
               <caret line="71" column="43" lean-forward="false" selection-start-line="71" selection-start-column="43" selection-end-line="71" selection-end-column="43" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#396#397#0" expanded="false" />
+                <element signature="e#438#439#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Interpreter.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Interpreter.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/peridot/script/r/Interpreter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3315">
-              <caret line="211" column="24" lean-forward="false" selection-start-line="211" selection-start-column="24" selection-end-line="211" selection-end-column="24" />
-              <folding />
+            <state relative-caret-position="412">
+              <caret line="93" column="61" lean-forward="true" selection-start-line="93" selection-start-column="61" selection-end-line="93" selection-end-column="61" />
+              <folding>
+                <element signature="e#580#581#0" expanded="true" />
+                <element signature="e#629#630#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -56,7 +66,10 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="102">
               <caret line="6" column="10" lean-forward="false" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
-              <folding />
+              <folding>
+                <element signature="e#647#648#0" expanded="false" />
+                <element signature="e#674#675#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -64,8 +77,8 @@
       <file leaf-file-name="PeridotConfig.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/peridot/Archiver/PeridotConfig.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="19" column="63" lean-forward="false" selection-start-line="19" selection-start-column="63" selection-end-line="19" selection-end-column="63" />
+            <state relative-caret-position="323">
+              <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -81,7 +94,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PackageInstaller.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PackageInstaller.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/peridot/script/r/PackageInstaller.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="251">
@@ -107,7 +120,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>fo</find>
       <find>fol</find>
       <find>l</find>
       <find>log2</find>
@@ -137,6 +149,7 @@
       <find>os</find>
       <find>os_</find>
       <find>loadu</find>
+      <find>remove</find>
     </findStrings>
     <replaceStrings>
       <replace>peridotDir</replace>
@@ -212,10 +225,10 @@
         <option value="$PROJECT_DIR$/src/peridot/script/Task.java" />
         <option value="$PROJECT_DIR$/src/peridot/Archiver/Spreadsheet.java" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/src/peridot/script/r/Interpreter.java" />
         <option value="$PROJECT_DIR$/src/peridot/Archiver/PeridotConfig.java" />
         <option value="$PROJECT_DIR$/src/peridot/script/r/VersionNumber.java" />
         <option value="$PROJECT_DIR$/src/peridot/script/r/PackageInstaller.java" />
+        <option value="$PROJECT_DIR$/src/peridot/script/r/Interpreter.java" />
       </list>
     </option>
   </component>
@@ -894,6 +907,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9418">
           <caret line="584" column="33" lean-forward="false" selection-start-line="584" selection-start-column="33" selection-end-line="584" selection-end-column="33" />
+          <folding>
+            <element signature="e#3618#3619#0" expanded="false" />
+            <element signature="e#3651#3652#0" expanded="false" />
+            <element signature="e#31624#31625#0" expanded="false" />
+            <element signature="e#31688#31689#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1082,7 +1101,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="26" column="3" lean-forward="false" selection-start-line="26" selection-start-column="3" selection-end-line="26" selection-end-column="3" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3110#3111#0" expanded="false" />
+            <element signature="e#3155#3156#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1090,15 +1113,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="986">
           <caret line="71" column="43" lean-forward="false" selection-start-line="71" selection-start-column="43" selection-end-line="71" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/peridot/script/r/Interpreter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3315">
-          <caret line="211" column="24" lean-forward="false" selection-start-line="211" selection-start-column="24" selection-end-line="211" selection-end-column="24" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#396#397#0" expanded="false" />
+            <element signature="e#438#439#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1106,15 +1125,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" column="10" lean-forward="false" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/peridot/Archiver/PeridotConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="19" column="63" lean-forward="false" selection-start-line="19" selection-start-column="63" selection-end-line="19" selection-end-column="63" />
-          <folding />
+          <folding>
+            <element signature="e#647#648#0" expanded="false" />
+            <element signature="e#674#675#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1135,6 +1149,25 @@
             <element signature="e#1282#1283#0" expanded="true" />
             <element signature="e#2903#2904#0" expanded="true" />
             <element signature="e#2950#2951#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/peridot/Archiver/PeridotConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/peridot/script/r/Interpreter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="412">
+          <caret line="93" column="61" lean-forward="true" selection-start-line="93" selection-start-column="61" selection-end-line="93" selection-end-column="61" />
+          <folding>
+            <element signature="e#580#581#0" expanded="true" />
+            <element signature="e#629#630#0" expanded="true" />
           </folding>
         </state>
       </provider>
