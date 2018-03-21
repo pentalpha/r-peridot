@@ -2,6 +2,7 @@ package peridot.script.r;
 
 import peridot.Archiver.PeridotConfig;
 import peridot.Archiver.Places;
+import peridot.CLI.PeridotCmd;
 import peridot.Log;
 import peridot.Output;
 
@@ -33,7 +34,11 @@ public class PackageInstaller {
         this.interpreter = interpreter;
         this.pack = pack;
         status = Status.NOT_STARTED;
-        String[] args = {pack.name, PeridotConfig.get().packagesRepository};
+        String[] args = {pack.name, "0.0.0.0"};
+        if(interpreter.getRVersion().into(PeridotConfig.preferredRVersion)){
+            String[] args2 = {pack.name, PeridotConfig.get().packagesRepository};
+            args = args2;
+        }
         script = new Script(Places.installPackageScript, args, true);
         running = new AtomicBoolean(false);
     }

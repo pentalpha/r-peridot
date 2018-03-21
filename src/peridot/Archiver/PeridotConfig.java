@@ -17,8 +17,8 @@ public class PeridotConfig implements Serializable{
     public String defaultInterpreter;
     public Set<String> availableInterpreters;
     public String packagesRepository;
-    public static VersionNumber preferredRVersion = new VersionNumber("3.4.1");
-    public static VersionNumber minimalRVersion = new VersionNumber("3.4.0");
+    public static VersionNumber preferredRVersion = new VersionNumber("3.4");
+    public static VersionNumber minimalRVersion = new VersionNumber("3.4");
 
 
     public PeridotConfig(){

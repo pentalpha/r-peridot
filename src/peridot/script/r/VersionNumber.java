@@ -63,6 +63,15 @@ public class VersionNumber implements Comparable<VersionNumber>{
         return 0;
     }
 
+    public boolean into(VersionNumber n){
+        for(int i = 0; i < n.numbers.length; i++){
+            if(numbers[i] != n.numbers[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof VersionNumber){
