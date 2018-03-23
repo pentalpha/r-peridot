@@ -21,12 +21,12 @@ public class InstallationBatch {
         FINISHED
     }
 
-    private Deque<PackageInstaller> concluded;
-    private Queue<PackageInstaller> installationQueue;
-    private PackageInstaller currentInstallation;
-    private AtomicBoolean stopFlag;
-    private Status status;
-    private AtomicBoolean running;
+    public Deque<PackageInstaller> concluded;
+    public Queue<PackageInstaller> installationQueue;
+    public PackageInstaller currentInstallation;
+    public AtomicBoolean stopFlag;
+    public Status status;
+    public AtomicBoolean running;
 
     public static InstallationBatch lastInstallation = null;
 
