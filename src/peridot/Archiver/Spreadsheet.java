@@ -44,8 +44,9 @@ public class Spreadsheet {
         return false;
     }
 
-    private static List<String[]> getRowsFromTable(File tableFile, String separator){
+    private static List<String[]> getRowsFromTable(File tableFile, int max, String separator){
         List<String[]> allRows = new LinkedList<>();
+        int nLines = 0;
         try{
             FileReader inputReader = new FileReader(tableFile);
             BufferedReader buffInput = new BufferedReader(inputReader);
@@ -53,6 +54,11 @@ public class Spreadsheet {
             while(line != null){
                 String[] cells = Global.split(line, separator);
                 allRows.add(cells);
+                nLines++;
+                line = buffInput.readLine();
+                if(nLines > max){
+                    break;
+                }
             }
         }catch (Exception ex){
             Log.logger.severe("Could not read input from file " + tableFile.getAbsolutePath());
@@ -185,8 +191,10 @@ public class Spreadsheet {
     public File tableFile;
 
     public Spreadsheet(File tableFile) throws IOException{
+        Log.logger.info("Reading spreadsheet for " + tableFile.getName());
         this.info = new Info(tableFile);
         this.tableFile = tableFile;
+        Log.logger.info("Read spreadsheet for " + tableFile.getName());
     }
 
     public Spreadsheet(File tableFile, Info info){
@@ -197,7 +205,7 @@ public class Spreadsheet {
     private void setSeparator(String sep){
         info.separator = sep;
         if(rows != null){
-            this.reloadRows();
+            this.reloadRows(-1);
         }
     }
 
@@ -205,13 +213,17 @@ public class Spreadsheet {
         return info.separator;
     }
 
-    private void reloadRows(){
-        this.rows = Spreadsheet.getRowsFromTable(tableFile, info.separator);
+    private void reloadRows(int max){
+        this.rows = Spreadsheet.getRowsFromTable(tableFile, max, info.separator);
     }
 
     public List<String[]> getRows(){
+        return getRows(-1);
+    }
+
+    public List<String[]> getRows(int max){
         if(rows == null){
-            reloadRows();
+            reloadRows(max);
         }
         return rows;
     }
@@ -227,7 +239,7 @@ public class Spreadsheet {
             boolean alreadyLoaded = rows != null;
             rows = null;
             if(alreadyLoaded){
-                reloadRows();
+                reloadRows(-1);
             }
         }
     }
@@ -297,6 +309,7 @@ public class Spreadsheet {
          * @throws IOException If failed to read the table file.
          */
         public Info(File tableFile) throws IOException{
+            Log.logger.info("Reading info of " + tableFile.getName());
             FileReader inputReader = new FileReader(tableFile);
             BufferedReader tableInput = new BufferedReader(inputReader);
             String line = tableInput.readLine();
@@ -312,6 +325,7 @@ public class Spreadsheet {
             }
 
             setLabelsOnFirstCol(true);
+            Log.logger.info("Read info of " + tableFile.getName());
         }
 
         /**

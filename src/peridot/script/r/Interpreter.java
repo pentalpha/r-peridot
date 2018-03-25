@@ -144,9 +144,6 @@ public class Interpreter {
 
     public Interpreter(String exe){
         this.exe = exe;
-
-        Output testOutput = null;
-
         /*if(!this.exe.exists()){
             validInterpreter = false;
             return;
@@ -156,7 +153,11 @@ public class Interpreter {
             validInterpreter = false;
             return;
         }*/
+        analyseInterpreter();
+    }
 
+    public void analyseInterpreter(){
+        Output testOutput = null;
         try{
             testOutput = readPackagesAvailable();
         }catch (Exception exp){

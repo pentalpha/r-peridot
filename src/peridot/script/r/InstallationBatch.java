@@ -27,11 +27,13 @@ public class InstallationBatch {
     public AtomicBoolean stopFlag;
     public Status status;
     public AtomicBoolean running;
+    private Interpreter installingTo;
 
     public static InstallationBatch lastInstallation = null;
 
     public InstallationBatch(Collection<Package> packsToInstall, Interpreter installTo) {
         status = Status.WAITING;
+        installingTo = installTo;
         concluded = new ConcurrentLinkedDeque<>();
         currentInstallation = null;
         installationQueue = new ConcurrentLinkedQueue<>();
@@ -77,6 +79,7 @@ public class InstallationBatch {
                }
            }
         }
+        installingTo.analyseInterpreter();
         running.set(false);
     }
 

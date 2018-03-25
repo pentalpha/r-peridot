@@ -27,7 +27,7 @@ public class PackageInstaller {
     private Interpreter interpreter;
     private Package pack;
     public Status status;
-    private Script script;
+    public Script script;
     private AtomicBoolean running;
 
     public PackageInstaller(Interpreter interpreter, Package pack){
