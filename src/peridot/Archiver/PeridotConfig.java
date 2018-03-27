@@ -22,7 +22,7 @@ public class PeridotConfig implements Serializable{
 
 
     public PeridotConfig(){
-        this.packagesRepository = "http://localhost/R/drat/";
+        this.packagesRepository = "http://www.bioinformatics-brazil.org/r-peridot/R/drat/";
         this.availableInterpreters = Places.getDefaultRexecs();
         this.defaultInterpreter = null;
     }

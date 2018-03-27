@@ -56,7 +56,7 @@ public class Spreadsheet {
                 allRows.add(cells);
                 nLines++;
                 line = buffInput.readLine();
-                if(nLines > max){
+                if(max >= 0 && nLines > max){
                     break;
                 }
             }
@@ -189,6 +189,8 @@ public class Spreadsheet {
     private Info info;
     private List<String[]> rows;
     public File tableFile;
+    private boolean reloadFlag = true;
+    private int lastMax = -2;
 
     public Spreadsheet(File tableFile) throws IOException{
         Log.logger.info("Reading spreadsheet for " + tableFile.getName());
@@ -202,11 +204,10 @@ public class Spreadsheet {
         this.tableFile = tableFile;
     }
 
-    private void setSeparator(String sep){
+    public void setSeparator(String sep){
+        boolean reload = !sep.equals(info.separator);
         info.separator = sep;
-        if(rows != null){
-            this.reloadRows(-1);
-        }
+        reloadFlag = true;
     }
 
     public String getSeparator(){
@@ -222,27 +223,27 @@ public class Spreadsheet {
     }
 
     public List<String[]> getRows(int max){
-        if(rows == null){
+        if(reloadFlag || lastMax == -2 || lastMax != max){
             reloadRows(max);
         }
+        reloadFlag = false;
+        lastMax = max;
         return rows;
     }
 
     public void setInfo(Info info){
-        boolean reload = true;
-        if(info.separator.equals(this.info.separator)){
-            reload = false;
+        boolean reload = false;
+        if(!info.separator.equals(this.info.separator)
+                || info.getHeaderOnFirstLine() != this.info.getHeaderOnFirstLine()
+                || info.getFirstCellPresent() != this.info.getFirstCellPresent()
+                || info.getLabelsOnFirstCol() != this.info.getLabelsOnFirstCol()){
+            reload = true;
         }
 
         this.info = info;
-        if(reload){
-            boolean alreadyLoaded = rows != null;
-            rows = null;
-            if(alreadyLoaded){
-                reloadRows(-1);
-            }
-        }
+        reloadFlag = reload;
     }
+
 
     public Info getInfo(){
         return info;
