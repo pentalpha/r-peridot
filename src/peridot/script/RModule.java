@@ -12,6 +12,7 @@ import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.GeneIdType;
 import peridot.Log;
+import peridot.Organism;
 import peridot.script.r.Interpreter;
 import peridot.script.r.Package;
 
@@ -39,6 +40,7 @@ public class RModule implements Serializable{
         params.put(Integer.class.getSimpleName(), Integer.class);
         params.put(Float.class.getSimpleName(), Float.class);
         params.put(GeneIdType.class.getSimpleName(), GeneIdType.class);
+        params.put(Organism.class.getSimpleName(), Organism.class);
         return params;
     }
 
