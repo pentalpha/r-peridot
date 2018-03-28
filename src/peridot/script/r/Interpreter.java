@@ -229,11 +229,26 @@ public class Interpreter {
         String str = "";
         Set<Package> toInstall = getPackagesToInstall();
         if(toInstall.size() > 0){
-            str += "\tTo Install:\n";
+            str += "To Install:\n";
             for(Package pack : toInstall){
-                str += "\t\t"+pack.name+"\t"+pack.version.toString()+"\n";
+                str += "\t"+pack.name+"\t"+pack.version.toString()+"\n";
             }
         }
+
+        Set<String> cannotRun = new HashSet<>();
+        for(String module : RModule.getAvailableModules()){
+            if(!RModule.availableModules.get(module).requiredPackagesInstalled(this)){
+                cannotRun.add(module);
+            }
+        }
+
+        if(cannotRun.size() > 0){
+            str += "Modules with unmet dependencies:\n\t";
+            for(String module : cannotRun){
+                str += module+"; ";
+            }
+        }
+
         return str;
     }
 

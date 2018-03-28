@@ -810,9 +810,17 @@ public class RModule implements Serializable{
 
     public Set<Package> requiredPackagesNotInstalled(){
         if(Interpreter.isDefaultInterpreterDefined()) {
-            Set<Package> installed = Interpreter.defaultInterpreter.availablePackages;
+            return requiredPackagesNotInstalled(Interpreter.defaultInterpreter);
+        }else{
+            return requiredPackages;
+        }
+    }
+
+    public Set<Package> requiredPackagesNotInstalled(Interpreter interpreter){
+        if(interpreter != null) {
+            Set<Package> installed = interpreter.availablePackages;
             Set<String> installedNames = new TreeSet<>();
-            Set<Package> notInstalledPacks = new TreeSet<>();
+            Set<Package> notInstalledPacks = new HashSet<>();
             for(Package pack : installed){
                 installedNames.add(pack.name);
             }
@@ -828,6 +836,10 @@ public class RModule implements Serializable{
     }
 
     public boolean requiredPackagesInstalled(){
-        return requiredPackagesNotInstalled().size() > 0;
+        return requiredPackagesNotInstalled().size() == 0;
+    }
+
+    public boolean requiredPackagesInstalled(Interpreter interpreter){
+        return requiredPackagesNotInstalled(interpreter).size() == 0;
     }
 }
