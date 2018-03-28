@@ -267,11 +267,14 @@ public class Spreadsheet {
             float[] avgCellsPerLine = {-1.0f, -1.0f, -1.0f, -1.0f};
             for(int i = 0; i < separators.length; i++){
                 for(String line : lines){
-                    String[] split = Global.joinArgsBetweenQuotes(line.split(separators[i]));
-                    if(avgCellsPerLine[i] < 0.0f){
-                        avgCellsPerLine[i] = (float)split.length;
-                    }else{
-                        avgCellsPerLine[i] = avgCellsPerLine[i] * (float)split.length;
+                    String[] split = line.split(separators[i]);
+                    if(split.length > 0){
+                        split = Global.joinArgsBetweenQuotes(split);
+                        if(avgCellsPerLine[i] < 0.0f){
+                            avgCellsPerLine[i] = (float)split.length;
+                        }else{
+                            avgCellsPerLine[i] = avgCellsPerLine[i] * (float)split.length;
+                        }
                     }
                 }
             }
@@ -318,7 +321,15 @@ public class Spreadsheet {
             tableInput.close();
             inputReader.close();
             separator = guessLineSeparator(tableFile);
-            setFirstCellPresent(!(Global.split(line, separator).length < Global.split(line2, separator).length));
+            if(line != null){
+                if(line2 != null){
+                    setFirstCellPresent(!(Global.split(line, separator).length < Global.split(line2, separator).length));
+                }else{
+                    setFirstCellPresent(true);
+                }
+            }else{
+                setFirstCellPresent(false);
+            }
             if(getFirstCellPresent()){
                 setHeaderOnFirstLine(lineIsHeader(line, separator));
             }else{

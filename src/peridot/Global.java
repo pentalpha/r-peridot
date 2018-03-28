@@ -373,14 +373,14 @@ public final class Global {
                 tempString = args[i];
             }*/
             if(starts){
-                arg = arg.substring(1);
-                String newArg = "";
-                while(!endsWithQuotes(arg)){
-                    if(i >= args.length){
-                        break;
-                    }
-                    newArg += " " + arg;
-                    i++;
+                if(arg.length() > 1) {
+                    arg = arg.substring(1);
+                }else{
+                    arg = "";
+                }
+                String newArg;
+                for(newArg = ""; !endsWithQuotes(arg) && i < args.length; i++) {
+                    newArg = newArg + " " + arg;
                     arg = args[i];
                 }
                 if(endsWithQuotes(arg)){
