@@ -385,7 +385,7 @@ public final class Global {
                 }
                 if(endsWithQuotes(arg)){
                     if(arg.length()>1) {
-                        newArg += " " + arg.substring(0, arg.length() - 2);
+                        newArg += " " + arg.substring(0, arg.length() - 1);
                     }
                 }
                 newArgs.add(newArg);
