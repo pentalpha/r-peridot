@@ -20,6 +20,8 @@ public class AnalysisData {
     protected Global.RoundingMode roundMode;
     protected boolean hasReplicates = false;
     protected boolean moreThanTwoConditions = false;
+    protected File finalCountReadsFile;
+    protected File finalConditionsFile;
     public AnalysisData(File expressionFile, File conditionsFile, Info info, String roundMode,
                         int countReadsThreshold) throws IOException
     {
@@ -47,6 +49,8 @@ public class AnalysisData {
     private void defaultBuilderOperations(File expressionFile, File conditionsFile, Info info, String roundMode,
                                           int countReadsThreshold)  throws IOException
     {
+        this.finalCountReadsFile = Places.countReadsInputFile;
+        this.finalConditionsFile = Places.conditionInputFile;
         this.info = info;
         if(roundMode.equals("HALF_UP")){
             this.roundMode = Global.RoundingMode.HALF_UP;
@@ -71,6 +75,14 @@ public class AnalysisData {
         }else{
             throw new IOException("Conditions file does not exists.");
         }
+    }
+
+    public void setCountReadsFile(File file){
+        finalCountReadsFile = file;
+    }
+
+    public void setConditionsFile(File file){
+        finalConditionsFile = file;
     }
 
     public void setConditions(SortedMap<IndexedString, String> newCond) {
@@ -242,7 +254,7 @@ public class AnalysisData {
     }
     
     protected void writeFinalConditions(){
-        AnalysisData.createConditionsFile(Places.conditionInputFile, conditions, true, false);
+        AnalysisData.createConditionsFile(this.finalConditionsFile, conditions, true, false);
     }
     
     public static void createConditionsFile(File file,
@@ -299,7 +311,7 @@ public class AnalysisData {
     }
     
     private void writeCountReadsWithoutConditions() throws IOException{
-        File newRNASeq = Places.countReadsInputFile;
+        File newRNASeq = finalCountReadsFile;
         if(newRNASeq.exists()){
             newRNASeq.delete();
         }
