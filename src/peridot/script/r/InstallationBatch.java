@@ -50,10 +50,13 @@ public class InstallationBatch {
 
     public void installationThread(){
         running.set(true);
+        //System.out.println("Starting installationThread");
         while(status == Status.INSTALLING){
+           //System.out.println("Installing");
            if(stopFlag.get()){
                cancelInstallations();
                status = Status.STOPPED;
+               //System.out.println("Stopflag has been set, breaking the installationThread");
                break;
            }else{
                if(!installationQueue.isEmpty()){
@@ -75,11 +78,14 @@ public class InstallationBatch {
                    }
                }else{
                    status = Status.FINISHED;
+                   //System.out.println("No more installations, breaking the installationThread");
                    break;
                }
            }
         }
+        //System.out.println("Exited the installationThread loop");
         installingTo.analyseInterpreter();
+        //Log.logger.info("exiting installationThread");
         running.set(false);
     }
 

@@ -20,7 +20,7 @@ public class Main {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 Task task = Task.getRunningTask();
-                System.out.println("2 - Waiting for task to finish");
+                //System.out.println("3 - Waiting for task to finish");
                 if(task != null){
                     if(task.processingStatus.get() < 0){
                         System.out.println("\n[USER-INTERRUPT]\n");
@@ -35,14 +35,15 @@ public class Main {
                         }
                     }
                 }
-                System.out.println("1 - Waiting for installations to finish");
+                //System.out.println("2 - Checking for ongoing installations");
                 if(InstallationBatch.lastInstallation != null){
                     InstallationBatch.lastInstallation.stop();
+                    //System.out.println("1 - Waiting for installations to finish");
                     while(InstallationBatch.lastInstallation.isRunning()){
 
                     }
                 }
-                System.out.println("0 - Finished shutdown hook");
+                //System.out.println("0 - Finished shutdown hook");
             }
         });
 

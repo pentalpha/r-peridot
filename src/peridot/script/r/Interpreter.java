@@ -71,7 +71,7 @@ public class Interpreter {
                 }
             }
         }
-        System.out.println("Trying to add interpreter");
+        //System.out.println("Trying to add interpreter");
         Interpreter interpreter = new Interpreter(exec);
         if(interpreter.validInterpreter){
             if(toRemove != null){
@@ -174,9 +174,7 @@ public class Interpreter {
             validInterpreter = false;
         }
         if(validInterpreter){
-            //if(testOutput.contains("> Packages\n")){
             validInterpreter = readPackagesFromOutput(testOutput);
-            System.out.println(validInterpreter);
         }
     }
 

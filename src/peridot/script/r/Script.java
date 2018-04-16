@@ -239,6 +239,9 @@ public class Script {
         if(process != null){
             if(process.isAlive() && running.get()){
                 process.destroy();
+                if(process.isAlive()){
+                    process.destroyForcibly();
+                }
             }
         }
     }
