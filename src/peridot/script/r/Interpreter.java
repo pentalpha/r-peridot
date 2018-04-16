@@ -247,12 +247,7 @@ public class Interpreter {
             }
         }
 
-        Set<String> cannotRun = new HashSet<>();
-        for(String module : RModule.getAvailableModules()){
-            if(!RModule.availableModules.get(module).requiredPackagesInstalled(this)){
-                cannotRun.add(module);
-            }
-        }
+        Set<String> cannotRun = RModule.modulesWithUnmetDependencies(this);
 
         if(cannotRun.size() > 0){
             str += "Modules with unmet dependencies:\n\t";

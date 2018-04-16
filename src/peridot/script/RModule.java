@@ -96,6 +96,26 @@ public class RModule implements Serializable{
         return scripts;
     }
 
+    public static Set<String> modulesWithUnmetDependencies(){
+        if(Interpreter.isDefaultInterpreterDefined()){
+            return modulesWithUnmetDependencies(Interpreter.defaultInterpreter);
+        }else{
+            HashSet<String> set = new HashSet<String>();
+            set.addAll(getAvailableModules());
+            return set;
+        }
+    }
+
+    public static Set<String> modulesWithUnmetDependencies(Interpreter interpreter){
+        Set<String> cannotRun = new HashSet<>();
+        for(String module : RModule.getAvailableModules()){
+            if(!RModule.availableModules.get(module).requiredPackagesInstalled(interpreter)){
+                cannotRun.add(module);
+            }
+        }
+        return cannotRun;
+    }
+
     public static void updateUserScripts(){
         loadUserScripts();
     }
