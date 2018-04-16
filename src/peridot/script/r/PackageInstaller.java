@@ -56,7 +56,7 @@ public class PackageInstaller {
     }
 
     public boolean install(){
-        if(status == Status.FAILED){
+        if(status == Status.FAILED || status == Status.NO_PERMISSION){
             return false;
         }
         try{

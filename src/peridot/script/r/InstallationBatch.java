@@ -183,4 +183,15 @@ public class InstallationBatch {
 
         return failures;
     }
+
+    public Collection<Package> getNoPermission(){
+        Vector<Package> noPerm = new Vector<>();
+        for(PackageInstaller installer : concluded){
+            if(installer.status == PackageInstaller.Status.NO_PERMISSION){
+                noPerm.add(installer.getPackage());
+            }
+        }
+
+        return noPerm;
+    }
 }

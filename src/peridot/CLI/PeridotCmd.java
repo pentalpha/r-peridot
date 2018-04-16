@@ -123,6 +123,7 @@ public final class PeridotCmd {
         packageLists.put("Successful installations", batch.getSuccessful());
         packageLists.put("Already installed", batch.getAlreadyInstalled());
         packageLists.put("Failed", batch.getFailed());
+        packageLists.put("No Permission To Install", batch.getNoPermission());
 
         for(Map.Entry<String, Collection<Package>> list : packageLists.entrySet()){
             if(list.getValue().size() > 0){
@@ -131,7 +132,7 @@ public final class PeridotCmd {
             }
         }
 
-        return batch.getFailed().size() == 0;
+        return (batch.getFailed().size() + batch.getNoPermission().size()) == 0;
     }
 
     public static void askToUpdateInterpreter(int i){
