@@ -21,6 +21,7 @@ public class PackageInstaller {
         INSTALLING,
         ALREADY_INSTALLED,
         FAILED,
+        NO_PERMISSION,
         INSTALLED
     }
 
@@ -29,6 +30,7 @@ public class PackageInstaller {
     public Status status;
     public Script script;
     private AtomicBoolean running;
+    public boolean writeAccessError;
 
     public PackageInstaller(Interpreter interpreter, Package pack){
         this.interpreter = interpreter;
@@ -62,7 +64,7 @@ public class PackageInstaller {
             running.set(true);
             script.run(interpreter, true);
             Output output = script.getOutputStream();
-            parseOutput(output.getCommands());
+            parseOutput(output);
             running.set(false);
             return true;
         }catch(Exception e){
@@ -72,7 +74,16 @@ public class PackageInstaller {
         }
     }
 
-    private void parseOutput(HashMap<String, List<String>> commands){
+    private boolean lookForPermissionError(String output){
+        if(output != null){
+            return output.contains("not writable");
+        }
+        return false;
+    }
+
+    private void parseOutput(Output output){
+        writeAccessError = lookForPermissionError(output.getText());
+        HashMap<String, List<String>> commands = output.getCommands();
         List<String> ifCommand = commands.get("> if(packIsInstalled(packageToInstall)){");
         if(ifCommand != null){
             String resultLine = null;
@@ -86,6 +97,11 @@ public class PackageInstaller {
                 status = Status.ALREADY_INSTALLED;
             }else if(resultLine.contains("The package could not")){
                 status = Status.FAILED;
+                if(writeAccessError){
+                    script.getOutputStream().appendLine("This installation probably failed because you do not have access to the" +
+                            " packages library of the current R environment. Try using r-peridot as root next time.");
+                    status = Status.NO_PERMISSION;
+                }
             }else if(resultLine.contains("Package successfully installed")){
                 status = Status.INSTALLED;
             }else{

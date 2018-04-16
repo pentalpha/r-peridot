@@ -104,7 +104,9 @@ public class Output {
                     currentCommand = infoLines[i];
                     commandOutput = new ArrayList<>();
                 }else{
-                    commandOutput.add(infoLines[i]);
+                    if(commandOutput != null){
+                        commandOutput.add(infoLines[i]);
+                    }
                 }
             }
         }

@@ -88,9 +88,10 @@ public class RModule implements Serializable{
     public static Vector<String> getAvailableModules(){
         Vector<String> scripts = new Vector<>();
         for(Map.Entry<String, RModule> pair : RModule.availableModules.entrySet()){
-            if(pair.getValue() instanceof PostAnalysisModule){
-                scripts.add(pair.getKey());
-            }
+            //if(pair.getValue() instanceof PostAnalysisModule){
+            //    scripts.add(pair.getKey());
+            //}
+            scripts.add(pair.getKey());
         }
         return scripts;
     }

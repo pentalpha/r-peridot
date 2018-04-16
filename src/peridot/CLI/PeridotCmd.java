@@ -136,7 +136,7 @@ public final class PeridotCmd {
 
     public static void askToUpdateInterpreter(int i){
         System.out.println("The current R environment is missing some required packages.\n"
-                + "Would you like to install them from our repository? [y/n]");
+                + "Would you like to install them? [y/n]");
         Scanner keyboard = new Scanner(System.in);
         String str = keyboard.next();
         if(str.equals("y") || str.equals("yes") || str.equals("Y") || str.equals("Yes")){

@@ -75,6 +75,9 @@ public class InstallationBatch {
                    }else if(installation.status == PackageInstaller.Status.FAILED){
                        Log.logger.severe(installation.getOutputStr());
                        Log.logger.severe("Failed to install: " + installation.getPackageName() + totalStr);
+                   }else if(installation.status == PackageInstaller.Status.NO_PERMISSION){
+                       Log.logger.info("This installation probably failed because you do not have access to the" +
+                               " packages library of the current R environment. Try using r-peridot as root next time.");
                    }
                }else{
                    status = Status.FINISHED;
@@ -135,6 +138,10 @@ public class InstallationBatch {
     }
 
     public boolean isRunning(){
+        //System.out.println("Done " + concluded.size() + " Todo " + installationQueue.size());
+        //if(currentInstallation != null){
+        //    System.out.println(currentInstallation.getPackageName() + " " + currentInstallation.status);
+        //}
         return status == Status.INSTALLING;
     }
 

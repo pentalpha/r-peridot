@@ -2,6 +2,7 @@ package peridot.script.r;
 
 import peridot.Archiver.PeridotConfig;
 import peridot.Archiver.Places;
+import peridot.Log;
 import peridot.Output;
 import peridot.script.RModule;
 
@@ -133,7 +134,7 @@ public class Interpreter {
             s += str;
         }
         if(Interpreter.isDefaultInterpreterDefined()){
-            s += "* = Default interpreter";
+            s += "\n* = Default interpreter";
         }
         return s;
     }
