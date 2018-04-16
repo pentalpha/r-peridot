@@ -31,7 +31,7 @@ public class RInfoParser {
     private void readLines(){
         List<String> versionOutput = commands.get("> R.Version()");
         readVersion(versionOutput);
-        List<String> packsTable = commands.get("> Packages");
+        List<String> packsTable = commands.get("> onlyNamesAndVersion");
         readPackages(packsTable);
     }
 

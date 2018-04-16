@@ -20,6 +20,7 @@ public class Main {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 Task task = Task.getRunningTask();
+                System.out.println("2 - Waiting for task to finish");
                 if(task != null){
                     if(task.processingStatus.get() < 0){
                         System.out.println("\n[USER-INTERRUPT]\n");
@@ -34,23 +35,23 @@ public class Main {
                         }
                     }
                 }
+                System.out.println("1 - Waiting for installations to finish");
                 if(InstallationBatch.lastInstallation != null){
                     InstallationBatch.lastInstallation.stop();
                     while(InstallationBatch.lastInstallation.isRunning()){
 
                     }
                 }
+                System.out.println("0 - Finished shutdown hook");
             }
         });
 
         Operations.createNecessaryDirs();
         if(Operations.loadModules()){
-            if(Operations.loadInterpreters(() -> PeridotCmd.setDefaultInterpreter())){
-                if(args.length == 0){
-                    UserInterface.printNoCommand();
-                }else{
-                    UserInterface ui = new peridot.CLI.UserInterface(args);
-                }
+            if(args.length == 0){
+                UserInterface.printNoCommand();
+            }else{
+                UserInterface ui = new peridot.CLI.UserInterface(args);
             }
         }
 

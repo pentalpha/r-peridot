@@ -37,9 +37,11 @@ public class PeridotConfig implements Serializable{
         }
 
         List<Interpreter> inters = Interpreter.interpreters;
-        this.availableInterpreters = new HashSet<>();
-        for(Interpreter i : inters){
-            this.availableInterpreters.add(i.exe);
+        if(inters != null){
+            this.availableInterpreters = new HashSet<>();
+            for(Interpreter i : inters){
+                this.availableInterpreters.add(i.exe);
+            }
         }
     }
 

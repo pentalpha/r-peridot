@@ -84,6 +84,12 @@ public final class PeridotCmd {
     }
 
     public static boolean setDefaultInterpreter(){
+        if(Interpreter.interpreters.size() <= 0){
+            Log.logger.severe("No R Environments could be found in this system." +
+            " If you have installed an R environment, please use 'r-peridot r add <path-to-exe>'" +
+            " to inform R-Peridot about the location of R.");
+            return false;
+        }
         System.out.println("Choose a R environment to be used by R-Peridot.");
         System.out.println(Interpreter.getInterpretersStr());
         int n = getInterpreterNumber();

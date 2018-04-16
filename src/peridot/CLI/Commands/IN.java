@@ -25,6 +25,8 @@ public class IN extends Command{
     public void evaluateArgs() throws Command.CmdParseException {
         if(args.length != 1){
             fail("Invalid, 'r-peridot in [args]' takes one argument.");
+        }else{
+            needsREnvironments = false;
         }
     }
 

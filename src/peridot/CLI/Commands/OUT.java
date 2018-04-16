@@ -28,10 +28,14 @@ public class OUT extends Command {
         }else if(args.length == 1){
             if(isHelpArg(args[0]) == false){
                 fail("Invalid argument: " + args[0]);
+            }else{
+                needsREnvironments = false;
             }
         }else if(args.length == 2){
             if(isAModule(args[0]) == false){
                 fail(args[0] + " is not an existent module.");
+            }else{
+                needsREnvironments = false;
             }
         }
     }

@@ -2,6 +2,7 @@ package peridot.CLI;
 
 import peridot.CLI.Commands.*;
 import peridot.Global;
+import peridot.Operations;
 import peridot.script.RModule;
 
 /**
@@ -14,7 +15,7 @@ public class UserInterface {
         args = Global.joinArgsBetweenQuotes(args);
         String command = args[0];
         String[] theRest = new String[args.length-1];
-        Command cmd;
+        Command cmd = null;
         for(int i = 1; i < args.length; i++){
             theRest[i-1] = args[i];
         }
@@ -32,6 +33,17 @@ public class UserInterface {
             cmd = new R(theRest);
         }else{
             printInvalidCommand(command);
+            return;
+        }
+
+        if(cmd != null){
+            if(cmd.isNeedsREnvironments()){
+                if(Operations.loadInterpreters(() -> PeridotCmd.setDefaultInterpreter())){
+                    cmd.run();
+                }
+            }else {
+                cmd.run();
+            }
         }
     }
 

@@ -10,6 +10,8 @@ public abstract class Command {
     protected String commandStr;
     protected String detail;
     protected String[] args;
+    protected boolean needsREnvironments = true;
+    protected boolean validArgs = true;
 
     public Command(String[] args){
         this.args = args;
@@ -18,7 +20,7 @@ public abstract class Command {
         assert(detail != null);
         try {
             evaluateArgs();
-            run();
+            //run();
         } catch (CmdParseException ex){
             System.out.println("Error: " + ex.getMessage());
             System.out.println("For better use, read these instructions: ");
@@ -30,7 +32,7 @@ public abstract class Command {
 
     protected abstract void evaluateArgs() throws CmdParseException;
 
-    protected abstract void run();
+    public abstract void run();
 
     public static boolean isAModule(String name){
         return RModule.availableModules.containsKey(name);
@@ -43,7 +45,8 @@ public abstract class Command {
         return arg.equals("-h") || arg.equals("--help");
     }
 
-    protected static void fail(String failedMessage) throws CmdParseException{
+    protected void fail(String failedMessage) throws CmdParseException{
+        validArgs = false;
         throw new CmdParseException(failedMessage);
     }
 
@@ -55,5 +58,9 @@ public abstract class Command {
         public CmdParseException(String message){
             super(message);
         }
+    }
+
+    public boolean isNeedsREnvironments(){
+        return needsREnvironments;
     }
 }

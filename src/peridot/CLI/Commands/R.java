@@ -28,6 +28,8 @@ public class R extends Command {
             }else if(args.length == 2){
                 if(!args[0].equals("add")){
                     fail("Expected a 'r-peridot add <path/to/environment>': " + args[0] + " " + args[1]);
+                }else{
+                    needsREnvironments = false;
                 }
             }
         }

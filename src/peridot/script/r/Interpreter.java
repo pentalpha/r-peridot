@@ -62,16 +62,23 @@ public class Interpreter {
 
     public static boolean addInterpreter(String exec){
         Interpreter toRemove = null;
-        for(Interpreter interp : interpreters){
-            if(interp.exe.equals(exec)){
-                toRemove = interp;
+        if(interpreters != null){
+            if(interpreters.size() > 0){
+                for(Interpreter interp : interpreters){
+                    if(interp.exe.equals(exec)){
+                        toRemove = interp;
+                    }
+                }
             }
         }
-
+        System.out.println("Trying to add interpreter");
         Interpreter interpreter = new Interpreter(exec);
         if(interpreter.validInterpreter){
             if(toRemove != null){
                 interpreters.remove(toRemove);
+            }
+            if(interpreters == null){
+                interpreters = new ArrayList<>();
             }
             interpreters.add(interpreter);
         }
@@ -161,11 +168,15 @@ public class Interpreter {
         try{
             testOutput = readPackagesAvailable();
         }catch (Exception exp){
+            //System.out.println("Exception thrown");
+            //exp.printStackTrace();
+            //System.out.println(testOutput.getText());
             validInterpreter = false;
         }
         if(validInterpreter){
             //if(testOutput.contains("> Packages\n")){
             validInterpreter = readPackagesFromOutput(testOutput);
+            System.out.println(validInterpreter);
         }
     }
 
@@ -181,6 +192,8 @@ public class Interpreter {
             this.rVersion = parser.rVersion;
             this.availablePackages = parser.packages;
             this.evaluate();
+        }else{
+            System.out.println(output.getText());
         }
         return parser.validOutput();
     }

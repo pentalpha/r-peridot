@@ -23,6 +23,7 @@ public class LS extends Command {
     }
 
     public void evaluateArgs() throws CmdParseException{
+        needsREnvironments = false;
         if(args.length > 1){
             fail("'r-peridot ls' takes only zero or one arguments.");
         }else{
