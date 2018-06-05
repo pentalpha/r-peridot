@@ -5,123 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e4f6c08-aa0c-476a-a9ac-fe508fc4faf1" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jar/how-do-r-peridot-modules-work.pdf" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jar/r-peridot.jar" afterPath="$PROJECT_DIR$/jar/r-peridot.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/allclasses-frame.html" afterPath="$PROJECT_DIR$/docs/allclasses-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/allclasses-noframe.html" afterPath="$PROJECT_DIR$/docs/allclasses-noframe.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/constant-values.html" afterPath="$PROJECT_DIR$/docs/constant-values.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/deprecated-list.html" afterPath="$PROJECT_DIR$/docs/deprecated-list.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/help-doc.html" afterPath="$PROJECT_DIR$/docs/help-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-1.html" afterPath="$PROJECT_DIR$/docs/index-files/index-1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-10.html" afterPath="$PROJECT_DIR$/docs/index-files/index-10.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-11.html" afterPath="$PROJECT_DIR$/docs/index-files/index-11.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-12.html" afterPath="$PROJECT_DIR$/docs/index-files/index-12.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-13.html" afterPath="$PROJECT_DIR$/docs/index-files/index-13.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-14.html" afterPath="$PROJECT_DIR$/docs/index-files/index-14.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-15.html" afterPath="$PROJECT_DIR$/docs/index-files/index-15.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-16.html" afterPath="$PROJECT_DIR$/docs/index-files/index-16.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-17.html" afterPath="$PROJECT_DIR$/docs/index-files/index-17.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-18.html" afterPath="$PROJECT_DIR$/docs/index-files/index-18.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-19.html" afterPath="$PROJECT_DIR$/docs/index-files/index-19.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-2.html" afterPath="$PROJECT_DIR$/docs/index-files/index-2.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-20.html" afterPath="$PROJECT_DIR$/docs/index-files/index-20.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-21.html" afterPath="$PROJECT_DIR$/docs/index-files/index-21.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-22.html" afterPath="$PROJECT_DIR$/docs/index-files/index-22.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-23.html" afterPath="$PROJECT_DIR$/docs/index-files/index-23.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-24.html" afterPath="$PROJECT_DIR$/docs/index-files/index-24.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-25.html" afterPath="$PROJECT_DIR$/docs/index-files/index-25.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-3.html" afterPath="$PROJECT_DIR$/docs/index-files/index-3.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-4.html" afterPath="$PROJECT_DIR$/docs/index-files/index-4.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-5.html" afterPath="$PROJECT_DIR$/docs/index-files/index-5.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-6.html" afterPath="$PROJECT_DIR$/docs/index-files/index-6.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-7.html" afterPath="$PROJECT_DIR$/docs/index-files/index-7.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-8.html" afterPath="$PROJECT_DIR$/docs/index-files/index-8.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index-files/index-9.html" afterPath="$PROJECT_DIR$/docs/index-files/index-9.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/index.html" afterPath="$PROJECT_DIR$/docs/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-frame.html" afterPath="$PROJECT_DIR$/docs/overview-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-summary.html" afterPath="$PROJECT_DIR$/docs/overview-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/overview-tree.html" afterPath="$PROJECT_DIR$/docs/overview-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/package-list" afterPath="$PROJECT_DIR$/docs/package-list" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/AnalysisData.html" afterPath="$PROJECT_DIR$/docs/peridot/AnalysisData.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/AnalysisParameters.html" afterPath="$PROJECT_DIR$/docs/peridot/AnalysisParameters.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/Manager.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/Manager.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/PeridotConfig.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/PeridotConfig.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/Persistence.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/Persistence.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/Places.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/Places.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/Spreadsheet.Info.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/Spreadsheet.Info.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/Spreadsheet.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/Spreadsheet.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Archiver/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/Archiver/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/AnalysisFile.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/AnalysisFile.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/AnalysisFileParser.ParseException.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/AnalysisFileParser.ParseException.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/AnalysisFileParser.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/AnalysisFileParser.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Command.CmdParseException.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Command.CmdParseException.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Command.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Command.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/IN.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/IN.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/LS.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/LS.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/OUT.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/OUT.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/R.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/R.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/RUN.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/RUN.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/Commands/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/PeridotCmd.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/PeridotCmd.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/UserInterface.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/UserInterface.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/CLI/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/CLI/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/GeneIdType.html" afterPath="$PROJECT_DIR$/docs/peridot/GeneIdType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Global.RoundingMode.html" afterPath="$PROJECT_DIR$/docs/peridot/Global.RoundingMode.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Global.html" afterPath="$PROJECT_DIR$/docs/peridot/Global.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/IndexedString.html" afterPath="$PROJECT_DIR$/docs/peridot/IndexedString.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Log.html" afterPath="$PROJECT_DIR$/docs/peridot/Log.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Main.html" afterPath="$PROJECT_DIR$/docs/peridot/Main.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Operations.html" afterPath="$PROJECT_DIR$/docs/peridot/Operations.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Organism.html" afterPath="$PROJECT_DIR$/docs/peridot/Organism.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/Output.html" afterPath="$PROJECT_DIR$/docs/peridot/Output.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/AnalysisModule.html" afterPath="$PROJECT_DIR$/docs/peridot/script/AnalysisModule.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/DiffExpressionModule.html" afterPath="$PROJECT_DIR$/docs/peridot/script/DiffExpressionModule.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/PostAnalysisModule.html" afterPath="$PROJECT_DIR$/docs/peridot/script/PostAnalysisModule.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/PostAnalysisOntology.html" afterPath="$PROJECT_DIR$/docs/peridot/script/PostAnalysisOntology.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/RModule.html" afterPath="$PROJECT_DIR$/docs/peridot/script/RModule.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/ScriptExec.html" afterPath="$PROJECT_DIR$/docs/peridot/script/ScriptExec.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/ScriptRunnable.html" afterPath="$PROJECT_DIR$/docs/peridot/script/ScriptRunnable.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/Task.WaitState.html" afterPath="$PROJECT_DIR$/docs/peridot/script/Task.WaitState.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/Task.html" afterPath="$PROJECT_DIR$/docs/peridot/script/Task.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/script/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/script/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/script/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/InstallationBatch.Status.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/InstallationBatch.Status.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/InstallationBatch.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/InstallationBatch.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/Interpreter.InvalidExeException.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/Interpreter.InvalidExeException.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/Interpreter.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/Interpreter.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/Package.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/Package.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/PackageInstaller.Status.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/PackageInstaller.Status.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/PackageInstaller.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/PackageInstaller.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/RInfoParser.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/RInfoParser.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/Script.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/Script.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/VersionNumber.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/VersionNumber.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/package-frame.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/package-summary.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/peridot/script/r/package-tree.html" afterPath="$PROJECT_DIR$/docs/peridot/script/r/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/script.js" afterPath="$PROJECT_DIR$/docs/script.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/serialized-form.html" afterPath="$PROJECT_DIR$/docs/serialized-form.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/AnalysisData.java" afterPath="$PROJECT_DIR$/src/peridot/AnalysisData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/Archiver/PeridotConfig.java" afterPath="$PROJECT_DIR$/src/peridot/Archiver/PeridotConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/Archiver/Places.java" afterPath="$PROJECT_DIR$/src/peridot/Archiver/Places.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/GeneIdType.java" afterPath="$PROJECT_DIR$/src/peridot/GeneIdType.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/Main.java" afterPath="$PROJECT_DIR$/src/peridot/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/RModule.java" afterPath="$PROJECT_DIR$/src/peridot/script/RModule.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/r/Interpreter.java" afterPath="$PROJECT_DIR$/src/peridot/script/r/Interpreter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/r/Package.java" afterPath="$PROJECT_DIR$/src/peridot/script/r/Package.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/r/RInfoParser.java" afterPath="$PROJECT_DIR$/src/peridot/script/r/RInfoParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peridot/script/r/VersionNumber.java" afterPath="$PROJECT_DIR$/src/peridot/script/r/VersionNumber.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -197,11 +81,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GeneIdType.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GeneIdType.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/peridot/GeneIdType.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="155">
               <caret line="30" column="44" lean-forward="false" selection-start-line="30" selection-start-column="44" selection-end-line="30" selection-end-column="44" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/peridot/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="400">
+              <caret line="33" column="18" lean-forward="false" selection-start-line="33" selection-start-column="18" selection-end-line="33" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -227,16 +121,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="description" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jar/r-peridot-scripts/edgeR.AnalysisModule/description">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="12" column="25" lean-forward="false" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -248,7 +132,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>bi</find>
       <find>bio</find>
       <find>bioi</find>
       <find>bioin</find>
@@ -278,6 +161,7 @@
       <find>foldchange</find>
       <find>list.add(</find>
       <find>);</find>
+      <find>[USER-INTERRUPT]</find>
     </findStrings>
     <replaceStrings>
       <replace>peridotDir</replace>
@@ -352,7 +236,6 @@
         <option value="$PROJECT_DIR$/src/peridot/script/r/PackageInstaller.java" />
         <option value="$PROJECT_DIR$/src/peridot/script/r/RInfoParser.java" />
         <option value="$PROJECT_DIR$/src/peridot/AnalysisData.java" />
-        <option value="$PROJECT_DIR$/src/peridot/Main.java" />
         <option value="$PROJECT_DIR$/src/peridot/script/RModule.java" />
         <option value="$PROJECT_DIR$/src/peridot/Archiver/Places.java" />
         <option value="$PROJECT_DIR$/src/peridot/script/r/Package.java" />
@@ -361,6 +244,7 @@
         <option value="$PROJECT_DIR$/src/peridot/script/r/Interpreter.java" />
         <option value="$PROJECT_DIR$/jar/r-peridot-scripts/HeatMap.PostAnalysisModule/description" />
         <option value="$PROJECT_DIR$/src/peridot/GeneIdType.java" />
+        <option value="$PROJECT_DIR$/src/peridot/Main.java" />
       </list>
     </option>
   </component>
@@ -499,236 +383,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot-scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot-scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="VennDiagram.PostAnalysisModule" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot-scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sSeq.AnalysisModule" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot-scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HeatMap.PostAnalysisModule" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot-scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="edgeR.AnalysisModule" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot-scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="EBSeq.AnalysisModule" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot-scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DESeq2.AnalysisModule" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot-scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DESeq.AnalysisModule" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot-scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ClusterProfiler.PostAnalysisModule" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="r-peridot-scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BoxPlot.PostAnalysisModule" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1381,13 +1035,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/peridot/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="901">
-          <caret line="66" column="18" lean-forward="false" selection-start-line="66" selection-start-column="18" selection-end-line="66" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/peridot/AnalysisData.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7446">
@@ -1555,6 +1202,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="155">
           <caret line="30" column="44" lean-forward="false" selection-start-line="30" selection-start-column="44" selection-end-line="30" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/peridot/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="33" column="18" lean-forward="false" selection-start-line="33" selection-start-column="18" selection-end-line="33" selection-end-column="18" />
           <folding />
         </state>
       </provider>
