@@ -1,6 +1,8 @@
 package peridot.script.r;
 
-public class VersionNumber implements Comparable<VersionNumber>{
+import java.io.Serializable;
+
+public class VersionNumber implements Comparable<VersionNumber>, Serializable{
     public int[] numbers;
     private String fullVersion;
 

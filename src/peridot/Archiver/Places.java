@@ -159,6 +159,7 @@ public final class Places {
         try{
             if(modulesDir.exists() == false){
                 modulesDir.mkdir();
+                overwrite = true;
             }
             updateModulesFolder(overwrite);
         }

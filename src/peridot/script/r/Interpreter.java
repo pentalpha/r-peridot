@@ -125,7 +125,7 @@ public class Interpreter {
         int i = 0;
         for(Interpreter interpreter : Interpreter.interpreters){
             i++;
-            String str = "["+i+"] " + interpreter.toString();
+            String str = "["+i+"] " + interpreter.toString() + "\n";
             if(Interpreter.isDefaultInterpreterDefined()){
                 if(Interpreter.defaultInterpreter.exe.equals(interpreter.exe)){
                     str = "* " + str;

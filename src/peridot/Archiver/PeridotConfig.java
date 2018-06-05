@@ -1,10 +1,14 @@
 package peridot.Archiver;
 
+import peridot.Log;
 import peridot.script.r.Interpreter;
 import peridot.script.r.VersionNumber;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,12 +21,12 @@ public class PeridotConfig implements Serializable{
     public String defaultInterpreter;
     public Set<String> availableInterpreters;
     public String packagesRepository;
+    public String rPeridotWebSite = "http://www.bioinformatics-brazil.org/r-peridot/";
     public static VersionNumber preferredRVersion = new VersionNumber("3.4");
     public static VersionNumber minimalRVersion = new VersionNumber("3.4");
 
-
     public PeridotConfig(){
-        this.packagesRepository = "http://www.bioinformatics-brazil.org/r-peridot/R/drat/";
+        this.packagesRepository = rPeridotWebSite + "R/drat/";
         this.availableInterpreters = Places.getDefaultRexecs();
         this.defaultInterpreter = null;
     }

@@ -1,6 +1,8 @@
 package peridot.script.r;
 
-public class Package{
+import java.io.Serializable;
+
+public class Package implements Serializable{
     public VersionNumber version;
     public String name;
 

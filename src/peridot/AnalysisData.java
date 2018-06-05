@@ -63,6 +63,10 @@ public class AnalysisData {
         }
         this.countReadsThreshold = countReadsThreshold;
 
+        if(this.countReadsThreshold < 1){
+            this.countReadsThreshold = 1;
+        }
+
         if(Manager.fileExists(expressionFile.getAbsolutePath())){
             this.expressionFile = expressionFile;
         }else{

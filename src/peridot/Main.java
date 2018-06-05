@@ -3,12 +3,15 @@ package peridot;
 import peridot.Archiver.PeridotConfig;
 import peridot.CLI.PeridotCmd;
 import peridot.CLI.UserInterface;
+import peridot.script.RModule;
 import peridot.script.Task;
 import peridot.script.r.InstallationBatch;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
+
+import peridot.script.r.Package;
 
 public class Main {
 

@@ -124,13 +124,19 @@ public class RModule implements Serializable{
         try{
             //new File(Places.sgsDir + File.separator + "log.txt").delete();
             FileUtils.deleteDirectory(RModule.availableModules.get(script).getWorkingDirectory());
-            return true;
+            Log.logger.info("Deleting " + RModule.availableModules.get(script).getWorkingDirectory().getAbsolutePath());
         }catch(IOException ex){
-            Log.logger.severe("Could not delete "
-                    + RModule.availableModules.get(script).workingDirectory.getName());
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             return false;
         }
+
+        boolean reallyDeleted = RModule.availableModules.get(script).getWorkingDirectory().exists() == false;
+        if(!reallyDeleted){
+            Log.logger.severe("Could not delete "
+                    + RModule.availableModules.get(script).workingDirectory.getName());
+        }
+
+        return reallyDeleted;
     }
 
     //load all the scripts in the temp folder and sort them
@@ -746,6 +752,9 @@ public class RModule implements Serializable{
     
     //exclui pasta com o script, o arquivo de configurações e os resultados gerados
     public void clearEnvironment(){
+        if(this.getWorkingDirectory().exists() == false){
+            return;
+        }
         Log.logger.info("cleaning " + this.name);
         try{
             FileUtils.deleteDirectory(getWorkingDirectory());
@@ -779,6 +788,9 @@ public class RModule implements Serializable{
     }
     
     public void cleanLocalResults(){
+        if(this.resultsFolder.exists() == false){
+            return;
+        }
         Iterator<File> iterator = FileUtils.iterateFiles(this.resultsFolder, null, false);
         while(iterator.hasNext()){
             File file = iterator.next();
@@ -791,6 +803,9 @@ public class RModule implements Serializable{
     }
     
     public void cleanTempFiles(){
+        if(this.getWorkingDirectory().exists() == false){
+            return;
+        }
         Iterator<File> iterator = FileUtils.iterateFiles(getWorkingDirectory(), null, false);
         while(iterator.hasNext()){
             File file = iterator.next();

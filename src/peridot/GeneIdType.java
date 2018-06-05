@@ -33,34 +33,15 @@ public class GeneIdType {
      */
     public static LinkedList<String> getDefaultIDTypes(){
         LinkedList<String> list = new LinkedList<>();
-        list.add("None");
-        list.add("kegg");
-        list.add("SYMBOL");
-        list.add("ACCNUM");       
-        list.add("ALIAS");        
-        list.add("ENSEMBL");      
-        list.add("ENSEMBLPROT"); 
-        list.add("ENSEMBLTRANS"); 
-        list.add("ENTREZID");     
-        list.add("ENZYME");       
-        list.add("EVIDENCE");
-        list.add("EVIDENCEALL");  
-        list.add("GENENAME");     
-        list.add("GO");           
-        list.add("GOALL");
-        list.add("IPI");          
-        list.add("MAP");          
-        list.add("OMIM");         
-        list.add("ONTOLOGY");
-        list.add("ONTOLOGYALL");  
-        list.add("PATH");         
-        list.add("PFAM");         
-        list.add("PMID");
-        list.add("PROSITE");      
-        list.add("REFSEQ");       
-        list.add("UCSCKG");
-        list.add("UNIGENE");      
-        list.add("UNIPROT");
+        String[] ids = {"None", "kegg", "SYMBOL", "ACCNUM", "ALIAS", "ENSEMBL", "ENSEMBLPROT",
+                "ENSEMBLTRANS", "ENTREZID", "ENZYME", "EVIDENCE", "EVIDENCEALL",
+                "GENENAME", "GO", "GOALL", "IPI", "MAP", "OMIM", "ONTOLOGY",
+                "ONTOLOGYALL", "PATH", "PFAM", "PMID", "PROSITE", "REFSEQ",
+                "UCSCKG", "UNIGENE", "UNIPROT"};
+        for(String id : ids){
+            list.add(id);
+        }
+
         return list;
     }
     @Override

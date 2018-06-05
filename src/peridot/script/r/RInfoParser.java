@@ -25,7 +25,9 @@ public class RInfoParser {
     }
 
     public boolean validOutput(){
-        return rVersion != null && this.packages != null;
+        boolean hasRVersion = rVersion != null;
+        boolean hasPackages = packages != null;
+        return hasRVersion && hasPackages;
     }
 
     private void readLines(){
