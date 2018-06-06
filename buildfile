@@ -14,4 +14,8 @@ define 'r-peridot' do
 
   package :file=>_("jar/r-peridot.jar")
   package(:jar).with(:manifest=>_("src/main/MANIFEST.MF")).exclude('.scala-deps').merge(compile.dependencies)
+
+  task :make => :package do
+    system './downloadScripts.sh'
+  end
 end
