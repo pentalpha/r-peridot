@@ -1,7 +1,9 @@
--------------------------------------------------------------
-#The following software was used to make R-Peridot:
+# R-Peridot
 
-##R
+-------------------------------------------------------------
+# The following software was used to make R-Peridot:
+
+## R
 Copyright (c) R Development Core Team, The R Foundation.
 GNU GPL v2, full text: R-LICENSE.txt. 
 Official webpage: <www.r-project.org>.
