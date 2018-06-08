@@ -1,9 +1,11 @@
+![Project Logo](http://www.bioinformatics-brazil.org/r-peridot/img/logo1-no_background-black.png)
+
+## This project, which only has a command line interface, is the foundation for [R-Peridot-GUI](https://github.com/pentalpha/r-peridot-gui)
+
 # R-Peridot
 Software for intuitively doing Differential Gene Expression (DGE) analysis on Windows and GNU\Linux, based on R packages.
 
-[Project Page](bioinformatics-brazil.org/r-peridot)
-
-ISSUE: Our page at bioinformatics-brazil.org is not available due to server problems. Please use our secondary page at [hungria.imd.ufrn.br/r-peridot](hungria.imd.ufrn.br/r-peridot). While our main address (and with it our R packages repository) is not available, the R package installer will use CRAN and Bioconductor.
+[Project Page](www.bioinformatics-brazil.org/r-peridot)
 
 ## The Input
 A plain text CSV/TSV table with genes/transcripts as rows and samples as columns, in which the values of the cells are read counts from RNA-Seq or Microarray experiments.
