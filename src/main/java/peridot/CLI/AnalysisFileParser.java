@@ -4,6 +4,7 @@ import peridot.*;
 import peridot.Archiver.Spreadsheet;
 import peridot.script.AnalysisModule;
 import peridot.script.RModule;
+import peridot.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -97,6 +98,10 @@ public class AnalysisFileParser {
             }
             scanner.close();
 
+            if(separatorChar != null){
+                info.separator = separatorChar;
+            }
+
             setExpression();
             setModules();
             analysisFile.outputFolder = saveFolder;
@@ -125,20 +130,29 @@ public class AnalysisFileParser {
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             valid = false;
         }
+        
+        analysisFile.hasData = hasData;
+        analysisFile.hasConditions = hasConditions;
+        analysisFile.hasModules = hasModules;
+        analysisFile.hasParams = hasParams;
 
-        analysisFile.allInfo = hasData && hasConditions && hasModules && hasParams;
         analysisFile.valid = valid;
     }
 
     public void setExpression() throws IOException{
         if(conditionsFile != null && countReadsFile != null && info.allInfoSet()){
             info.setFirstCellPresent(!info.getHeaderOnFirstLine() || !info.getLabelsOnFirstCol());
-            if(separatorChar != null){
-                info.separator = separatorChar;
-            }
+            
             analysisFile.expression = new AnalysisData(countReadsFile, conditionsFile, info, roundingMode, threshold);
             hasData = true;
             hasConditions = true;
+            System.out.println("[Gene Expression Loaded]");
+        }else if(!info.allInfoSet()){
+            Log.logger.severe("Missing informations about the count reads file.");
+        }else if(countReadsFile == null){
+            Log.logger.severe("Count reads file not defined.");
+        }else if(conditionsFile == null){
+            Log.logger.severe("Conditions file not defined");
         }
     }
 
@@ -290,14 +304,17 @@ public class AnalysisFileParser {
             roundingMode = value;
         }else if(word.equals(sepStr)){
             //String value = second;
-            if(second.equals("\"\"") || second.equals("\" \"")){
+            second = second.replace("\"", "");
+            if(second.equals("") || second.equals(" ")){
                 separatorChar = " ";
-            }else if(second.equals("\",\"")){
+            }else if(second.equals(",")){
                 separatorChar = ",";
-            }else if(second.equals("\"\\t\"")){
+            }else if(second.equals("\\t") || second.equals("\t")){
                 separatorChar = "\t";
-            }else if(second.equals("\";\"")){
+            }else if(second.equals(";")){
                 separatorChar = ";";
+            }else if(second.length() > 0){
+                separatorChar = second;
             }else{
                 separatorChar = null;
             }

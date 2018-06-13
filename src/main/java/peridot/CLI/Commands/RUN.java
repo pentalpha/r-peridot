@@ -69,9 +69,19 @@ public class RUN extends Command{
                             + file.getAbsolutePath() + "'" +
                             ", cannot run analysis.");
                 }else if(analysisFile.hasAllInfo() == false){
-                    Log.logger.severe("Fatal Error: '" + file.getName() + "'" +
-                            "does not have all the necessary information to run an" +
-                            " analysis.");
+                    String errorMsg = "Fatal Error: '" + file.getName() + "'" +
+                    " does not have all the necessary information to run an" +
+                    " analysis.";
+                    if(!analysisFile.hasConditions){
+                        errorMsg += "\n\t- Conditions not defined.";
+                    }else if(!analysisFile.hasData){
+                        errorMsg += "\n\t- Count reads not defined.";
+                    } else if(!analysisFile.hasModules){
+                        errorMsg += "\n\t- Modules not chosen.";
+                    } else if(!analysisFile.hasParams){
+                        errorMsg += "\n\t- Invalid parameters.";
+                    }
+                    Log.logger.severe(errorMsg);
                 }else{
                     peridot.script.Task task = Operations.start(analysisFile);
                     waitForEnd(task, analysisFile);

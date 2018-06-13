@@ -22,6 +22,7 @@ import java.util.logging.Level;
  */
 public class AnalysisFile {
     public boolean valid, allInfo;
+    public boolean hasData, hasConditions, hasModules, hasParams;
 
     public Set<String> scriptsToExec;
     public AnalysisParameters params;
@@ -44,7 +45,7 @@ public class AnalysisFile {
     }
 
     public boolean hasAllInfo() {
-        return allInfo;
+        return hasData && hasConditions && hasModules && hasParams;
     }
 
     public static void createExampleFileFor(File countReadsFile){
@@ -56,7 +57,7 @@ public class AnalysisFile {
                 parentDir = new File(peridot.Archiver.Manager.getCurrentWorkingDir());
             }
             content += AnalysisFileParser.dataStr + " " + countReadsFile.getAbsolutePath() + "\n";
-            content += AnalysisFileParser.sepStr + " " + info.separator;
+            content += AnalysisFileParser.sepStr + " " + "\"" + info.separator + "\"" + "\n";
             SortedMap<IndexedString, String> conditions = AnalysisData.getConditionsFromExpressionFile(countReadsFile, info);
             File condFile = new File(countReadsFile.getAbsolutePath() + ".conditions");
             AnalysisData.createConditionsFile(condFile, conditions, false, true);

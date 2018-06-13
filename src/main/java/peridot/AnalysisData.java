@@ -410,6 +410,7 @@ public class AnalysisData {
         int removeCounter = 0;
         while(line != null){
             String[] lineSplited = Global.split(line, info.separator);
+            
             String[] values;
             String label;
             if(info.getLabelsOnFirstCol()){
@@ -460,7 +461,7 @@ public class AnalysisData {
         buffOutput.close();
         outputWriter.close();
 
-        Log.logger.info( ((float)removeCounter/(float)counter)*100 + "% of the lines dropped by threshold");
+        Log.logger.info( ((float)removeCounter/(float)counter)*100 + "% of the lines dropped by threshold, with a threshold of " + countReadsThreshold);
         this.setConditions(newConditions);
     }
 

@@ -128,7 +128,9 @@ public final class Global {
      * @return      Spliced line.
      */
     public static String[] split(String line, String sep){
-        return Global.joinArgsBetweenQuotes(line.split(sep));
+        String[] x = line.split(sep);
+        x = Global.joinArgsBetweenQuotes(x);
+        return x;
     }
 
     /**
@@ -286,16 +288,13 @@ public final class Global {
      * @return  return[0] = first word, return[1] = the rest
      */
     public static String[] firstWordAndTheRest(String text){
-        String[] array = new String[2];
-        String[] spliced = spliceBySpacesAndTabs(text);
-        array[0] = spliced[0];
-        if(spliced.length == 1){
-            array[1] = null;
-        }else{
-            array[1] = "";
-            for(int i = 1; i < spliced.length; i++)
-            {
-                array[1] += " " + spliced[i];
+        String[] arraySpace = text.split(" ", 2);
+        String[] arrayTab = text.split("\t", 2);
+        String[] array = {text, null};
+        if(arraySpace.length > 1 || arrayTab.length > 1){
+            array = arraySpace;
+            if(arrayTab.length > arraySpace.length){
+                array = arrayTab;
             }
         }
         return array;
