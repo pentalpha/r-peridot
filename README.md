@@ -45,18 +45,25 @@ If you are using GNU\Linux, there are more dependencies. There are scripts to ha
 - For CentOS >= 7.2: jar/centosDeps.sh (recommended for other rpm-based distros);
 
 ### It's time to build
-This project uses [buildr](https://buildr.apache.org/) as build system. To build our project, please install it.
+This project uses [Apache Ant](https://ant.apache.org/) as build system. To build our project, please install it.
 
 ```sh
-    $ buildr r-peridot:make
+    $ ant jar
 ```
 
-That command will compile, package and them download the modules from [r-peridot-scripts](https://github.com/pentalpha/r-peridot-scripts). Always make sure that the 'r-peridot-scripts' directory is at the same directory as 'r-peridot.jar'.
+That command will compile and package r-peridot. Now, download the modules from [r-peridot-scripts](https://github.com/pentalpha/r-peridot-scripts):
+
+```sh
+    $ cd jar
+    $ git clone https://github.com/pentalpha/r-peridot-scripts
+```
+
+ Always make sure that the 'r-peridot-scripts' directory is at the same directory as 'r-peridot.jar'.
 
 ### Using it
 R-Peridot can be executed by running the 'jar/r-peridot' script or the 'jar/r-peridot.jar' JAR file. You can move these to any place in your system, as long as you move them along with the 'r-peridot-scripts' directory.
 
-When R-Peridot opens for the first time, it will ask you to choose a R environment. If that environment is missing packages, you have the option to install them.
+When R-Peridot opens for the first time, it will ask you to choose a R environment. If that environment is missing packages, you have the option to install them (depending on where is your default R package library, you may need to run r-peridot with sudo)
 
 To get help on using the command line interface:
 
