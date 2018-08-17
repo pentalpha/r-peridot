@@ -142,7 +142,7 @@ public final class Places {
         if(file.exists()){
             return file;
         }else{
-            Log.logger.warning("Warning: No DefaultModulesDir found, without it you can't " +
+            Log.logger.warning("Warning: No DefaultModulesDir found, without it you cannot " +
                     "reload the modules.");
             return null;
         }
@@ -179,6 +179,13 @@ public final class Places {
      * @param overwrite If already loaded modules should be overwritten.
      */
     private static void updateModulesFolder(boolean overwrite) throws Exception{
+        if (defaultModulesDir == null){
+                Log.logger.severe("Could not find any modules to load. Please clone" 
+                + "https://github.com/pentalpha/r-peridot-scripts into "
+                + Places.jarFolder.getAbsolutePath() + File.separator
+                + "r-peridot-scripts/ to load the default modules.");
+            return;
+        }
         File[] subs = defaultModulesDir.listFiles();
 
         for(int i = 0; i < subs.length; i++){

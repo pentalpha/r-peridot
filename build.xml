@@ -1,0 +1,71 @@
+<project name="r-peridot" basedir="." default="main">
+
+    <property name="src.dir"     value="src"/>
+
+    <property name="build.dir"   value="out"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="jar"/>
+
+    <property name="main-class"  value="peridot.Main"/>
+    <property name="deps.dir" value="${jar.dir}/deps/"/>
+    <property name="lib.dir"     value="lib"/>
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+    </target>
+
+    <!-- Group all dependencies into a big dependency-all.jar -->
+	<target name="copy-dependencies">
+
+		<mkdir dir="${deps.dir}" />
+
+		<jar jarfile="${deps.dir}/dependencies-all.jar">
+			<zipgroupfileset dir="${lib.dir}">
+				<include name="**/*.jar" />
+			</zipgroupfileset>
+		</jar>
+
+	</target>
+
+	<!-- jar it, extract above dependency-all.jar and zip it with project files -->
+	<target name="jar" depends="compile, copy-dependencies" 
+                description="package, output to JAR">
+		<mkdir dir="${jar.dir}" />
+		<mkdir dir="${deps.dir}" />
+
+		<jar jarfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+			<manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+			<zipfileset src="${deps.dir}/dependencies-all.jar" 
+                                excludes="META-INF/*.SF" />
+		</jar>
+	</target>
+
+    <!--<target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target> -->
+
+    <target name="run" depends="jar">
+        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+    </target>
+
+    <target name="clean-build" depends="clean,jar"/>
+
+    <target name="main" depends="clean,run"/>
+
+</project>
