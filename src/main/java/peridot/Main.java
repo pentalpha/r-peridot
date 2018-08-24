@@ -51,7 +51,7 @@ public class Main {
         //System.out.println("3 - Waiting for task to finish");
         if(task != null){
             if(task.processingStatus.get() < 0){
-                System.out.println("\n[USER-INTERRUPT]\n");
+                System.out.println("\n- Ending all tasks.\n");
                 task.abortAll();
                 try{
                     //System.out.println("Joining mainThread");
@@ -68,7 +68,7 @@ public class Main {
     public static void abortInstallations(){
         //System.out.println("2 - Checking for ongoing installations");
         if(InstallationBatch.lastInstallation != null){
-            System.out.println("\n[USER-INTERRUPT]\n");
+            System.out.println("\n- Finishing all installations.\n");
             InstallationBatch.lastInstallation.stop();
             //System.out.println("1 - Waiting for installations to finish");
             long startedWaiting = System.currentTimeMillis();
