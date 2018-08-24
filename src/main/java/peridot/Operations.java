@@ -199,7 +199,7 @@ public class Operations {
         try{
             if(SystemUtils.IS_OS_WINDOWS){
                 Runtime.getRuntime().exec("cmd.exe /c start " + interpreter.exe + " --no-save");
-            }else if(SystemUtils.IS_OS_LINUX){
+            }else if(SystemUtils.IS_OS_UNIX){
                 Runtime.getRuntime().exec("xterm " + interpreter.exe + " --no-save");
             }
 

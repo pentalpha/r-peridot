@@ -130,7 +130,7 @@ public class Script {
         boolean needsEnv = false;
         String rPath = interpreter.exe;
         if(new File(rPath).exists()){
-            if(SystemUtils.IS_OS_LINUX){
+            if(SystemUtils.IS_OS_UNIX){
                 needsEnv = true;
             }
         }

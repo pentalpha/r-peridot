@@ -301,7 +301,7 @@ public final class Places {
         HashSet<String> exes = new HashSet<>();
         if(org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS){
             exes.addAll(windowsRexes());
-        }else if(org.apache.commons.lang3.SystemUtils.IS_OS_LINUX){
+        }else if(org.apache.commons.lang3.SystemUtils.IS_OS_UNIX){
             exes.addAll(linuxRexes());
         }
         exes.add("R");
@@ -348,7 +348,7 @@ public final class Places {
         File localRPortable = new File(jarFolder.getAbsolutePath() + File.separator
                 + "r-portable");
 
-        if(org.apache.commons.lang3.SystemUtils.IS_OS_LINUX){
+        if(org.apache.commons.lang3.SystemUtils.IS_OS_UNIX){
             File file = new File("/opt/r-peridot/r-portable");
             if (file.exists()){
                 return file;
@@ -395,7 +395,7 @@ public final class Places {
                 }
                 path1 += File.separator + "R.exe";
                 path2 += File.separator + "R.exe";
-            }else if(org.apache.commons.lang3.SystemUtils.IS_OS_LINUX){
+            }else if(org.apache.commons.lang3.SystemUtils.IS_OS_UNIX){
                 path2 = rPortableDir.getAbsolutePath();
                 path1 += File.separator + "R";
                 path2 += File.separator + "R";
@@ -410,7 +410,7 @@ public final class Places {
         if(exec.exists()){
             if(exec.isFile()){
                 //Log.logger.info("R is " + exec.getAbsolutePath());
-                if(org.apache.commons.lang3.SystemUtils.IS_OS_LINUX){
+                if(org.apache.commons.lang3.SystemUtils.IS_OS_UNIX){
                     //setLinuxEnvironmentVars();
                 }
                 return exec;

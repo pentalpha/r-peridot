@@ -109,7 +109,7 @@ public class ScriptRunnable implements Runnable {
         /*if(Places.rExec != null){
             if(Places.rExec.exists()){
                 rPath = Places.rExec.getAbsolutePath();
-                if(SystemUtils.IS_OS_LINUX){
+                if(SystemUtils.IS_OS_UNIX){
                     needsEnv = true;
                 }
             }else{
