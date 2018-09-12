@@ -227,24 +227,28 @@ public class AnalysisData {
             map.clear();
             while ((line = buffReader.readLine()) != null)  
             {  
-               String[] nameAndCondition = line.split("\t");
-               
-               if(nameAndCondition.length == 2){
-                   String name = nameAndCondition[0];
-                   String condition = nameAndCondition[1];
-                   if(map2.containsKey(name)){
-                       Log.logger.severe("Ambiguous sample condition: "+
-                        "\n"+name+"\t"+map2.get(name)+
-                        "\n"+name+"\t"+condition);
-                        return null;
-                   }
-                   map.put(new IndexedString(samples.get(name), name), condition);
-                   map2.put(name, condition);
-                   addedSamples.add(name);
-               }else{
-                   //do something if the line is wrong
-               }
-               
+                if (!line.equals(conditionsHeader)){
+                    String[] nameAndCondition = line.split("\t");
+                    
+                    if(nameAndCondition.length == 2){
+                        String name = nameAndCondition[0];
+                        String condition = nameAndCondition[1];
+                        if(map2.containsKey(name)){
+                            Log.logger.severe("Ambiguous sample condition: "+
+                            "\n"+name+"\t"+map2.get(name)+
+                            "\n"+name+"\t"+condition);
+                            return null;
+                        }
+                        Integer index = samples.get(name);
+                        IndexedString key = new IndexedString(index, name);
+                        map.put(key, condition);
+                        map2.put(name, condition);
+                        addedSamples.add(name);
+                    }else{
+                        Log.logger.severe("Line with more tham two collumns in conditions file:\n"+line);
+                        //do something if the line is wrong
+                    }
+                }
             } 
             buffReader.close();
             fileReader.close();
@@ -340,7 +344,7 @@ public class AnalysisData {
 
             String text = "";
             if(makeHeader){
-                text += "sample\tcondition" + System.lineSeparator();
+                text += conditionsHeader + System.lineSeparator();
             }
             /*String nameWithCondition, name, condition;
             for(int i = 0; i < sampleNameWithCondition.length; i++){
@@ -405,27 +409,7 @@ public class AnalysisData {
             conditionNames[val] = conditions.get(sampleNames[val]);
             sampleNameWithCondition[val] = conditionNames[val] + "-" + key;
         }
-        /*for(int i = 0; i < sampleNames.length; i++){
-            boolean foundMatch = false;
-            for(Map.Entry<IndexedString, String> pair : conditions.entrySet()){
-                if(pair.getKey().getNumber() == i){
-                        sampleNames[i] = pair.getKey();
-                        conditionNames[i] = pair.getValue();
-                        sampleNameWithCondition[i] = pair.getValue() + "-" + pair.getKey().getText();
-                    foundMatch = true;
-                    break;
-                }
-            }
-            
-            if(!foundMatch){
-                Log.logger.severe("no match for " + i);
-                for(String s : samples.keySet()){
-                    if(samples.get(s).intValue() == i){
-                        Log.logger.severe(s + " (" + samples.get(s)+") does not have a condition set");
-                    }
-                }
-            }
-        }*/
+        
         //Log.logger.info("Unsorted conditions: ");
         //Global.printArray(sampleNameWithCondition);
         
@@ -602,4 +586,6 @@ public class AnalysisData {
         }
         return true;
     }
+
+    public static String conditionsHeader = "sample\tcondition";
 }

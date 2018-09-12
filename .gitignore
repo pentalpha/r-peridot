@@ -1,3 +1,4 @@
+copyToGUI.sh
 out/
 *.class
 jar/r-peridot-scripts
