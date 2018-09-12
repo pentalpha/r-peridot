@@ -375,15 +375,19 @@ public class AnalysisData {
     }
     
     public void writeExpression(){
+        writeExpression(false);
+    }
+
+    public void writeExpression(boolean optimize){
         try{
-            this.writeCountReadsWithoutConditions();
+            this.writeCountReadsWithoutConditions(optimize);
             this.writeFinalConditions();
         }catch(IOException ex){
             ex.printStackTrace();
         }
     }
-    
-    private void writeCountReadsWithoutConditions() throws IOException{
+
+    private void writeCountReadsWithoutConditions(boolean optimize) throws IOException{
         File newRNASeq = finalCountReadsFile;
         if(newRNASeq.exists()){
             newRNASeq.delete();
@@ -520,7 +524,7 @@ public class AnalysisData {
                 Global.printArray(values);
                 Global.printArray(sortedValues);    
             }
-            boolean eraseLine = filterValues(intSortedValues);
+            boolean eraseLine = filterValues(intSortedValues, optimize);
             if(eraseLine){
                 removeCounter++;
                 Log.logger.fine(label + " line dropped by threshold.");
@@ -543,7 +547,12 @@ public class AnalysisData {
         buffOutput.close();
         outputWriter.close();
 
-        Log.logger.info( ((float)removeCounter/(float)counter)*100 + "% of the lines dropped by threshold, with a threshold of " + countReadsThreshold);
+        if (optimize){
+            Log.logger.info( ((float)removeCounter/(float)counter)*100 + "% of the lines dropped by threshold, with a threshold of " + countReadsThreshold);
+        }else{
+            Log.logger.info(((float)removeCounter/(float)counter)*100 + "% of the lines dropped by threshold, because only contained zeros");
+        }
+        
         this.setConditions(newConditions);
     }
 
@@ -578,9 +587,10 @@ public class AnalysisData {
         return decimals;
     }
 
-    protected boolean filterValues(int[] values){
+    protected boolean filterValues(int[] values, boolean optimize){
         for (int i = 0; i < values.length; i++){
-            if(values[i] >= countReadsThreshold){
+            if((optimize && values[i] >= countReadsThreshold)
+                || (!optimize && values[i] > 0)){
                 return false;
             }
         }

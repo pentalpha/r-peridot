@@ -13,14 +13,17 @@ public class IndexedString implements Comparable<IndexedString>{
 
     private String text;
     private int number;
+    private static int largestNumber = 0;
 
     public IndexedString(int number, String text) {
         this.text = text;
         this.number = number;
+        checkIfGreater();
     }
 
     public void setIndex(int newValue){
         this.number = newValue;
+        checkIfGreater();
     }
 
     public String getText() {
@@ -33,7 +36,13 @@ public class IndexedString implements Comparable<IndexedString>{
 
     @Override
     public String toString() {
-        return Integer.toString(number) + " - " + getText();
+        String numberStr = Integer.toString(number);
+        int lenDif = Integer.toString(largestNumber).length() - numberStr.length();
+        while(lenDif > 0){
+            numberStr = "0" + numberStr;
+            lenDif -= 1;
+        }
+        return numberStr + ". " + getText();
     }
     
     @Override
@@ -44,6 +53,16 @@ public class IndexedString implements Comparable<IndexedString>{
             return 1;
         }else{
             return 0;
+        }
+    }
+
+    private void checkIfGreater(){
+        int absolute = number;
+        if(number < 0){
+            absolute = -number;
+        }
+        if (absolute > IndexedString.largestNumber){
+            largestNumber = absolute;
         }
     }
 }

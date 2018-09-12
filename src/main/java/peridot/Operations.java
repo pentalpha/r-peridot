@@ -45,7 +45,7 @@ public class Operations {
         clean();
         RModule.removeScriptResults();
 
-        expression.writeExpression();
+        expression.writeExpression(true);
         //expression.writeFinalConditions();
 
         Task task = new Task(scriptsToExec, params, specificParams, expression);
