@@ -247,11 +247,14 @@ public final class Global {
         String s = "";
         for(int i = 0; i < array.length; i++){
             s+= array[i];
+            if (array[i] == null){
+                Log.logger.info("printArray: index " + i + " is null");
+            }
             if(i != array.length-1){
                 s+= ", ";
             }
         }
-        Log.logger.info(s);
+        Log.logger.info(s + "\nLength " + array.length);
     }
 
     public static String[] spliceBySpacesAndTabs(String text){

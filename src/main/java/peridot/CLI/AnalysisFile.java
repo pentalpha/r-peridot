@@ -58,9 +58,15 @@ public class AnalysisFile {
             }
             content += AnalysisFileParser.dataStr + " " + countReadsFile.getAbsolutePath() + "\n";
             content += AnalysisFileParser.sepStr + " " + "\"" + info.separator + "\"" + "\n";
-            SortedMap<IndexedString, String> conditions = AnalysisData.getConditionsFromExpressionFile(countReadsFile, info);
+            SortedMap<IndexedString, String> conditions;
             File condFile = new File(countReadsFile.getAbsolutePath() + ".conditions");
-            AnalysisData.createConditionsFile(condFile, conditions, false, true);
+            if(condFile.exists()){
+                conditions = AnalysisData.loadConditionsFromFile(
+                    condFile, AnalysisData.getIndexedSamplesFromFile(countReadsFile, info));
+            }else{
+                conditions = AnalysisData.getConditionsFromExpressionFile(countReadsFile, info);
+                AnalysisData.createConditionsFile(condFile, conditions, false, true);
+            }
             content += AnalysisFileParser.thresholdStr + " 5\n";
             content += AnalysisFileParser.roundingModeStr + " HALF_UP\n";
             //content += AnalysisFileParser.integersOnlyStr + " " + (info.dataType == Spreadsheet.DataType.Int) + "\n";
@@ -108,7 +114,7 @@ public class AnalysisFile {
             writer.close();
 
             System.out.println("Created " + exampleFile.getAbsolutePath());
-        }catch(IOException ex){
+        }catch(Exception ex){
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }

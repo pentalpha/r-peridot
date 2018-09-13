@@ -2,6 +2,7 @@ package peridot.CLI;
 
 import peridot.*;
 import peridot.Archiver.Spreadsheet;
+import peridot.Archiver.Spreadsheet.Info;
 import peridot.script.AnalysisModule;
 import peridot.script.RModule;
 import peridot.Log;
@@ -139,9 +140,13 @@ public class AnalysisFileParser {
         analysisFile.valid = valid;
     }
 
-    public void setExpression() throws IOException{
+    public void setExpression() throws IOException, AnalysisFileParser.ParseException{
         if(conditionsFile != null && countReadsFile != null && info.allInfoSet()){
-            info.setFirstCellPresent(!info.getHeaderOnFirstLine() || !info.getLabelsOnFirstCol());
+            if(!info.getHeaderOnFirstLine() && info.getLabelsOnFirstCol()){
+                info.setFirstCellPresent(true);
+            }else{
+                info.setFirstCellPresent(Info.getFirstCellPresent(countReadsFile, separatorChar));
+            }
             
             analysisFile.expression = new AnalysisData(countReadsFile, conditionsFile, info, roundingMode, threshold);
             hasData = true;

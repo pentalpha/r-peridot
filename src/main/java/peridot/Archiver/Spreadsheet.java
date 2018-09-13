@@ -376,6 +376,30 @@ public class Spreadsheet {
             return this.firstCellPresent.booleanValue();
         }
 
+        public static boolean getFirstCellPresent(File tableFile, String separator){
+            try{
+                FileReader inputReader = new FileReader(tableFile);
+                BufferedReader tableInput = new BufferedReader(inputReader);
+                String line = tableInput.readLine();
+                String line2 = tableInput.readLine();
+                tableInput.close();
+                inputReader.close();
+                //char separator = guessLineSeparator(tableFile);
+                if(line != null){
+                    if(line2 != null){
+                        return (!(Global.split(line, separator).length < Global.split(line2, separator).length));
+                    }else{
+                        return (true);
+                    }
+                }else{
+                    return (false);
+                }
+            }catch(IOException ex){
+                ex.printStackTrace();
+                return false;
+            }
+        }
+
         public boolean getLabelsOnFirstCol(){
             return this.labelsOnFirstCol.booleanValue();
         }

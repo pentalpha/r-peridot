@@ -4,6 +4,8 @@ import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.Archiver.Spreadsheet;
 import peridot.Archiver.Spreadsheet.Info;
+import peridot.CLI.AnalysisFileParser;
+import peridot.CLI.AnalysisFileParser.ParseException;
 
 import java.io.*;
 import java.util.*;
@@ -13,6 +15,7 @@ import java.util.Map.Entry;
  * @author pentalpha
  */
 public class AnalysisData {
+    public Map<String, Integer> samples;
     public Spreadsheet.Info info;
     public File conditionsFile, expressionFile;
     public SortedMap<IndexedString, String> conditions;
@@ -23,13 +26,13 @@ public class AnalysisData {
     protected File finalCountReadsFile;
     protected File finalConditionsFile;
     public AnalysisData(File expressionFile, File conditionsFile, Info info, String roundMode,
-                        int countReadsThreshold) throws IOException
+                        int countReadsThreshold) throws IOException, AnalysisFileParser.ParseException
     {
         defaultBuilderOperations(expressionFile, conditionsFile, info, roundMode, countReadsThreshold);
     }
     
     public AnalysisData(File expressionFile, SortedMap<IndexedString, String> conditions, Info info, String roundMode,
-                        int countReadsThreshold) throws IOException
+                        int countReadsThreshold) throws IOException, AnalysisFileParser.ParseException
     {
         File newConditionsFile = new File(expressionFile.getAbsolutePath() + ".conditions");
         this.setConditions(applyConditionsToExprFileSamples(expressionFile, info, conditions));
@@ -47,7 +50,7 @@ public class AnalysisData {
     }
     
     private void defaultBuilderOperations(File expressionFile, File conditionsFile, Info info, String roundMode,
-                                          int countReadsThreshold)  throws IOException
+                                          int countReadsThreshold)  throws IOException, AnalysisFileParser.ParseException
     {
         this.finalCountReadsFile = Places.countReadsInputFile;
         this.finalConditionsFile = Places.conditionInputFile;
@@ -68,14 +71,20 @@ public class AnalysisData {
         }
 
         if(Manager.fileExists(expressionFile.getAbsolutePath())){
-            this.expressionFile = expressionFile;
+            setExpressionFile(expressionFile, info);
         }else{
             throw new IOException("Expression file does not exists.");
         }
         
         if(Manager.fileExists(conditionsFile.getAbsolutePath())){
             this.conditionsFile = conditionsFile;
-            setConditions(loadConditionsFromFile(conditionsFile));
+            SortedMap<IndexedString, String> cond = loadConditionsFromFile(conditionsFile, this.samples);
+            if(cond == null){
+                throw new AnalysisFileParser.ParseException(
+                    "Failed to load conditions from " + conditionsFile.getAbsolutePath()
+                );
+            }
+            setConditions(cond);
         }else{
             throw new IOException("Conditions file does not exists.");
         }
@@ -89,8 +98,7 @@ public class AnalysisData {
         finalConditionsFile = file;
     }
 
-    public void setConditions(SortedMap<IndexedString, String> newCond) {
-        this.conditions = newCond;
+    public void setConditionsInfo(){
         HashMap<String, Integer> sampleCountInCondition = new HashMap<>();
         for (Entry<IndexedString, String> entry : getNamesAndConditions()){
             if(sampleCountInCondition.containsKey(entry.getValue())){
@@ -112,6 +120,16 @@ public class AnalysisData {
         }
 
         moreThanTwoConditions = (nConditions > 2);
+    }
+
+    public void setConditions(SortedMap<IndexedString, String> newCond) {
+        this.conditions = newCond;
+        setConditionsInfo();
+    }
+
+    public void setExpressionFile(File file, Info info) throws AnalysisFileParser.ParseException{
+        this.expressionFile = file;
+        this.samples = getIndexedSamplesFromFile(file, info);
     }
 
     public boolean hasReplicatesInSamples(){
@@ -191,63 +209,114 @@ public class AnalysisData {
         }
     }
     
-    public static SortedMap<IndexedString, String> loadConditionsFromFile(File file){
+    public static SortedMap<IndexedString, String> loadConditionsFromFile(
+        File file, Map<String, Integer> samples)
+    {
         SortedMap<IndexedString, String> map = new TreeMap<>();
+        HashMap<String, String> map2 = new HashMap<>();
+
+        /*for(String str : samples.keySet()){
+            Log.logger.info(str + " is " + samples.get(str));
+        }*/
+
+        Set<String> addedSamples = new TreeSet<String>();
         try{
             FileReader fileReader = new FileReader(file);
             BufferedReader buffReader = new BufferedReader(fileReader);  
             String line = null;
             map.clear();
-            int i = 0;
             while ((line = buffReader.readLine()) != null)  
             {  
-               String[] nameAndCondition = line.split("\t");
-               
-               if(nameAndCondition.length == 2){
-                   String name = nameAndCondition[0];
-                   String condition = nameAndCondition[1];
-                   map.put(new IndexedString(i, name), condition);
-                   i++;
-               }else{
-                   //do something if the line is wrong
-               }
-               
+                if (!line.equals(conditionsHeader)){
+                    String[] nameAndCondition = line.split("\t");
+                    
+                    if(nameAndCondition.length == 2){
+                        String name = nameAndCondition[0];
+                        String condition = nameAndCondition[1];
+                        if(map2.containsKey(name)){
+                            Log.logger.severe("Ambiguous sample condition: "+
+                            "\n"+name+"\t"+map2.get(name)+
+                            "\n"+name+"\t"+condition);
+                            return null;
+                        }
+                        Integer index = samples.get(name);
+                        IndexedString key = new IndexedString(index, name);
+                        map.put(key, condition);
+                        map2.put(name, condition);
+                        addedSamples.add(name);
+                    }else{
+                        Log.logger.severe("Line with more tham two collumns in conditions file:\n"+line);
+                        //do something if the line is wrong
+                    }
+                }
             } 
             buffReader.close();
             fileReader.close();
         }catch(Exception ex){
             ex.printStackTrace();
         }
+
+        if(addedSamples.size() < samples.keySet().size()){
+            Log.logger.info("Some samples do not have a defined condition. They will be marked as 'not-use':");
+            for (String sample : samples.keySet()){
+                if(!addedSamples.contains(sample)){
+                    map.put(new IndexedString(samples.get(sample),sample), "not-use");
+                    Log.logger.info(sample + "\tnot-use");
+                }
+            }
+        }
         
         return map;
     }
+
+    private static String[] getSampleNamesFromFile(File file, Info info){
+        String[] firstRow = Spreadsheet.getFirstRowFromFile(file, info.separator);
+        if(info.getHeaderOnFirstLine()){
+            Vector<String> rowVector = new Vector<String>();
+            for (int i = 0; i < firstRow.length;i++){
+                rowVector.add(firstRow[i]);
+            }
+
+            if(info.getFirstCellPresent()){
+                rowVector.remove(0);
+                //Log.logger.info("First cell present");
+            }
+
+            String[] names = new String[1];
+            names = rowVector.toArray(names);
+            //Global.printArray(names);
+            return names; 
+        }else{
+            int nConditions = firstRow.length;
+            if(info.getLabelsOnFirstCol()){
+                nConditions -= 1;
+            }
+            return Spreadsheet.getDefaultColumnNames(nConditions);
+        }
+    }
+
+    public static Map<String, Integer> getIndexedSamplesFromFile(File file, Info info) throws AnalysisFileParser.ParseException{
+        String[] names = getSampleNamesFromFile(file, info);
+
+        Map<String, Integer> samples = new HashMap<>();
+        for(int i = 0; i < names.length; i++){
+            if(samples.containsKey(names[i])){
+                throw new AnalysisFileParser.ParseException("Duplicated sample names in count reads table: " + "\n"+names[i]+ " at " + samples.get(names[i]) + " and " + i);
+            }else{
+                samples.put(names[i], new Integer(i));
+            }
+        }
+        return samples;
+    }
     
-    public static SortedMap<IndexedString, String> 
-        getConditionsFromExpressionFile(File file, Info info){
+    public static SortedMap<IndexedString, String> getConditionsFromExpressionFile(
+        File file, 
+        Info info)
+    {
         SortedMap<IndexedString, String> map;
         map = new TreeMap<>();
         
-        String[] firstRow = Spreadsheet.getFirstRowFromFile(file, info.separator);
-        int nConditions;
-        if(info.getFirstCellPresent() == false || info.getLabelsOnFirstCol() == false){
-            nConditions = firstRow.length;
-        }else{
-            nConditions = firstRow.length-1;
-        }
-        String[] names;
-        
-        if(info.getHeaderOnFirstLine()){
-            names = new String[nConditions];
-            for(int i = 0; i < names.length; i++){
-                if(info.getFirstCellPresent() && info.getLabelsOnFirstCol()){
-                    names[i] = firstRow[i+1];
-                }else{
-                    names[i] = firstRow[i];
-                }
-            }
-        }else{
-            names = Spreadsheet.getDefaultColumnNames(nConditions);
-        }
+        String[] names = getSampleNamesFromFile(file, info);
         
         map.clear();
         for (int i = 0; i < names.length; i++) {
@@ -275,7 +344,7 @@ public class AnalysisData {
 
             String text = "";
             if(makeHeader){
-                text += "sample\tcondition" + System.lineSeparator();
+                text += conditionsHeader + System.lineSeparator();
             }
             /*String nameWithCondition, name, condition;
             for(int i = 0; i < sampleNameWithCondition.length; i++){
@@ -306,15 +375,19 @@ public class AnalysisData {
     }
     
     public void writeExpression(){
+        writeExpression(false);
+    }
+
+    public void writeExpression(boolean optimize){
         try{
-            this.writeCountReadsWithoutConditions();
+            this.writeCountReadsWithoutConditions(optimize);
             this.writeFinalConditions();
         }catch(IOException ex){
             ex.printStackTrace();
         }
     }
-    
-    private void writeCountReadsWithoutConditions() throws IOException{
+
+    private void writeCountReadsWithoutConditions(boolean optimize) throws IOException{
         File newRNASeq = finalCountReadsFile;
         if(newRNASeq.exists()){
             newRNASeq.delete();
@@ -326,24 +399,27 @@ public class AnalysisData {
         BufferedReader buffInput = new BufferedReader(inputReader);
         BufferedWriter buffOutput = new BufferedWriter(outputWriter);
 
-        IndexedString[] sampleNames = new IndexedString[conditions.size()];
-        String[] conditionNames = new String[conditions.size()];
-        String[] sampleNameWithCondition = new String[conditions.size()];
-        for(int i = 0; i < sampleNames.length; i++){
-            for(Map.Entry<IndexedString, String> pair : conditions.entrySet()){
-                if(pair.getKey().getNumber() == i){
-                        sampleNames[i] = pair.getKey();
-                        conditionNames[i] = pair.getValue();
-                        sampleNameWithCondition[i] = pair.getValue() + "-" + pair.getKey().getText();
-                    break;
-                }
+        //IndexedString[] sampleNames = new IndexedString[conditions.size()];
+        IndexedString[] sampleNames = new IndexedString[samples.size()];
+        String[] conditionNames = new String[samples.size()];
+        String[] sampleNameWithCondition = new String[samples.size()];
+        for (Map.Entry<String, Integer> entry : samples.entrySet()){
+            String key = entry.getKey();
+            int val = entry.getValue().intValue();
+            if(val >= sampleNames.length){
+                Log.logger.severe(val + " ("+key+") is out of bounds ");
             }
+            sampleNames[val] = new IndexedString(val, key);
+            conditionNames[val] = conditions.get(sampleNames[val]);
+            sampleNameWithCondition[val] = conditionNames[val] + "-" + key;
         }
+        
         //Log.logger.info("Unsorted conditions: ");
         //Global.printArray(sampleNameWithCondition);
         
+        //Global.printArray(sampleNameWithCondition);
         Arrays.sort(sampleNameWithCondition);
-        //Log.logger.info("Sorted conditions: ");
+        //Log.logger.info("Sorted conditions: " + sampleNameWithCondition[57]);
         //Global.printArray(sampleNameWithCondition);
         
         int[] sampleNameNewIndex = new int[sampleNames.length];
@@ -429,8 +505,12 @@ public class AnalysisData {
             
             String[] sortedValues = new String[values.length];
             try{
-                for(int i = 0; i < sortedValues.length; i++){
+                for(int i = 0; i < values.length; i++){
+                    //sortedValues[i] = values[sampleNameNewIndex[i]];
                     sortedValues[sampleNameNewIndex[i]] = values[i];
+                    if(sampleNameNewIndex[i] != i){
+                        //Log.logger.info("column " + i +" new index is " + sampleNameNewIndex[i]);
+                    }
                 }
             }catch (java.lang.ArrayIndexOutOfBoundsException ex){
                 ex.printStackTrace();
@@ -438,7 +518,13 @@ public class AnalysisData {
             }
 
             int[] intSortedValues = roundValuesAndEraseNotUse(sortedValues, sortedSampleName);
-            boolean eraseLine = filterValues(intSortedValues);
+            if(intSortedValues == null){
+                Log.logger.severe("Null value read in :" + line);
+                Global.printArray(lineSplited);
+                Global.printArray(values);
+                Global.printArray(sortedValues);    
+            }
+            boolean eraseLine = filterValues(intSortedValues, optimize);
             if(eraseLine){
                 removeCounter++;
                 Log.logger.fine(label + " line dropped by threshold.");
@@ -461,7 +547,12 @@ public class AnalysisData {
         buffOutput.close();
         outputWriter.close();
 
-        Log.logger.info( ((float)removeCounter/(float)counter)*100 + "% of the lines dropped by threshold, with a threshold of " + countReadsThreshold);
+        if (optimize){
+            Log.logger.info( ((float)removeCounter/(float)counter)*100 + "% of the lines dropped by threshold, with a threshold of " + countReadsThreshold);
+        }else{
+            Log.logger.info(((float)removeCounter/(float)counter)*100 + "% of the lines dropped by threshold, because only contained zeros");
+        }
+        
         this.setConditions(newConditions);
     }
 
@@ -478,7 +569,15 @@ public class AnalysisData {
         int decimalsIndex = 0;
         for (int i = 0; i < values.length; i++){
             if(isUsable[i]){
-                decimals[decimalsIndex] = Global.roundFloat(Float.parseFloat(values[i]), roundMode);
+                try{
+                    decimals[decimalsIndex] = Global.roundFloat(Float.parseFloat(values[i]), roundMode);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                    Log.logger.severe("Cannot parse number: " + values[i] + ". Array length " + values.length + " index " + i);
+                    Global.printArray(values);
+                    return null;
+                }
+                
                 if(decimals[decimalsIndex] < countReadsThreshold){
                     decimals[decimalsIndex] = 0;
                 }
@@ -488,12 +587,15 @@ public class AnalysisData {
         return decimals;
     }
 
-    protected boolean filterValues(int[] values){
+    protected boolean filterValues(int[] values, boolean optimize){
         for (int i = 0; i < values.length; i++){
-            if(values[i] >= countReadsThreshold){
+            if((optimize && values[i] >= countReadsThreshold)
+                || (!optimize && values[i] > 0)){
                 return false;
             }
         }
         return true;
     }
+
+    public static String conditionsHeader = "sample\tcondition";
 }
