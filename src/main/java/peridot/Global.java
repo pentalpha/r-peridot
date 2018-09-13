@@ -52,7 +52,11 @@ public final class Global {
     public static void openFileWithSysApp(File file){
         String cmd = "";
         if(SystemUtils.IS_OS_WINDOWS){
-            cmd = "CMD /C START \"\" \"" + file.getAbsolutePath() + "\"";
+            if(file.getName().contains(".txt")){
+                cmd = "notepad.exe \"" + file.getAbsolutePath() + "\"";
+            }else{
+                cmd = "CMD /C START \"\" \"" + file.getAbsolutePath() + "\"";
+            }
         }else if(SystemUtils.IS_OS_UNIX){
             cmd = "xdg-open " + file.getAbsolutePath();
         }
