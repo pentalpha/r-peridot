@@ -28,6 +28,13 @@ public class GeneIdType {
     }
 
     /**
+     * Starts with the default IdType, 'None'.
+     */
+    public GeneIdType(){
+        this.idName = "None";
+    }
+
+    /**
      * Defines the default list of IDs available
      * @return List of ID types.
      */

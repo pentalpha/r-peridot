@@ -53,14 +53,14 @@ public class Main {
             if(task.processingStatus.get() < 0){
                 System.out.println("\n- Ending all tasks.\n");
                 task.abortAll();
-                try{
+                /*try{
                     //System.out.println("Joining mainThread");
                     while(finished.get() == false){
 
                     }
                 }catch(Exception ex){
                     Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
-                }
+                }*/
             }
         }
     }

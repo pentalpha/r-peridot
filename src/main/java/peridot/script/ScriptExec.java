@@ -127,6 +127,22 @@ public class ScriptExec {
             updateOutput();
         }).start();
     }
+
+    private synchronized void saveResults(){
+        savingFlag.set(true);
+        output.appendLine("\n[End of input]");
+        peridot.Archiver.Manager.stringToFile(Places.finalResultsDir
+                + File.separator + script.name + ".output", output.getText());
+        if(script.verifyResults()){
+            successFlag.set(true);
+            //System.out.println("Saving results of " + script.name);
+            script.saveResults();
+        }else{
+            successFlag.set(false);
+        }
+        script.cleanLocalResults();
+        savingFlag.set(false);
+    }
     
     public synchronized void onEnd(){
         if(!running.get()){
@@ -136,20 +152,8 @@ public class ScriptExec {
         String exitMessage = script.name + " finished.";
         Log.logger.info(exitMessage);
 
-        savingFlag.set(true);
-        output.appendLine("\n[End of input]");
-        peridot.Archiver.Manager.stringToFile(Places.finalResultsDir
-                + File.separator + script.name + ".output", output.getText());
-        if(script.verifyResults()){
-            successFlag.set(true);
-            Log.logger.finer("Saving results of " + script.name);
-            script.saveResults();
-        }else{
-            successFlag.set(false);
-        }
-        script.cleanLocalResults();
-        savingFlag.set(false);
-        
+        saveResults();
+
         started.set(true);
         running.set(false);
         
@@ -164,6 +168,7 @@ public class ScriptExec {
     public void abort(){
         //Log.logger.info("Trying to abort " + script.name);
         if(running.get() || process.isAlive()){
+            saveResults();
             //Log.logger.info("Aborting " + script.name);
             if (process != null) {
                 process.destroyForcibly();

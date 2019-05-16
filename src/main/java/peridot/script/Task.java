@@ -238,7 +238,7 @@ public class Task {
                 }
                 updateStatus();
                 playReady();
-                for(String s : runningScripts){
+                /*for(String s : runningScripts){
                     LocalDateTime lastUpdate = scriptOutputs.get(s).lastUpdate;
                     if(lastUpdate.isBefore(LocalDateTime.now().minusMinutes(2))){
                         scriptOutputs.get(s).appendLine("[PERIDOT WARNING] This process may not be responding.");
@@ -246,7 +246,7 @@ public class Task {
                     }
                     //ScriptExec exec = scriptExecs.get(s);
                     //if(exec.)
-                }
+                }*/
             }
         };
     }
@@ -430,6 +430,7 @@ public class Task {
     public void abortAll(){
         abortAllFlag.set(true);
         for(ScriptExec exec : scriptExecs.values()){
+            //System.out.println("Aborting " + exec.script.name);
             if(exec.running.get()){
                 exec.abort();
             }

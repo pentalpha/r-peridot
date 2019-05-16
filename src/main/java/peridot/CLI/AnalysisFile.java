@@ -93,6 +93,7 @@ public class AnalysisFile {
                     content += entry.getValue().getSimpleName() + " "
                             + entry.getKey() + "=" + defaultValues.get(entry.getKey()).toString() + "\n";
                 }else{
+                    Log.logger.severe(entry.getKey() + " has no default value.");
                     content += entry.getValue().getSimpleName() + " "
                             + entry.getKey() + "=INSERT_VALUE" + "\n";
                 }

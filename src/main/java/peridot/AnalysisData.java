@@ -208,7 +208,15 @@ public class AnalysisData {
             return conditionsSet.size();
         }
     }
-    
+
+    private static String[] splitConditionsLine(String line){
+        line = line.replace(" ", "\t").replace(",", "\t")
+                .replace(";", "\t");
+        String[] parts = line.split("\t");
+        String[] first_and_last = {parts[0], parts[parts.length-1]};
+        return first_and_last;
+    }
+
     public static SortedMap<IndexedString, String> loadConditionsFromFile(
         File file, Map<String, Integer> samples)
     {
@@ -228,17 +236,17 @@ public class AnalysisData {
             while ((line = buffReader.readLine()) != null)  
             {  
                 if (!line.equals(conditionsHeader)){
-                    String[] nameAndCondition = line.split("\t");
-                    
+                    String[] nameAndCondition = splitConditionsLine(line);
                     if(nameAndCondition.length == 2){
                         String name = nameAndCondition[0];
                         String condition = nameAndCondition[1];
                         if(map2.containsKey(name)){
                             Log.logger.severe("Ambiguous sample condition: "+
                             "\n"+name+"\t"+map2.get(name)+
-                            "\n"+name+"\t"+condition);
-                            return null;
+                            "\n"+name+"\t"+condition + "\nignoring it.");
+                            //return null;
                         }
+                        System.out.println(name + "\t" + condition);
                         Integer index = samples.get(name);
                         IndexedString key = new IndexedString(index, name);
                         map.put(key, condition);
