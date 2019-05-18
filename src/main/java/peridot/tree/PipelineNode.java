@@ -22,23 +22,33 @@ public class PipelineNode
     private ArrayList<PipelineNode> parents;
     private Status status;
     private String key;
-    private RModule data;
+    //private RModule data;
     private boolean requiresAllParents;
 
-    /**
-     * Construtor para objetos da classe Node
-     * @param key Chave do nó.
-     * @param data Dados para serem armazenados.
-     */
-    public PipelineNode(RModule data, ArrayList<PipelineNode> children,
+    public PipelineNode(String name, ArrayList<PipelineNode> children,
                 ArrayList<PipelineNode> parents, boolean requiresAllParents)
     {
-        this.key = data.name;
-        this.data = data;
+        this.key = name;
+        //this.data = data;
         this.children = children;
         this.parents = parents;
         this.requiresAllParents = requiresAllParents;
         this.status = Status.QUEUE;
+    }
+
+    public PipelineNode(String name, boolean requiresAllParents)
+    {
+        this.key = name;
+        this.requiresAllParents = requiresAllParents;
+        this.status = Status.QUEUE;
+    }
+
+    public void addChildren(PipelineNode node){
+        children.add(node);
+    }
+
+    public void addParent(PipelineNode node){
+        parents.add(node);
     }
 
     public void updateReady(){
@@ -103,9 +113,9 @@ public class PipelineNode
         return key;
     }
 
-    public RModule getData(){
+    /*public RModule getData(){
         return data;
-    }
+    }*/
 
     public boolean hasParents(){
         return this.parents.size() != 0;

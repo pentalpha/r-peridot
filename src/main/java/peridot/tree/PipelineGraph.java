@@ -3,17 +3,16 @@ import peridot.script.RModule;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.List;
 
-/*
-* This is NOT A TREE (it can have many roots),
-* but I take the creative freedom to call it as such.
-* */
-public class PipelineTree{
+public class PipelineGraph{
     private HashMap<String, PipelineNode> nodes;
+    private HashMap<String, RModule> modules;
     private ArrayList<PipelineNode> roots;
     private boolean finished;
 
-    public PipelineTree(){
+    public PipelineGraph(){
         this.nodes = new HashMap<>();
         this.roots = new ArrayList<>();
         this.finished = false;
@@ -26,6 +25,36 @@ public class PipelineTree{
         nodes.put(node.getKey(), node);
     }
 
+    private void addVertex(RModule mode){
+        PipelineNode node = nodes.get(mode.name);
+
+        if(mode.requiredScripts.size() > 0){
+            for(String name : mode.requiredScripts){
+                PipelineNode parent = nodes.get(name);
+                node.addParent(parent);
+                parent.addChildren(nodes.get(mode.name));
+            }
+        }else{
+            roots.add(node);
+        }
+    }
+
+    public void addNodes(Set<RModule> mods){
+        for(RModule mod : mods){
+            modules.put(mod.name, mod);
+        }
+
+        for(RModule mod : mods){
+            PipelineNode node = new PipelineNode(mod.name, false);
+            nodes.put(mod.name, node);
+        }
+
+        for(RModule mod : mods){
+            addVertex(mod);
+        }
+    }
+
+
     private void updateReady(){
         for(PipelineNode node : roots){
             node.updateReady();
@@ -36,7 +65,7 @@ public class PipelineTree{
         for(Map.Entry<String, PipelineNode> entry : nodes.entrySet()){
             if(entry.getValue().isReady()){
                 entry.getValue().markAsRunning();
-                return entry.getValue().getData();
+                return modules.get(entry.getKey());
             }
         }
 
