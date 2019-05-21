@@ -51,7 +51,7 @@ public class PipelineNode
         parents.add(node);
     }
 
-    public void updateReady(){
+    public void updateStatus(){
         if(status == Status.QUEUE){
             int parents_done = 0;
             int parents_failed = 0;
@@ -80,13 +80,17 @@ public class PipelineNode
 
         if(status == Status.DONE || status == Status.FAILED){
             for(int i = 0; i < children.size(); i++){
-                children.get(i).updateReady();
+                children.get(i).updateStatus();
             }
         }
     }
 
     public boolean isRunning(){
         return this.status == Status.RUNNING;
+    }
+
+    public boolean isQueued(){
+        return this.status == Status.QUEUE;
     }
 
     public boolean isReady(){
@@ -106,7 +110,13 @@ public class PipelineNode
     }
 
     public void markAsDone(){
+        this.updateStatus();
         this.status = Status.DONE;
+    }
+
+    public void markAsFailed(){
+        this.updateStatus();
+        this.status = Status.FAILED;
     }
 
     public String getKey(){

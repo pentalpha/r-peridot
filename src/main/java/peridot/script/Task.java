@@ -3,6 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+ /**
+  * TODO:
+        Implement abort all
+        Tests with datasets
+        Delete useless code
+  */
 package peridot.script;
 
 import peridot.AnalysisData;
@@ -13,6 +20,7 @@ import peridot.Log;
 import peridot.Output;
 import peridot.script.r.Interpreter;
 import peridot.script.r.Package;
+import peridot.tree.*;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -20,6 +28,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -55,6 +64,9 @@ public class Task {
     public ConcurrentHashMap<String, ScriptExec> scriptExecs;
     public ConcurrentHashMap<String, WaitState> waitState;
     public ConcurrentHashMap<String, Output> scriptOutputs;
+    public ModuleWorker[] workers;
+    public Thread[] threads;
+    private PipelineGraph pipeline;
     private int remainingAnalysisScripts;
     protected Thread scriptsStatusWatcher;
     //public static Task _instance;
@@ -97,13 +109,35 @@ public class Task {
                 modulesToExec.add(scriptName);
             }
         }
+
+        Collection<RModule> modules = RModule.availableModules.values();
+        pipeline = new PipelineGraph();
+        pipeline.addNodes(modules);
+
+        int cpus = Runtime.getRuntime().availableProcessors();
+        workers = new ModuleWorker[cpus];
+        for(int i = 0; i < cpus; i++){
+            workers[i] = new ModuleWorker(pipeline, Interpreter.defaultInterpreter, 400);
+        }
+        for(int i = 0; i < cpus; i++){
+            threads[i] = new Thread(workers[i]);
+        }
+
+
     }
     
     public void start(){
-        abortAllFlag = new AtomicBoolean();
+        RModule.removeScriptResults();
+        _instance = this;
+        for(int i = 0; i < threads.length; i++){
+            threads[i].start();
+        }
+        
+
+        /*abortAllFlag = new AtomicBoolean();
         abortAllFlag.set(false);
         _instance = this;
-        RModule.removeScriptResults();
+        
         failedResults = new ConcurrentLinkedDeque<>();
         //ProcessingPanel.cleanMonitorPanels();
         remainingAnalysisScripts = 0;
@@ -115,7 +149,18 @@ public class Task {
         playReady();
         //scriptsStatusWatcher = new Thread(statusWatcher);
         //scriptsStatusWatcher.start();
-        new Thread(zombieFinder).start();
+        new Thread(zombieFinder).start();*/
+        
+    }
+
+    public void join(){
+        try{
+            for(int i = 0; i < threads.length; i++){
+                threads[i].join();
+            }
+        }catch(InterruptedException ex){
+            ex.printStackTrace();
+        }
     }
 
     private boolean evaluateScriptInput(String name){
