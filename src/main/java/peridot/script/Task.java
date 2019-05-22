@@ -6,7 +6,6 @@
 
  /**
   * TODO:
-        Implement abort all
         Tests with datasets
         Delete useless code
   */
@@ -17,7 +16,7 @@ import peridot.AnalysisParameters;
 import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.Log;
-import peridot.Output;
+//import peridot.Output;
 import peridot.script.r.Interpreter;
 import peridot.script.r.Package;
 import peridot.tree.*;
@@ -29,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Collection;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -39,10 +39,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author pentalpha
  */
 public class Task {
+
+    public static Task getRunningTask(){
+        return _instance;
+    }
+
+    private static Task _instance;
     
-    public Set<String> queryModules;
-    public Set<String> validQueryModules;
-    public Set<String> modulesToExec;
+    
+    //public Set<String> modulesToExec;
     public AnalysisParameters params;
     public Map<String, AnalysisParameters> specificParams;
     public AnalysisData expression;
@@ -50,9 +55,25 @@ public class Task {
     public AtomicBoolean packagesFinishedFlag, abortAllFlag;
     //The actual status of the processing.
     //-2 = Not started, -1 = Processing, 0 = failed, 1 = some failed, 2 = all success
-    public AtomicInteger processingStatus;
-    public Runnable statusWatcher;
-    public Runnable zombieFinder;
+    public enum Processing_Status{
+        NOT_STARTED,
+        PROCESSING,
+        FAILED,
+        SOME_FAILED,
+        ALL_SUCCESS
+
+        /*private final int valor;
+        Processing_Status(int n){
+            valor = n;
+        }
+        public int getValor(){
+            return valor;
+        }*/
+    }
+
+    public Processing_Status processingStatus;
+    //public Runnable statusWatcher;
+    //public Runnable zombieFinder;
     
     //populate only on start and later:
     public ConcurrentLinkedDeque<String> successfulScripts;
@@ -61,56 +82,58 @@ public class Task {
     public ConcurrentLinkedDeque<String> failedScripts;
     public ConcurrentLinkedDeque<String> runningScripts;
     public ConcurrentLinkedDeque<String> finishedScripts;
-    public ConcurrentHashMap<String, ScriptExec> scriptExecs;
-    public ConcurrentHashMap<String, WaitState> waitState;
-    public ConcurrentHashMap<String, Output> scriptOutputs;
+    //public ConcurrentHashMap<String, ScriptExec> scriptExecs;
+    //public ConcurrentHashMap<String, WaitState> waitState;
+    //public ConcurrentHashMap<String, Output> scriptOutputs;
     public ModuleWorker[] workers;
     public Thread[] threads;
     private PipelineGraph pipeline;
     private int remainingAnalysisScripts;
     protected Thread scriptsStatusWatcher;
-    //public static Task _instance;
     
     public Task(Set<String> scriptsToExec, AnalysisParameters params,
                             Map<String, AnalysisParameters> specificParams,
                             AnalysisData expression)
     {
-        //_instance = this;
-        this.queryModules = scriptsToExec;
+        _instance = this;
+        //Set<String> queryModules = scriptsToExec;
         this.params = params;
         this.specificParams = specificParams;
         this.expression = expression;
         
-        packagesFinishedFlag = new AtomicBoolean(false);
-        processingStatus = new AtomicInteger(-2);
-        this.modulesToExec = new TreeSet<>();
-        this.validQueryModules = new TreeSet<>();
-        successfulScripts = new ConcurrentLinkedDeque<>();
-        noDiffExpFound = new ConcurrentLinkedDeque<>();
-        failedScripts = new ConcurrentLinkedDeque<>();
-        runningScripts = new ConcurrentLinkedDeque<>();
-        finishedScripts = new ConcurrentLinkedDeque<>();
-        scriptExecs = new ConcurrentHashMap<String, ScriptExec>();
-        waitState = new ConcurrentHashMap<String, WaitState>();
-        scriptOutputs = new ConcurrentHashMap<String, Output>();
-        packagesFinishedFlag = new AtomicBoolean(false);
-        defineStatusWatcher();
-        defineZombieFinder();
+        //packagesFinishedFlag = new AtomicBoolean(false);
+        processingStatus = Processing_Status.NOT_STARTED;
+        //this.modulesToExec = new TreeSet<>();
+        //successfulScripts = new ConcurrentLinkedDeque<>();
+        //noDiffExpFound = new ConcurrentLinkedDeque<>();
+        //failedScripts = new ConcurrentLinkedDeque<>();
+        //runningScripts = new ConcurrentLinkedDeque<>();
+        //finishedScripts = new ConcurrentLinkedDeque<>();
+        //scriptExecs = new ConcurrentHashMap<String, ScriptExec>();
+        //waitState = new ConcurrentHashMap<String, WaitState>();
+        //scriptOutputs = new ConcurrentHashMap<String, Output>();
+        //packagesFinishedFlag = new AtomicBoolean(false);
+        //defineStatusWatcher();
+        //defineZombieFinder();
 
+        
+        Set<String> validQueryModules = new TreeSet<>();
         for(String name : scriptsToExec){
             if(evaluateScriptInput(name)){
                 validQueryModules.add(name);
             }
         }
 
+        ArrayList<RModule> modules = new ArrayList<>();
         for(String scriptName : validQueryModules){
-            boolean canExecute = evaluateScriptForExecution(scriptName);
+            boolean canExecute = evaluateScriptForExecution(scriptName, validQueryModules);
             if(canExecute){
-                modulesToExec.add(scriptName);
+                //modulesToExec.add(scriptName);
+                modules.add(RModule.availableModules.get(scriptName));
             }
         }
 
-        Collection<RModule> modules = RModule.availableModules.values();
+        //Collection<RModule> modules = RModule.availableModules.values();
         pipeline = new PipelineGraph();
         pipeline.addNodes(modules);
 
@@ -119,11 +142,10 @@ public class Task {
         for(int i = 0; i < cpus; i++){
             workers[i] = new ModuleWorker(pipeline, Interpreter.defaultInterpreter, 400);
         }
+
         for(int i = 0; i < cpus; i++){
             threads[i] = new Thread(workers[i]);
         }
-
-
     }
     
     public void start(){
@@ -132,7 +154,6 @@ public class Task {
         for(int i = 0; i < threads.length; i++){
             threads[i].start();
         }
-        
 
         /*abortAllFlag = new AtomicBoolean();
         abortAllFlag.set(false);
@@ -161,6 +182,7 @@ public class Task {
         }catch(InterruptedException ex){
             ex.printStackTrace();
         }
+        this.updateStatus();
     }
 
     private boolean evaluateScriptInput(String name){
@@ -186,7 +208,7 @@ public class Task {
         return false;
     }
 
-    private boolean evaluateScriptForExecution(String name){
+    private boolean evaluateScriptForExecution(String name, Set<String> validQueryModules){
         RModule script = RModule.availableModules.get(name);
         HashSet<String> modulesNotFound = new HashSet<>();
         for(String module : script.requiredScripts){
@@ -225,7 +247,56 @@ public class Task {
         return false;
     }
 
-    private void queueScriptForExecution(String name){
+    public boolean isFinished(){
+        return (isSuccess() || isSomeFailed() || isFailed());
+    }
+
+    public boolean isNotStarted(){
+        return processingStatus == Processing_Status.NOT_STARTED;
+    }
+    
+    public boolean isProcessing(){
+        return processingStatus == Processing_Status.PROCESSING;
+    }
+    
+    public boolean isFailed(){
+        return processingStatus == Processing_Status.FAILED;
+    }
+    
+    public boolean isSomeFailed(){
+        return processingStatus == Processing_Status.SOME_FAILED;
+    }
+    
+    public boolean isSuccess(){
+        return processingStatus == Processing_Status.ALL_SUCCESS;
+    }
+
+    /**
+     * Synchronized method to update the atomic status of the task.
+     */
+    public synchronized void updateStatus(){
+        if(pipeline.number_of_nodes() == pipeline.number_of_finished_nodes()){
+            if(pipeline.number_of_nodes_at_status(PipelineNode.Status.FAILED) == 0){
+                processingStatus = Processing_Status.ALL_SUCCESS;
+            }else if(pipeline.number_of_nodes_at_status(PipelineNode.Status.DONE) > 0){
+                processingStatus = Processing_Status.SOME_FAILED;
+            }else{
+                processingStatus = Processing_Status.FAILED;
+            }
+            _instance = null;
+        }else if (pipeline.number_of_nodes_at_status(PipelineNode.Status.RUNNING) > 0){
+            processingStatus = Processing_Status.PROCESSING;
+        }else{
+            processingStatus = Processing_Status.NOT_STARTED;
+        }
+    }
+
+    public void abortAll(){
+        abortAllFlag.set(true);
+        pipeline.abortAll();
+    }
+
+    /*private void queueScriptForExecution(String name){
         RModule script = RModule.availableModules.get(name);
         if(script instanceof AnalysisModule){
             remainingAnalysisScripts++;
@@ -236,29 +307,11 @@ public class Task {
         scriptExecs.put(name, exec);
 
         waitState.put(name, WaitState.WAITING);
-    }
+    }*/
     
-    public boolean isNotStarted(){
-        return processingStatus.get() == -2;
-    }
     
-    public boolean isProcessing(){
-        return processingStatus.get() == -1;
-    }
     
-    public boolean isFailed(){
-        return processingStatus.get() == 0;
-    }
-    
-    public boolean isSomeFailed(){
-        return processingStatus.get() == 1;
-    }
-    
-    public boolean isSuccess(){
-        return processingStatus.get() == 2;
-    }
-    
-    private void defineStatusWatcher(){
+    /*private void defineStatusWatcher(){
         statusWatcher = () -> {
             while(processingStatus.get() < 0){
                 //updateStatus();
@@ -291,40 +344,14 @@ public class Task {
                     }
                     //ScriptExec exec = scriptExecs.get(s);
                     //if(exec.)
-                }*/
-            }
-        };
-    }
-    
-    /**
-     * Synchronized method to update the atomic status of the task.
-     */
-    private synchronized void updateStatus(){
-        if(finishedScripts.size() == scriptExecs.size()){
-            if(failedScripts.size() == 0){
-                processingStatus.set(2);
-            }else if(successfulScripts.size() > 0){
-                processingStatus.set(1);
-            }else{
-                processingStatus.set(0);
-            }
-            _instance = null;
-        }else{
-            /*System.out.println("\n");
-            for(String name : scriptsToExec){
-                if(finishedScripts.contains(name) == false) {
-                    System.out.println("Remaining: " + name);
                 }
             }
-
-            for(String name : runningScripts){
-                System.out.println("Running: " + name);
-            }*/
-            processingStatus.set(-1);
-        }
-    }
+        };
+    }*/
     
-    public synchronized void addFinished(String name, boolean prefailed){
+    
+    
+    /*public synchronized void addFinished(String name, boolean prefailed){
         Log.logger.finer("Adding " + name + " to finished scripts.");
         if(RModule.getAvailableAnalysisModules().contains(name)){
             remainingAnalysisScripts--;
@@ -349,9 +376,9 @@ public class Task {
         updateStatus();
         updateStates();
         playReady();
-    }
+    }*/
     
-    private void checkForSuccess(String name){
+    /*private void checkForSuccess(String name){
         if(scriptExecs.get(name).successFlag.get()){
             successfulScripts.add(name);
             if(RModule.getAvailableAnalysisModules().contains(name)){
@@ -366,7 +393,6 @@ public class Task {
                         ex.printStackTrace();
                     }
                 }
-
             }
             Log.logger.info(name + " is successful");
         }else{
@@ -378,9 +404,9 @@ public class Task {
             failedScripts.add(name);
             Log.logger.info(name + " is not successful");
         }
-    }
+    }*/
     
-    private synchronized void playReady(){
+    /*private synchronized void playReady(){
         boolean found;
         String foundName;
         while(true){
@@ -415,19 +441,19 @@ public class Task {
                 break;
             }
         }
-    }
+    }*/
     
-    private void preFailed(String name){
-        this.addFinished(name, true);
+    //private void preFailed(String name){
+        //this.addFinished(name, true);
         //failedScripts.add(name);
         //ScriptExec  exec = scriptExecs.get(name);
         //exec.started.set(true);
         //exec.running.set(false);
         //exec.process = null;
         //scriptOutputs.get(name).appendLine("preFailed");
-    }
+   // }
     
-    private synchronized void updateStates(){
+    /*private synchronized void updateStates(){
         boolean foundPreFailed;
         do{
             foundPreFailed = false;
@@ -470,25 +496,13 @@ public class Task {
             waitState.replace(name, WaitState.READY);
             Log.logger.finer(name + " is now ready");
         }
-    }
+    }*/
 
-    public void abortAll(){
-        abortAllFlag.set(true);
-        for(ScriptExec exec : scriptExecs.values()){
-            //System.out.println("Aborting " + exec.script.name);
-            if(exec.running.get()){
-                exec.abort();
-            }
-        }
-    }
+    
 
-    public static Task getRunningTask(){
-        return _instance;
-    }
+    
 
-    private static Task _instance;
-
-    public enum WaitState{
+    /*public enum WaitState{
         WAITING, PRE_FAILED, READY, STARTED
-    }
+    }*/
 }

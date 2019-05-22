@@ -1,5 +1,4 @@
 package peridot.tree;
-import peridot.Output;
 import peridot.script.RModule;
 import java.util.Map;
 import java.util.HashMap;
@@ -11,18 +10,20 @@ import java.util.Collection;
 public class PipelineGraph{
     private HashMap<String, PipelineNode> nodes;
     private HashMap<String, RModule> modules;
-    private HashMap<String, Output> outputs;
     private HashMap<String, Process> processes;
+    //public HashMap<String, Boolean> abort_flag;
     private ArrayList<PipelineNode> roots;
+    private int n_nodes;
     private boolean finished;
 
     public PipelineGraph(){
         this.nodes = new HashMap<>();
         this.modules = new HashMap<>();
-        this.outputs = new HashMap<>();
         this.processes = new HashMap<>();
+        //this.abort_flag = new HashMap<>();
         this.roots = new ArrayList<>();
         this.finished = false;
+        n_nodes = 0;
     }
 
     public void addNode(PipelineNode node){
@@ -30,7 +31,8 @@ public class PipelineGraph{
             roots.add(node);
         }
         nodes.put(node.getKey(), node);
-        outputs.put(node.getKey(), new Output());
+        //abort_flag.put(node.getKey(), Boolean(false));
+        n_nodes += 1;
     }
 
     private void addVertex(RModule mode){
@@ -50,12 +52,13 @@ public class PipelineGraph{
     public void addNodes(Collection<RModule> mods){
         for(RModule mod : mods){
             modules.put(mod.name, mod);
+            n_nodes += 1;
+            //abort_flag.put(node.getKey(), Boolean(false));
         }
 
         for(RModule mod : mods){
             PipelineNode node = new PipelineNode(mod.name, false);
             nodes.put(mod.name, node);
-            outputs.put(mod.name, new Output());
         }
 
         for(RModule mod : mods){
@@ -99,6 +102,10 @@ public class PipelineGraph{
         }
     }
 
+    //public void abort(String name){
+    //    abort_flag.put(name, Boolean(true));
+    //}
+
     public boolean isFinished(){
         return this.finished;
     }
@@ -111,10 +118,6 @@ public class PipelineGraph{
     public synchronized void markAsFailed(String name){
         nodes.get(name).markAsFailed();
         updateReady();
-    }
-
-    public Output getOutput(String name){
-        return outputs.get(name);
     }
 
     public Process getProcess(String name){
@@ -132,5 +135,36 @@ public class PipelineGraph{
         }else if (nodes.get(name).isReady() || nodes.get(name).isQueued()){
             markAsFailed(name);
         }
+    }
+
+    public synchronized void abortAll(){
+        for(String name : nodes.keySet()){
+            abort(name);
+        }
+    }
+
+    public synchronized int number_of_nodes_at_status(PipelineNode.Status status){
+        int n = 0;
+        for(PipelineNode node : nodes.values()){
+            if (node.getStatus() == status){
+                n += 1;
+            }
+        }
+        return n;
+    }
+
+    public synchronized int number_of_finished_nodes(){
+        int n = 0;
+        for(PipelineNode node : nodes.values()){
+            if (node.getStatus() == PipelineNode.Status.FAILED
+            || node.getStatus() == PipelineNode.Status.DONE){
+                n += 1;
+            }
+        }
+        return n;
+    }
+
+    public int number_of_nodes(){
+        return n_nodes;
     }
 }

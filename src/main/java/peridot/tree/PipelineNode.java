@@ -105,6 +105,10 @@ public class PipelineNode
         return this.status == Status.DONE;
     }
 
+    public Status getStatus(){
+        return this.status;
+    }
+
     public void markAsRunning(){
         this.status = Status.RUNNING;
     }

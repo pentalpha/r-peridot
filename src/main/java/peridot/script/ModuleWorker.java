@@ -8,7 +8,6 @@ import peridot.Log;
 import peridot.script.RModule;
 import peridot.tree.PipelineGraph;
 import peridot.script.r.Interpreter;
-import peridot.Output;
 import java.util.Iterator;
 import java.io.File;
 import java.io.IOException;
@@ -21,10 +20,6 @@ import java.lang.ProcessBuilder;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.TreeSet;
-
-
-
-
 
 public class ModuleWorker implements Runnable {
 
@@ -174,6 +169,8 @@ public class ModuleWorker implements Runnable {
             processBuilder = new ProcessBuilder(bashCmdArray);
         }
         processBuilder.redirectErrorStream(true);
+        String saveIn = script.resultsFolder + File.separator + "output.txt";
+        processBuilder.redirectOutput(new File(saveIn));
         return processBuilder;
     }
 
@@ -187,7 +184,7 @@ public class ModuleWorker implements Runnable {
 
     public Status status;
     private RModule currentModule;
-    private Output currentOutput;
+    //private Output currentOutput;
     private Interpreter interpreter;
     private int waiting_time;
 
@@ -240,7 +237,7 @@ public class ModuleWorker implements Runnable {
             //process definition failed
             module_failed(next);
         }else{
-            this.currentOutput = pipeline.getOutput(next.name);
+            //this.currentOutput = pipeline.getOutput(next.name);
             try{
                 process = processBuilder.start();
                 if(process == null){
@@ -250,36 +247,36 @@ public class ModuleWorker implements Runnable {
                     this.status = Status.RUNNING;
                     this.currentModule = next;
                     
-                    currentOutput.appendLine("Command line:\n" + Global.listOfWordsToLine(processBuilder.command())
-                                            + "\n---------------");
+                    //currentOutput.appendLine("Command line:\n" + Global.listOfWordsToLine(processBuilder.command())
+                    //                        + "\n---------------");
                     pipeline.set_process(currentModule.name, process);
                     //Log.logger.info(exec.script.name + "'s process started.");
                 }
             }catch(IndexOutOfBoundsException ex){
-                currentOutput.appendLine("IndexOutOfBoundsException: ");
-                currentOutput.appendLine(ex.getMessage());
-                currentOutput.appendLine(ex.toString());
+                //currentOutput.appendLine("IndexOutOfBoundsException: ");
+                //currentOutput.appendLine(ex.getMessage());
+                //currentOutput.appendLine(ex.toString());
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
                 module_failed(next);
                 on_end();
             }catch(SecurityException ex){
-                currentOutput.appendLine("Security exception: ");
-                currentOutput.appendLine(ex.getMessage());
-                currentOutput.appendLine(ex.toString());
+                //currentOutput.appendLine("Security exception: ");
+                //currentOutput.appendLine(ex.getMessage());
+                //currentOutput.appendLine(ex.toString());
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
                 module_failed(next);
                 on_end();
             }catch(IOException ex){
-                currentOutput.appendLine("IO exception: ");
-                currentOutput.appendLine(ex.getMessage());
-                currentOutput.appendLine(ex.toString());
+                ///currentOutput.appendLine("IO exception: ");
+                //currentOutput.appendLine(ex.getMessage());
+                //currentOutput.appendLine(ex.toString());
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
                 module_failed(next);
                 on_end();
             }catch(NullPointerException ex){
-                currentOutput.appendLine("NullPointerException: ");
-                currentOutput.appendLine(ex.getMessage());
-                currentOutput.appendLine(ex.toString());
+                //currentOutput.appendLine("NullPointerException: ");
+                //currentOutput.appendLine(ex.getMessage());
+                //currentOutput.appendLine(ex.toString());
                 Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
                 module_failed(next);
                 on_end();
@@ -296,16 +293,18 @@ public class ModuleWorker implements Runnable {
     }
 
     private void update_module(){
-        InputStream iStream = process.getInputStream();
+        /*InputStream iStream = process.getInputStream();
         InputStreamReader iStreamReader = new InputStreamReader(iStream);
         BufferedReader buffReader = new BufferedReader(iStreamReader);
 
-        int chars_per_update = 100;
+        int chars_per_update = 50;
         int c = 0;
         try{
             c = buffReader.read();
             for (int i = 1; i <= chars_per_update; i++){
-                if(c != -1){
+        */
+        //if(pipeline.abort_flag.get(currentModule.name).booleanValue() == true)
+        /*        if(c != -1){
                     currentOutput.appendChar((char)c);
                     if(c == '\n'){
                         break;
@@ -324,9 +323,9 @@ public class ModuleWorker implements Runnable {
             }catch(InterruptedException ex2){
                 //there's probably nothing more to do here
             }
-        }
+        }*/
 
-        if(c == -1 || !process.isAlive()){
+        if(!process.isAlive()){
             //process_ended
             on_end();
         }
@@ -334,9 +333,9 @@ public class ModuleWorker implements Runnable {
 
     private synchronized void saveResults(){
         //savingFlag.set(true);
-        currentOutput.appendLine("\n[End of input]");
-        peridot.Archiver.Manager.stringToFile(Places.finalResultsDir
-                + File.separator + currentModule.name + ".output", currentOutput.getText());
+        //currentOutput.appendLine("\n[End of input]");
+        //peridot.Archiver.Manager.stringToFile(Places.finalResultsDir
+        //        + File.separator + currentModule.name + ".output", currentOutput.getText());
         if(currentModule.verifyResults()){
             module_sucess(currentModule);
             //System.out.println("Saving results of " + script.name);

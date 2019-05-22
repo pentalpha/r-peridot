@@ -50,7 +50,8 @@ public class Main {
         Task task = Task.getRunningTask();
         //System.out.println("3 - Waiting for task to finish");
         if(task != null){
-            if(task.processingStatus.get() < 0){
+            task.updateStatus();
+            if(!task.isFinished()){
                 System.out.println("\n- Ending all tasks.\n");
                 task.abortAll();
                 /*try{
