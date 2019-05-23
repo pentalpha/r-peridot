@@ -1,10 +1,11 @@
 package peridot.tree;
+import peridot.Log;
 import peridot.script.RModule;
 import java.util.ArrayList;
 
 /**
  * Classe de nó generico com chave para ser utilizado em um Heap.
- *
+ *  #TODO: implement "requiresAllParents"
  * @author Pitagoras Alves
  * @version 1.0
  */
@@ -40,6 +41,8 @@ public class PipelineNode
     {
         this.key = name;
         this.requiresAllParents = requiresAllParents;
+        this.parents = new ArrayList<>();
+        this.children = new ArrayList<>();
         this.status = Status.QUEUE;
     }
 
@@ -53,34 +56,47 @@ public class PipelineNode
 
     public void updateStatus(){
         if(status == Status.QUEUE){
+            Log.logger.info(key + " is in queue");
             int parents_done = 0;
             int parents_failed = 0;
-            for (int i = 0; i < parents.size(); i++) {
-                if (parents.get(i).isDone()) {
+            Log.logger.info("parents:");
+            for(PipelineNode parent : parents){
+            //for (int i = 0; i < parents.size(); i++) {
+                if (parent.isDone()) {
                     parents_done += 1;
-                }else if (parents.get(i).isFailed()) {
+                    Log.logger.info(parent.getKey() + " is done");
+                }else if (parent.isFailed()) {
                     parents_failed += 1;
+                    Log.logger.info(parent.getKey() + " has failed");
                 }
             }
 
-            if(this.requiresAllParents) {
-                if(parents_failed > 0){
-                    this.status = Status.FAILED;
-                }else if(parents_done == this.parents.size()){
-                    this.status = Status.READY;
-                }
-            }else{
-                if(parents_done != 0){
-                    this.status = Status.READY;
-                }else if(parents_failed == this.parents.size()){
-                    this.status = Status.FAILED;
+            boolean all_parents_finished = this.parents.size() == parents_done + parents_failed;
+
+            if(all_parents_finished){
+                if(this.requiresAllParents) {
+                    if(parents_failed > 0){
+                        this.status = Status.FAILED;
+                        Log.logger.info(key + " has pre-failed :(, because one of the parents has failed");
+                    }else if(parents_done == this.parents.size()){
+                        this.status = Status.READY;
+                        Log.logger.info(key + " is ready now!");
+                    }
+                }else{
+                    if(parents_done != 0 || this.parents.size() == 0){
+                        this.status = Status.READY;
+                        Log.logger.info(key + " is ready now!");
+                    }else if(parents_failed == this.parents.size() && this.parents.size() != 0){
+                        this.status = Status.FAILED;
+                        Log.logger.info(key + " has pre-failed :(");
+                    }
                 }
             }
         }
 
         if(status == Status.DONE || status == Status.FAILED){
-            for(int i = 0; i < children.size(); i++){
-                children.get(i).updateStatus();
+            for(PipelineNode child : children){
+                child.updateStatus();
             }
         }
     }

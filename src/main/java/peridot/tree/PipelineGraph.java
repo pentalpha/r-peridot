@@ -167,4 +167,8 @@ public class PipelineGraph{
     public int number_of_nodes(){
         return n_nodes;
     }
+
+    public Collection<PipelineNode> getNodes(){
+        return nodes.values();
+    }
 }

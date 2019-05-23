@@ -4,35 +4,40 @@
  * and open the template in the editor.
  */
 
- /**
-  * TODO:
-        Tests with datasets
-        Delete useless code
-  */
+/**
+ * TODO:
+       Tests with datasets
+       Delete useless code
+ */
 package peridot.script;
 
 import peridot.AnalysisData;
 import peridot.AnalysisParameters;
+//import peridot.Archiver.Manager;
+//import peridot.Archiver.Places;
+import peridot.Log;
 import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
-import peridot.Log;
 //import peridot.Output;
 import peridot.script.r.Interpreter;
 import peridot.script.r.Package;
 import peridot.tree.*;
 
-import java.io.File;
-import java.time.LocalDateTime;
+//import java.io.File;
+//import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Collection;
+import java.io.File;
+//import java.util.Collection;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collection;
+//import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+//import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -76,20 +81,20 @@ public class Task {
     //public Runnable zombieFinder;
     
     //populate only on start and later:
-    public ConcurrentLinkedDeque<String> successfulScripts;
-    public ConcurrentLinkedDeque<String> noDiffExpFound;
-    public ConcurrentLinkedDeque<String> failedResults;
-    public ConcurrentLinkedDeque<String> failedScripts;
-    public ConcurrentLinkedDeque<String> runningScripts;
-    public ConcurrentLinkedDeque<String> finishedScripts;
+    //public ConcurrentLinkedDeque<String> successfulScripts;
+    //ublic ConcurrentLinkedDeque<String> noDiffExpFound;
+    //public ConcurrentLinkedDeque<String> failedResults;
+    //public ConcurrentLinkedDeque<String> failedScripts;
+    //public ConcurrentLinkedDeque<String> runningScripts;
+    //public ConcurrentLinkedDeque<String> finishedScripts;
     //public ConcurrentHashMap<String, ScriptExec> scriptExecs;
     //public ConcurrentHashMap<String, WaitState> waitState;
     //public ConcurrentHashMap<String, Output> scriptOutputs;
     public ModuleWorker[] workers;
     public Thread[] threads;
     private PipelineGraph pipeline;
-    private int remainingAnalysisScripts;
-    protected Thread scriptsStatusWatcher;
+    //private int remainingAnalysisScripts;
+    //protected Thread scriptsStatusWatcher;
     
     public Task(Set<String> scriptsToExec, AnalysisParameters params,
                             Map<String, AnalysisParameters> specificParams,
@@ -138,11 +143,15 @@ public class Task {
         pipeline.addNodes(modules);
 
         int cpus = Runtime.getRuntime().availableProcessors();
+        Log.logger.info(cpus + " workers");
         workers = new ModuleWorker[cpus];
+        threads = new Thread[cpus];
+        Log.logger.info("creating workers");
         for(int i = 0; i < cpus; i++){
             workers[i] = new ModuleWorker(pipeline, Interpreter.defaultInterpreter, 400);
         }
-
+        
+        Log.logger.info("creating threads");
         for(int i = 0; i < cpus; i++){
             threads[i] = new Thread(workers[i]);
         }
@@ -296,6 +305,42 @@ public class Task {
         pipeline.abortAll();
     }
 
+    public Map<String, Set<String>> getScriptSets(){
+        HashMap<String, Set<String>> sets = new HashMap<>();
+        sets.put("Successful", new TreeSet<String>());
+        sets.put("No Differential Expression Found", new TreeSet<String>());
+        sets.put("Failed", new TreeSet<String>());
+        for(PipelineNode node : pipeline.getNodes()){
+            String name = node.getKey();
+            sets.get("Successful").add(name);
+            if(node.getStatus() == PipelineNode.Status.DONE){
+                if(RModule.getAvailableAnalysisModules().contains(name)){
+                    String path = Places.finalResultsDir.getAbsolutePath() + File.separator
+                            + name + ".AnalysisModule" + File.separator + "res.tsv";
+                    if(Manager.fileExists(path)){
+                        try{
+                            if(Manager.countLines(path) <= 1){
+                                sets.get("No Differential Expression Found").add(name);
+                            }
+                        }catch(Exception ex){
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+                //Log.logger.info(name + " is successful");
+            }else{
+                /*Set<String> faileds = scriptExecs.get(name).script.getNotExistantResults();
+                for(String result : faileds){
+                    //Log.logger.severe(result + " wont be generated anymore.");
+                    //this.failedResults.add(result);
+                }*/
+                sets.get("Failed").add(name);
+                //Log.logger.info(name + " is not successful");
+            }
+        }
+        return sets;
+    }
+
     /*private void queueScriptForExecution(String name){
         RModule script = RModule.availableModules.get(name);
         if(script instanceof AnalysisModule){
@@ -376,34 +421,6 @@ public class Task {
         updateStatus();
         updateStates();
         playReady();
-    }*/
-    
-    /*private void checkForSuccess(String name){
-        if(scriptExecs.get(name).successFlag.get()){
-            successfulScripts.add(name);
-            if(RModule.getAvailableAnalysisModules().contains(name)){
-                String path = Places.finalResultsDir.getAbsolutePath() + File.separator
-                        + name + ".AnalysisModule" + File.separator + "res.tsv";
-                if(Manager.fileExists(path)){
-                    try{
-                        if(Manager.countLines(path) <= 1){
-                            noDiffExpFound.add(name);
-                        }
-                    }catch(Exception ex){
-                        ex.printStackTrace();
-                    }
-                }
-            }
-            Log.logger.info(name + " is successful");
-        }else{
-            Set<String> faileds = scriptExecs.get(name).script.getNotExistantResults();
-            for(String result : faileds){
-                //Log.logger.severe(result + " wont be generated anymore.");
-                this.failedResults.add(result);
-            }
-            failedScripts.add(name);
-            Log.logger.info(name + " is not successful");
-        }
     }*/
     
     /*private synchronized void playReady(){

@@ -8,6 +8,9 @@ import peridot.Operations;
 import peridot.script.Task;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Command to create a example Analysis File or run an Analysis File to make an analysis.
@@ -95,36 +98,41 @@ public class RUN extends Command{
 
     public void waitForEnd (Task task, AnalysisFile analysisFile){
         //System.out.print("Waiting for processing to finish");
-        while(task.isProcessing()){
+        /*while(task.isProcessing()){
 
-        }
+        }*/
+        task.join();
         System.out.println("\nFinished processing task.");
+
+        Map<String, Set<String>> modSets = task.getScriptSets();
+        Collection<String> successfulScripts = modSets.get("Successful");
+        Collection<String> noDiffExpFound = modSets.get("No Differential Expression Found");
+        Collection<String> failedScripts = modSets.get("Failed");
         System.out.println("Failed: ");
-        if(task.failedScripts.size() == 0){
+        if(failedScripts.size() == 0){
             System.out.println("\tNone");
         }else{
-            for(String s : task.failedScripts){
+            for(String s : failedScripts){
                 System.out.println("\t" + s);
             }
         }
 
         System.out.println("Success: ");
-        if(task.successfulScripts.size() == 0){
+        if(successfulScripts.size() == 0){
             System.out.println("\tNone");
         }else{
-            for(String s : task.successfulScripts){
+            for(String s : successfulScripts){
                 System.out.println("\t" + s);
             }
-            if(task.noDiffExpFound.size() > 0){
+            if(noDiffExpFound.size() > 0){
                 System.out.println("The following modules did not found differential expression:");
-                for(String modName : task.noDiffExpFound){
+                for(String modName : noDiffExpFound){
                     System.out.println("\t" + modName);
                 }
             }
         }
 
         boolean success = Operations.saveResultsAt(analysisFile.outputFolder);
-
     }
 
     public void defineCmdNameAndDetails(){

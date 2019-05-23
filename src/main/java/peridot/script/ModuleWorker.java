@@ -250,7 +250,7 @@ public class ModuleWorker implements Runnable {
                     //currentOutput.appendLine("Command line:\n" + Global.listOfWordsToLine(processBuilder.command())
                     //                        + "\n---------------");
                     pipeline.set_process(currentModule.name, process);
-                    //Log.logger.info(exec.script.name + "'s process started.");
+                    Log.logger.info(next.name + "'s process started.");
                 }
             }catch(IndexOutOfBoundsException ex){
                 //currentOutput.appendLine("IndexOutOfBoundsException: ");
