@@ -167,12 +167,25 @@ public class AnalysisFileParser {
             if(RModule.availableModules.get(module) instanceof AnalysisModule){
                 anyPackages = true;
             }
-            for(String dep : RModule.availableModules.get(module).requiredScripts){
-                if(modules.contains(dep) == false){
-                    throw new ParseException("Error: " + module + " depends on " + dep +
-                            ", but " + dep + " was not chosen to be executed.");
+            Collection<String> required_mods = RModule.availableModules.get(module).requiredScripts;
+            int number_of_required_mods = RModule.availableModules.get(module).requiredScripts.size();
+            int number_of_required_mods_installed = 0;
+            if(number_of_required_mods > 0){
+                for(String dep : required_mods){
+                    if(modules.contains(dep) == false){
+                        if(RModule.availableModules.get(module).needsAllDependencies){
+                            throw new ParseException("Error: " + module + " depends on " + dep +
+                                ", but " + dep + " was not chosen to be executed.");
+                        }
+                    }else{
+                        number_of_required_mods_installed += 1;
+                    }
+                }
+                if(number_of_required_mods_installed < 1){
+                    throw new ParseException("Error: None of " + module + "'s dependencies have been chosen, so it cannot be executed.");
                 }
             }
+            
         }
         if(anyPackages){
             analysisFile.scriptsToExec = modules;

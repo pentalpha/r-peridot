@@ -218,7 +218,7 @@ public class Interpreter {
             required.put(pack.name, pack);
         }
         //notInstalledPacks.addAll(RModule.requiredPackages());
-        //Set<String> requiredNames //TODO
+        //Set<String> requiredNames 
         Set<Package> installed = new HashSet<>();
         for(Package pack : this.availablePackages){
             if(required.keySet().contains(pack.name)){

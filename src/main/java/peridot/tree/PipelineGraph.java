@@ -41,8 +41,10 @@ public class PipelineGraph{
         if(mode.requiredScripts.size() > 0){
             for(String name : mode.requiredScripts){
                 PipelineNode parent = nodes.get(name);
-                node.addParent(parent);
-                parent.addChildren(nodes.get(mode.name));
+                if(parent != null){
+                    node.addParent(parent);
+                    parent.addChildren(nodes.get(mode.name));
+                }
             }
         }else{
             roots.add(node);
@@ -57,7 +59,7 @@ public class PipelineGraph{
         }
 
         for(RModule mod : mods){
-            PipelineNode node = new PipelineNode(mod.name, false);
+            PipelineNode node = new PipelineNode(mod.name, mod.needsAllDependencies);
             nodes.put(mod.name, node);
         }
 

@@ -225,7 +225,9 @@ public class Task {
                 modulesNotFound.add(module);
             }
         }
-        if(modulesNotFound.size() == 0){
+        if(modulesNotFound.size() == 0 || (!script.needsAllDependencies && 
+        (modulesNotFound.size() < script.requiredScripts.size())))
+        {
             if(script.requiredPackagesInstalled()){
                 boolean createdConfig = script.createConfig();
                 if(createdConfig){

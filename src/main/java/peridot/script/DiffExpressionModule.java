@@ -11,10 +11,6 @@ import java.io.File;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-//TODO: 
-//Create constructor for packages 
-//adapt class to external scripts too
-
 /**
  *
  * @author pentalpha

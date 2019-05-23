@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 /**
  * Classe de nó generico com chave para ser utilizado em um Heap.
- *  #TODO: implement "requiresAllParents"
  * @author Pitagoras Alves
  * @version 1.0
  */

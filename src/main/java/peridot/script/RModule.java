@@ -233,6 +233,7 @@ public class RModule implements Serializable{
     public boolean max2Conditions;
     public boolean needsReplicates;
     public boolean mandatoryFailed;
+    public boolean needsAllDependencies;
     public String info = null;
     public StringBuilder scriptContent = null;
 
@@ -270,6 +271,7 @@ public class RModule implements Serializable{
     public RModule(File dir) throws Exception
     {
         this.environmentCreated = true;
+        this.needsAllDependencies = true;
         this.parameters = new TreeMap<String, Object>();
         this.results = new TreeSet<>();
         this.mandatoryResults = new TreeSet<>();
@@ -335,6 +337,10 @@ public class RModule implements Serializable{
                     else if(category.equals("[NEEDS-REPLICATES]"))
                     {
                         this.needsReplicates = Boolean.parseBoolean(value);
+                    }
+                    else if(category.equals("[REQUIRES-ALL-DEPENDENCIES]"))
+                    {
+                        this.needsAllDependencies = Boolean.parseBoolean(value);
                     }
                     else if(category.equals("[INFO]")){
                         this.info += value + "\n";
@@ -408,6 +414,7 @@ public class RModule implements Serializable{
         writer.write("[SCRIPT-NAME]\t" + this.scriptName + System.lineSeparator());
         writer.write("[MAX-2-CONDITIONS]\t" + this.max2Conditions + System.lineSeparator());
         writer.write("[NEEDS-REPLICATES]\t" + this.needsReplicates + System.lineSeparator());
+        writer.write("[NEEDS-REPLICATES]\t" + this.needsAllDependencies + System.lineSeparator());
         for(String result : this.results){
             if(mandatoryResults.contains(result)){
                 writer.write("[MANDATORY-RESULT]\t"+ result + System.lineSeparator());
@@ -876,6 +883,12 @@ public class RModule implements Serializable{
     }
 
     public boolean requiredPackagesInstalled(Interpreter interpreter){
-        return requiredPackagesNotInstalled(interpreter).size() == 0;
+        int n = requiredPackagesNotInstalled(interpreter).size();
+        if(this.needsAllDependencies){
+            return n == 0;
+        }else{
+            return n < requiredPackages.size();
+        }
+        
     }
 }

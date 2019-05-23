@@ -97,7 +97,7 @@ public class AnalysisParameters {
         return defaultValues;
     }
 
-    //TODO
+
     public static HashMap<String, Class> availableParamTypes = getAvailableParamTypes();
 
     public static HashMap<String, Class> getAvailableParamTypes(){
