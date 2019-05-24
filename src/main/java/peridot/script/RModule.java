@@ -773,25 +773,29 @@ public class RModule implements Serializable{
     }
     
     public boolean verifyResults(){
-        int nSuccessful = 0;
-        for(String resultName : results){
-            if(new File(this.resultsFolder + File.separator + resultName)
-                    .exists() == false){
-                Log.logger.warning("The expected result does not exists: " 
-                        + this.resultsFolder + File.separator + resultName);
-                
-                if(mandatoryResults.contains(resultName)){
-                    Log.logger.severe(resultName + " was a mandatory result "
-                            + " and it failed!");
-                    mandatoryFailed = true;
-                    return false;
+        if(results.size() == 0){
+            return true;
+        }else{
+            int nSuccessful = 0;
+            for(String resultName : results){
+                if(new File(this.resultsFolder + File.separator + resultName)
+                        .exists() == false){
+                    Log.logger.warning("The expected result does not exists: " 
+                            + this.resultsFolder + File.separator + resultName);
+                    
+                    if(mandatoryResults.contains(resultName)){
+                        Log.logger.severe(resultName + " was a mandatory result "
+                                + " and it failed!");
+                        mandatoryFailed = true;
+                        return false;
+                    }
+                }else{
+                    nSuccessful++;
                 }
-            }else{
-                nSuccessful++;
             }
+            mandatoryFailed = false;
+            return (nSuccessful > 0);
         }
-        mandatoryFailed = false;
-        return (nSuccessful > 0);
     }
     
     public void cleanLocalResults(){
