@@ -86,21 +86,21 @@ public class PipelineGraph{
                 }
             }
 
-            int not_finished = 0;
+            /*int not_finished = 0;
             for(Map.Entry<String, PipelineNode> entry : nodes.entrySet()){
-                if(entry.getValue().isReady() || entry.getValue().isRunning()){
+                if(entry.getValue().isQueued() || entry.getValue().isReady() || entry.getValue().isRunning()){
                     not_finished += 1;
                 }
             }
             
             if(not_finished > 0){
                 this.finished = true;
-                return null;
-            }else{
+                return null;*/
+           // }else{
                 //Log.logger.info(not_finished + " modules running, but none is ready. Waiting...");
                 //Thread.sleep(1000);
-                return null;
-            }
+            return null;
+            //}
         }
     }
 
@@ -108,7 +108,17 @@ public class PipelineGraph{
     //    abort_flag.put(name, Boolean(true));
     //}
 
-    public boolean isFinished(){
+    public synchronized boolean isFinished(){
+        int modules_used = 0;
+        for(Map.Entry<String, PipelineNode> entry : nodes.entrySet()){
+            if(entry.getValue().isFailed() || entry.getValue().isDone() || entry.getValue().isRunning()){
+                modules_used += 1;
+            }
+        }
+        
+        if(modules_used == nodes.values().size()){
+            this.finished = true;
+        }
         return this.finished;
     }
 

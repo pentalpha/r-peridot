@@ -208,12 +208,14 @@ public class ModuleWorker implements Runnable {
     public void run(){
         while(status != Status.FINISHED){
             try{Thread.sleep(waiting_time);}catch(InterruptedException ex){}
+
             if(status == Status.WAITING_NEXT){
                 retrieve_module();
             }else if(status == Status.RUNNING){
                 update_module();
             }
         }
+        Log.logger.info("Finishing ModuleWorker");
     }
 
     private void retrieve_module(){
@@ -337,9 +339,9 @@ public class ModuleWorker implements Runnable {
         //peridot.Archiver.Manager.stringToFile(Places.finalResultsDir
         //        + File.separator + currentModule.name + ".output", currentOutput.getText());
         if(currentModule.verifyResults()){
-            module_sucess(currentModule);
             //System.out.println("Saving results of " + script.name);
             currentModule.saveResults();
+            module_sucess(currentModule);
         }else{
             //successFlag.set(false);
             module_failed(currentModule);

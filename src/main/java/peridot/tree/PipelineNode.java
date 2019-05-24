@@ -55,7 +55,7 @@ public class PipelineNode
 
     public void updateStatus(){
         if(status == Status.QUEUE){
-            Log.logger.info(key + " is in queue");
+            //Log.logger.info(key + " is in queue");
             int parents_done = 0;
             int parents_failed = 0;
             Log.logger.info("parents:");
