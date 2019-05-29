@@ -885,15 +885,23 @@ public class RModule implements Serializable{
     }
 
     public boolean requiredPackagesInstalled(){
-        return requiredPackagesNotInstalled().size() == 0;
+        if(requiredPackages.size() == 0){
+            return true;
+        }else{
+            return requiredPackagesNotInstalled().size() == 0;
+        }
     }
 
     public boolean requiredPackagesInstalled(Interpreter interpreter){
-        int n = requiredPackagesNotInstalled(interpreter).size();
-        if(this.needsAllDependencies){
-            return n == 0;
+        if(requiredPackages.size() == 0){
+            return true;
         }else{
-            return n < requiredPackages.size();
+            int n = requiredPackagesNotInstalled(interpreter).size();
+            if(this.needsAllDependencies){
+                return n == 0;
+            }else{
+                return n < requiredPackages.size();
+            }
         }
         
     }
