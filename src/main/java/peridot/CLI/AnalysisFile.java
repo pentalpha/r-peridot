@@ -205,7 +205,8 @@ public class AnalysisFile {
                 "[/end]\n" +
                 "### All parameters needed by the modules ######\n" +
                 "### must have values specified for them here. #\n" +
-                "### Type can be Float, Integer or GeneIdType. #\n" +
+                "### Type can be Float, Integer, ###############\n" +
+                "### ConsensusThreshold or GeneIdType. #########\n" +
                 "### 'targetModule' can be any module. #########\n";
         string += "" +
                 "######################################################\n" +

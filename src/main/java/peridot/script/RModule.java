@@ -8,6 +8,7 @@ package peridot.script;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import peridot.AnalysisParameters;
+import peridot.ConsensusThreshold;
 import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.GeneIdType;
@@ -41,6 +42,7 @@ public class RModule implements Serializable{
         params.put(Float.class.getSimpleName(), Float.class);
         params.put(GeneIdType.class.getSimpleName(), GeneIdType.class);
         params.put(Organism.class.getSimpleName(), Organism.class);
+        params.put(ConsensusThreshold.class.getSimpleName(), ConsensusThreshold.class);
         return params;
     }
 

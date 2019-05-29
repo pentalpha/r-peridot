@@ -13,6 +13,7 @@ package peridot.script;
 
 import peridot.AnalysisData;
 import peridot.AnalysisParameters;
+import peridot.ConsensusThreshold;
 //import peridot.Archiver.Manager;
 //import peridot.Archiver.Places;
 import peridot.Log;
@@ -138,6 +139,8 @@ public class Task {
             }
         }
 
+        ConsensusThreshold.updateNumberOfPackages(modules);
+
         //Collection<RModule> modules = RModule.availableModules.values();
         pipeline = new PipelineGraph();
         pipeline.addNodes(modules);
@@ -146,18 +149,19 @@ public class Task {
         Log.logger.info(cpus + " workers");
         workers = new ModuleWorker[cpus];
         threads = new Thread[cpus];
-        Log.logger.info("creating workers");
+        //Log.logger.info("Starting workers");
         for(int i = 0; i < cpus; i++){
             workers[i] = new ModuleWorker(pipeline, Interpreter.defaultInterpreter, 400);
         }
         
-        Log.logger.info("creating threads");
+        //Log.logger.info("creating threads");
         for(int i = 0; i < cpus; i++){
             threads[i] = new Thread(workers[i]);
         }
     }
     
     public void start(){
+        Log.logger.info("Starting to run analysis");
         RModule.removeScriptResults();
         _instance = this;
         for(int i = 0; i < threads.length; i++){

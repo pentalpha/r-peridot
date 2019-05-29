@@ -222,6 +222,14 @@ public class AnalysisFileParser {
                 value = new GeneIdType(pair.getValue());
             }else if(paramTypes.get(pair.getKey()) == Organism.class){
                 value = new Organism(pair.getValue());
+            }else if(paramTypes.get(pair.getKey()) == ConsensusThreshold.class){
+                try{
+                    value = new ConsensusThreshold(pair.getValue());
+                }catch(NumberFormatException ex){
+                    ex.printStackTrace();
+                    Log.logger.warning("Invalid Consensus Threshold value: '" + pair.getValue() + "', using default value.");
+                    value = new ConsensusThreshold();
+                }
             }
             ap.passParameter(pair.getKey(), value);
         }

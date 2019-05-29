@@ -94,6 +94,7 @@ public class AnalysisParameters {
         defaultValues.put("tops", new Integer(0));
         defaultValues.put("idType", new GeneIdType("None"));
         defaultValues.put("referenceOrganism", new Organism("Human"));
+        defaultValues.put("minimumPackagesForConsensus", new ConsensusThreshold());
         return defaultValues;
     }
 
@@ -106,6 +107,7 @@ public class AnalysisParameters {
         classes.put(Float.class.getSimpleName(), Float.class);
         classes.put(GeneIdType.class.getSimpleName(), GeneIdType.class);
         classes.put(Organism.class.getSimpleName(), Organism.class);
+        classes.put(ConsensusThreshold.class.getSimpleName(), ConsensusThreshold.class);
 
         return classes;
     }

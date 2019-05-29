@@ -58,12 +58,12 @@ public class PipelineNode
             //Log.logger.info(key + " is in queue");
             int parents_done = 0;
             int parents_failed = 0;
-            Log.logger.info("parents:");
+            //Log.logger.info("parents:");
             for(PipelineNode parent : parents){
             //for (int i = 0; i < parents.size(); i++) {
                 if (parent.isDone()) {
                     parents_done += 1;
-                    Log.logger.info(parent.getKey() + " is done");
+                    //Log.logger.info(parent.getKey() + " is done");
                 }else if (parent.isFailed()) {
                     parents_failed += 1;
                     Log.logger.info(parent.getKey() + " has failed");

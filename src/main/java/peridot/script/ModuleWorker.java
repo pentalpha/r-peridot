@@ -15,7 +15,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.nio.file.attribute.PosixFilePermission;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.lang.ProcessBuilder;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -249,7 +252,21 @@ public class ModuleWorker implements Runnable {
                     this.status = Status.RUNNING;
                     this.currentModule = next;
                     
-                    //currentOutput.appendLine("Command line:\n" + Global.listOfWordsToLine(processBuilder.command())
+                    
+                    if(processBuilder.command().size() <= 2){
+                        String filePath = processBuilder.command().get(processBuilder.command().size()-1);
+                        Log.logger.info("Command line:\n");
+                        try{
+                            Files.lines(Paths.get(filePath), StandardCharsets.UTF_8).forEach(System.out::println);
+                        }catch(IOException ex){
+                            Log.logger.info(ex.toString());
+                        }
+                        
+                    }else{
+                        String commandStr = Global.listOfWordsToLine(processBuilder.command());
+                        Log.logger.info("Command line:\n" + commandStr);
+                    }
+                    
                     //                        + "\n---------------");
                     pipeline.set_process(currentModule.name, process);
                     Log.logger.info(next.name + "'s process started.");
