@@ -382,11 +382,11 @@ public class AnalysisData {
         }
     }
     
-    public void writeExpression(){
+    public void writeExpression() throws NumberFormatException{
         writeExpression(false);
     }
 
-    public void writeExpression(boolean optimize){
+    public void writeExpression(boolean optimize) throws NumberFormatException{
         try{
             this.writeCountReadsWithoutConditions(optimize);
             this.writeFinalConditions();
@@ -395,7 +395,7 @@ public class AnalysisData {
         }
     }
 
-    private void writeCountReadsWithoutConditions(boolean optimize) throws IOException{
+    private void writeCountReadsWithoutConditions(boolean optimize) throws IOException, NumberFormatException{
         File newRNASeq = finalCountReadsFile;
         if(newRNASeq.exists()){
             newRNASeq.delete();
@@ -510,7 +510,7 @@ public class AnalysisData {
                     values[i] = lineSplited[i];
                 }
             }
-            
+
             String[] sortedValues = new String[values.length];
             try{
                 for(int i = 0; i < values.length; i++){
@@ -530,7 +530,7 @@ public class AnalysisData {
                 Log.logger.severe("Null value read in :" + line);
                 Global.printArray(lineSplited);
                 Global.printArray(values);
-                Global.printArray(sortedValues);    
+                Global.printArray(sortedValues);
             }
             boolean eraseLine = filterValues(intSortedValues, optimize);
             if(eraseLine){
@@ -564,7 +564,7 @@ public class AnalysisData {
         this.setConditions(newConditions);
     }
 
-    protected int[] roundValuesAndEraseNotUse(String[] values, String[] names){
+    protected int[] roundValuesAndEraseNotUse(String[] values, String[] names) throws NumberFormatException{
         boolean[] isUsable = new boolean[values.length];
         int usableCount = 0;
         for (int i = 0; i < values.length; i++){
@@ -575,17 +575,20 @@ public class AnalysisData {
         }
         int[] decimals = new int[usableCount];
         int decimalsIndex = 0;
+        float x;
         for (int i = 0; i < values.length; i++){
             if(isUsable[i]){
                 try{
-                    decimals[decimalsIndex] = Global.roundFloat(Float.parseFloat(values[i]), roundMode);
+                    x = Float.parseFloat(values[i]);
                 }catch(Exception ex){
                     ex.printStackTrace();
-                    Log.logger.severe("Cannot parse number: " + values[i] + ". Array length " + values.length + " index " + i);
+                    String str = "Cannot parse number: " + values[i];
+                    Log.logger.severe(str);
                     Global.printArray(values);
-                    return null;
+                    throw new NumberFormatException(str);
                 }
-                
+
+                decimals[decimalsIndex] = Global.roundFloat(x, roundMode);
                 if(decimals[decimalsIndex] < countReadsThreshold){
                     decimals[decimalsIndex] = 0;
                 }

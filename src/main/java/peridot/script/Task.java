@@ -318,8 +318,8 @@ public class Task {
         sets.put("Failed", new TreeSet<String>());
         for(PipelineNode node : pipeline.getNodes()){
             String name = node.getKey();
-            sets.get("Successful").add(name);
             if(node.getStatus() == PipelineNode.Status.DONE){
+                sets.get("Successful").add(name);
                 if(RModule.getAvailableAnalysisModules().contains(name)){
                     String path = Places.finalResultsDir.getAbsolutePath() + File.separator
                             + name + ".AnalysisModule" + File.separator + "res.tsv";

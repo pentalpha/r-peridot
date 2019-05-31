@@ -218,7 +218,7 @@ public class ModuleWorker implements Runnable {
                 update_module();
             }
         }
-        Log.logger.info("Finishing ModuleWorker");
+        //Log.logger.info("Finishing ModuleWorker");
     }
 
     private void retrieve_module(){

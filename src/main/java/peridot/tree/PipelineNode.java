@@ -66,7 +66,7 @@ public class PipelineNode
                     //Log.logger.info(parent.getKey() + " is done");
                 }else if (parent.isFailed()) {
                     parents_failed += 1;
-                    Log.logger.info(parent.getKey() + " has failed");
+                    //Log.logger.info(parent.getKey() + " has failed");
                 }
             }
 

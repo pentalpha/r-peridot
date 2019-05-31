@@ -33,7 +33,20 @@ public class Operations {
         System.out.println("["+newState+"]");
     }
 
-    public static Task start(AnalysisFile analysisFile){
+    public static void prepare(AnalysisFile analysisFile) throws NumberFormatException
+    {
+        prepare(analysisFile.expression);
+    }
+
+    public static void prepare(AnalysisData expression) throws NumberFormatException
+    {
+        clean();
+        RModule.removeScriptResults();
+        expression.writeExpression(true);
+    }
+
+    public static Task start(AnalysisFile analysisFile)
+    {
         return start(analysisFile.scriptsToExec,
                 analysisFile.params, analysisFile.specificParams,
                 analysisFile.expression);
@@ -41,13 +54,8 @@ public class Operations {
 
     public static Task start(Set<String> scriptsToExec, AnalysisParameters params,
                              Map<String, AnalysisParameters> specificParams,
-                             AnalysisData expression){
-        clean();
-        RModule.removeScriptResults();
-
-        expression.writeExpression(true);
-        //expression.writeFinalConditions();
-
+                             AnalysisData expression)
+    {
         Task task = new Task(scriptsToExec, params, specificParams, expression);
         task.start();
         return task;

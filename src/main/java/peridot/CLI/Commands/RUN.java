@@ -86,6 +86,13 @@ public class RUN extends Command{
                     }
                     Log.logger.severe(errorMsg);
                 }else{
+                    try{
+                        Operations.prepare(analysisFile);
+                    }catch(NumberFormatException ex){
+                        ex.printStackTrace();
+                        Log.logger.severe(ex.getMessage());
+                        return;
+                    }
                     peridot.script.Task task = Operations.start(analysisFile);
                     waitForEnd(task, analysisFile);
                 }
