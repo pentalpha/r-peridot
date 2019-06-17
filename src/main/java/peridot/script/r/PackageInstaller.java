@@ -4,7 +4,7 @@ import peridot.Archiver.PeridotConfig;
 import peridot.Archiver.Places;
 import peridot.CLI.PeridotCmd;
 import peridot.Log;
-import peridot.Output;
+import peridot.Global;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +63,7 @@ public class PackageInstaller {
             status = Status.INSTALLING;
             running.set(true);
             script.run(interpreter, true);
-            Output output = script.getOutputStream();
+            String output = script.getOutputString();
             parseOutput(output);
             running.set(false);
             return true;
@@ -81,9 +81,9 @@ public class PackageInstaller {
         return false;
     }
 
-    private void parseOutput(Output output){
-        writeAccessError = lookForPermissionError(output.getText());
-        HashMap<String, List<String>> commands = output.getCommands();
+    private void parseOutput(String output){
+        writeAccessError = lookForPermissionError(output);
+        HashMap<String, List<String>> commands = Global.commandsFromOutput(output);
         List<String> ifCommand = commands.get("> if(packIsInstalled(packageToInstall)){");
         if(ifCommand != null){
             String resultLine = null;
@@ -98,7 +98,7 @@ public class PackageInstaller {
             }else if(resultLine.contains("The package could not")){
                 status = Status.FAILED;
                 if(writeAccessError){
-                    script.getOutputStream().appendLine("This installation probably failed because you do not have access to the" +
+                    Log.logger.severe("This installation probably failed because you do not have access to the" +
                             " packages library of the current R environment. Try using r-peridot as root next time.");
                     status = Status.NO_PERMISSION;
                 }

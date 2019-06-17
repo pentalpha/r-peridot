@@ -2,7 +2,6 @@ package peridot.script.r;
 
 import org.apache.commons.lang3.SystemUtils;
 import peridot.Log;
-import peridot.Output;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -12,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 
 public class Script {
-    public Output output;
+    public String output;
     public File scriptFile;
     public AtomicBoolean running;
     String[] commandArray;
@@ -20,16 +19,17 @@ public class Script {
     Process process;
     AtomicBoolean stopListeningFlag;
     private String[] userArgs;
+    public String outputFilePath;
 
     public Script (File scriptFile){
-        output = new Output();
+        output = "";
         running = new AtomicBoolean(false);
         this.scriptFile = scriptFile;
         userArgs = new String[0];
     }
 
     public Script (File scriptFile, String[] args, boolean autoPrintToBash){
-        output = new Output(autoPrintToBash);
+        output = "";
         running = new AtomicBoolean(false);
         this.scriptFile = scriptFile;
         userArgs = args;
@@ -37,7 +37,8 @@ public class Script {
 
     public void run(Interpreter interpreter, boolean wait) throws Exception{
         defineCommand(interpreter);
-        processBuilder = makeProcessBuilder(commandArray, scriptFile.getParentFile());
+        processBuilder = makeProcessBuilder(scriptFile.getAbsolutePath(), 
+            commandArray, scriptFile.getParentFile());
         if(processBuilder == null){
             Log.logger.severe("ProcessBuilder is null, not executing analysis.");
             throw new Interpreter.InvalidExeException();
@@ -54,39 +55,38 @@ public class Script {
     private void update(){
         if(process != null){
             running.set(true);
-            int lines = 0;
-            InputStream iStream = process.getInputStream();
-            InputStreamReader iStreamReader = new InputStreamReader(iStream);
-            BufferedReader buffReader = new BufferedReader(iStreamReader);
-            try{
-                stopListeningFlag = new AtomicBoolean();
-                stopListeningFlag.set(false);
-                //stopperThread.run();
-                String c;
-                while((c = buffReader.readLine()) != null && stopListeningFlag.get() == false){
-                    output.appendLine(c);
-                    lines += 1;
+            while(true){
+                try{Thread.sleep(300);}catch(Exception ex){}
+                if(process.isAlive()){
+                    output = peridot.Global.readFileUsingSystem(outputFilePath);
+                }else{
+                    break;
                 }
-            }catch(IOException ex){
-                output.appendLine( "IOException in "+scriptFile.getName()+" instance. ");
-                Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
             afterEnd();
         }
     }
 
+    public void little_update(){
+        if(process != null){
+            if(process.isAlive()){
+                output = peridot.Global.readFileUsingSystem(outputFilePath);
+            }else{
+                afterEnd();
+            }
+        }
+    }
+
     private void afterStart(boolean wait){
-        output = new Output();
+        running.set(true);
         if(!wait){
-            new Thread(() ->{
-                update();
-            }).start();
+            little_update();
         }else{
             update();
         }
     }
 
-    public Output waitForOutput(){
+    public String waitForOutput(){
         while(running.get()){
             //waiting
         }
@@ -101,10 +101,10 @@ public class Script {
     }
 
     public String getOutputString(){
-        return output.getText();
+        return output;
     }
 
-    public Output getOutputStream() {return output;}
+    //public Output getOutputStream() {return output;}
 
     private String[] getCommandArray(String rPath){
         String[] c = {rPath,
@@ -223,7 +223,7 @@ public class Script {
         return new ProcessBuilder(bashCmdArray);
     }
 
-    public static ProcessBuilder makeProcessBuilder(String[] commandArray, File dir){
+    public ProcessBuilder makeProcessBuilder(String scriptFile, String[] commandArray, File dir){
         ProcessBuilder processBuilder = null;
 
         if(SystemUtils.IS_OS_WINDOWS){
@@ -232,7 +232,22 @@ public class Script {
             processBuilder = makeProcessBuilderUnix(commandArray, dir);
         }
         processBuilder.redirectErrorStream(true);
+        outputFilePath = getOutputFile(scriptFile);
+        processBuilder.redirectOutput(new File(outputFilePath));
         return processBuilder;
+    }
+
+    private static String getOutputFile(String scriptFile){
+        return getOutputFile(scriptFile, 0);
+    }
+
+    private static String getOutputFile(String scriptFile, int i){
+        String path = scriptFile + ".output." + i;
+        if(new File(path).exists()){
+            return getOutputFile(scriptFile, i+1);
+        }else{
+            return path;
+        }
     }
 
     public void kill(){

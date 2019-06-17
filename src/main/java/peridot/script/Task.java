@@ -19,7 +19,6 @@ import peridot.ConsensusThreshold;
 import peridot.Log;
 import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
-//import peridot.Output;
 import peridot.script.r.Interpreter;
 import peridot.script.r.Package;
 import peridot.tree.*;
@@ -311,6 +310,22 @@ public class Task {
         pipeline.abortAll();
     }
 
+    public Collection<String> getModules(){
+        ArrayList<String> list = new ArrayList<>();
+        for(PipelineNode node : pipeline.getNodes()){
+            list.add(node.getKey());
+        }
+        return list;
+    }
+
+    public Map<String, PipelineNode.Status> getModuleStatus(){
+        HashMap<String, PipelineNode.Status> status = new HashMap<>();
+        for(PipelineNode node : pipeline.getNodes()){
+            status.put(node.getKey(), node.getStatus());
+        }
+        return status;
+    }
+
     public Map<String, Set<String>> getScriptSets(){
         HashMap<String, Set<String>> sets = new HashMap<>();
         sets.put("Successful", new TreeSet<String>());
@@ -345,6 +360,10 @@ public class Task {
             }
         }
         return sets;
+    }
+
+    public PipelineGraph getPipeline(){
+        return pipeline;
     }
 
     /*private void queueScriptForExecution(String name){

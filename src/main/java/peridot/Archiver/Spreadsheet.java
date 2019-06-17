@@ -44,7 +44,18 @@ public class Spreadsheet {
         return false;
     }
 
-    private static List<String[]> getRowsFromTable(File tableFile, int max, String separator){
+    private static void testParsing(String[] row) throws NumberFormatException{
+        float x;
+        for(int i = 0; i < row.length; i++){
+            try{
+                x = Float.parseFloat(row[i]);
+            }catch(NumberFormatException ex){
+                throw new NumberFormatException("Cannot parse value to float: " + row[i]);
+            }
+        }
+    }
+
+    private static List<String[]> getRowsFromTable(File tableFile, int max, String separator) throws NumberFormatException{
         List<String[]> allRows = new LinkedList<>();
         int nLines = 0;
         try{
@@ -53,6 +64,7 @@ public class Spreadsheet {
             String line = buffInput.readLine();
             while(line != null){
                 String[] cells = Global.split(line, separator);
+                testParsing(cells);
                 allRows.add(cells);
                 nLines++;
                 line = buffInput.readLine();
@@ -214,15 +226,15 @@ public class Spreadsheet {
         return info.separator;
     }
 
-    private void reloadRows(int max){
+    private void reloadRows(int max) throws NumberFormatException{
         this.rows = Spreadsheet.getRowsFromTable(tableFile, max, info.separator);
     }
 
-    public List<String[]> getRows(){
+    public List<String[]> getRows() throws NumberFormatException{
         return getRows(-1);
     }
 
-    public List<String[]> getRows(int max){
+    public List<String[]> getRows(int max) throws NumberFormatException{
         if(reloadFlag || lastMax == -2 || lastMax != max){
             reloadRows(max);
         }
@@ -353,9 +365,9 @@ public class Spreadsheet {
                     boolean firstCellPresent,
                     String  sep){
             //this.dataType = dataType;
-            this.labelsOnFirstCol = new Boolean(labelsOnFirstCol);
-            this.headerOnFirstLine = new Boolean(headerOnFirstLine);
-            this.firstCellPresent = new Boolean(firstCellPresent);
+            this.labelsOnFirstCol = Boolean.valueOf(labelsOnFirstCol);
+            this.headerOnFirstLine = Boolean.valueOf(headerOnFirstLine);
+            this.firstCellPresent = Boolean.valueOf(firstCellPresent);
             this.separator = sep;
         }
 
@@ -410,25 +422,25 @@ public class Spreadsheet {
 
         public void setFirstCellPresent(boolean newValue){
             if(firstCellPresent == null){
-                firstCellPresent = new Boolean(newValue);
+                firstCellPresent = Boolean.valueOf(newValue);
             }else{
-                firstCellPresent = new Boolean(newValue);
+                firstCellPresent = Boolean.valueOf(newValue);
             }
         }
 
         public void setLabelsOnFirstCol(boolean newValue){
             if(labelsOnFirstCol == null){
-                labelsOnFirstCol = new Boolean(newValue);
+                labelsOnFirstCol = Boolean.valueOf(newValue);
             }else{
-                labelsOnFirstCol = new Boolean(newValue);
+                labelsOnFirstCol = Boolean.valueOf(newValue);
             }
         }
 
         public void setHeaderOnFirstLine(boolean newValue){
             if(headerOnFirstLine == null){
-                headerOnFirstLine = new Boolean(newValue);
+                headerOnFirstLine = Boolean.valueOf(newValue);
             }else{
-                headerOnFirstLine = new Boolean(newValue);
+                headerOnFirstLine = Boolean.valueOf(newValue);
             }
         }
     }

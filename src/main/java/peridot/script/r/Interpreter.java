@@ -3,7 +3,6 @@ package peridot.script.r;
 import peridot.Archiver.PeridotConfig;
 import peridot.Archiver.Places;
 import peridot.Log;
-import peridot.Output;
 import peridot.script.RModule;
 
 import java.io.File;
@@ -165,7 +164,7 @@ public class Interpreter {
     }
 
     public void analyseInterpreter(){
-        Output testOutput = null;
+        String testOutput = null;
         try{
             testOutput = readPackagesAvailable();
         }catch (Exception exp){
@@ -179,20 +178,20 @@ public class Interpreter {
         }
     }
 
-    private Output readPackagesAvailable() throws Exception{
+    private String readPackagesAvailable() throws Exception{
         Script readPackagesScript = new Script(Places.readPackagesScript);
         readPackagesScript.run(this, true);
-        return readPackagesScript.getOutputStream();
+        return readPackagesScript.getOutputString();
     }
 
-    boolean readPackagesFromOutput(Output output){
+    boolean readPackagesFromOutput(String output){
         RInfoParser parser = new RInfoParser(output);
         if(parser.validOutput()){
             this.rVersion = parser.rVersion;
             this.availablePackages = parser.packages;
             this.evaluate();
         }else{
-            System.out.println(output.getText());
+            System.out.println(output);
         }
         return parser.validOutput();
     }

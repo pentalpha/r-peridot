@@ -311,7 +311,7 @@ public class AnalysisData {
             if(samples.containsKey(names[i])){
                 throw new AnalysisFileParser.ParseException("Duplicated sample names in count reads table: " + "\n"+names[i]+ " at " + samples.get(names[i]) + " and " + i);
             }else{
-                samples.put(names[i], new Integer(i));
+                samples.put(names[i], Integer.valueOf(i));
             }
         }
         return samples;

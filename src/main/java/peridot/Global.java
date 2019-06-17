@@ -12,6 +12,7 @@ import peridot.Archiver.Places;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -313,7 +314,7 @@ public final class Global {
         }else if (roundingMode == RoundingMode.UP){
             return (int) Math.ceil(x);
         }else {
-            int naturalPart = new Double(Math.floor(x)).intValue();
+            int naturalPart = Double.valueOf(Math.floor(x)).intValue();
             float fraction = x - naturalPart;
             if (fraction < 0.5) {
                 return naturalPart;
@@ -489,5 +490,55 @@ public final class Global {
         }
 
         return ((float)validChars / (float)total) >= 0.95f;
+    }
+
+    public static String readFileUsingSystem(String path){
+        String exe = "cat";
+        String result = "";
+        if(SystemUtils.IS_OS_WINDOWS){
+            exe = "type";
+        }
+        try{
+            ProcessBuilder pb = new ProcessBuilder(exe, path);
+            Process process = pb.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder builder = new StringBuilder();
+            String line = null;
+            while ( (line = reader.readLine()) != null) {
+                builder.append(line);
+                builder.append(System.getProperty("line.separator"));
+            }
+            result = builder.toString();
+        }catch(IOException ex){
+            //ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public static HashMap<String, List<String>> commandsFromOutput(String output){
+        HashMap<String, List<String>> commands;
+        String[] infoLines = output.split(System.lineSeparator());
+
+        String currentCommand = null;
+        List<String> commandOutput = null;
+        commands = new HashMap<>();
+        for(int i = 0; i < infoLines.length; i++){
+            if(infoLines[i].length() > 0){
+                //String[] splice = Global.spliceBySpacesAndTabs(infoLines[i]);
+                if(infoLines[i].charAt(0) == '>' || i == 0){
+                    if(currentCommand != null){
+                        commands.put(currentCommand, commandOutput);
+                    }
+                    currentCommand = infoLines[i];
+                    commandOutput = new ArrayList<>();
+                }else{
+                    if(commandOutput != null){
+                        commandOutput.add(infoLines[i]);
+                    }
+                }
+            }
+        }
+
+        return commands;
     }
 }

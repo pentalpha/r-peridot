@@ -88,10 +88,10 @@ public class AnalysisParameters {
 
     public static HashMap<String, Object> getDefaultValues(){
         HashMap<String, Object> defaultValues = new HashMap<>();
-        defaultValues.put("pValue", new Float(0.01));
-        defaultValues.put("fdr", new Float(0.01));
-        defaultValues.put("foldChange", new Float(1.5));
-        defaultValues.put("tops", new Integer(0));
+        defaultValues.put("pValue", Float.valueOf(0.01f));
+        defaultValues.put("fdr", Float.valueOf(0.01f));
+        defaultValues.put("foldChange", Float.valueOf(1.5f));
+        defaultValues.put("tops", Integer.valueOf(0));
         defaultValues.put("idType", new GeneIdType("None"));
         defaultValues.put("referenceOrganism", new Organism("Human"));
         defaultValues.put("minimumPackagesForConsensus", new ConsensusThreshold());

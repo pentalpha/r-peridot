@@ -215,9 +215,9 @@ public class AnalysisFileParser {
         for(Map.Entry<String, String> pair : this.params.entrySet()){
             Object value = null;
             if(paramTypes.get(pair.getKey()) == Float.class){
-                value = new Float(pair.getValue());
+                value = Float.valueOf(pair.getValue());
             }else if(paramTypes.get(pair.getKey()) == Integer.class){
-                value = new Integer(pair.getValue());
+                value = Integer.valueOf(pair.getValue());
             }else if(paramTypes.get(pair.getKey()) == GeneIdType.class){
                 value = new GeneIdType(pair.getValue());
             }else if(paramTypes.get(pair.getKey()) == Organism.class){

@@ -1,7 +1,6 @@
 package peridot.script.r;
 
 import peridot.Global;
-import peridot.Output;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,11 +15,11 @@ public class RInfoParser {
     public Set<Package> packages;
     private HashMap<String, List<String>> commands;
 
-    public RInfoParser(Output info){
+    public RInfoParser(String info){
         this.rVersion = null;
         this.packages = null;
 
-        commands = info.getCommands();
+        commands = Global.commandsFromOutput(info);
         readLines();
     }
 
