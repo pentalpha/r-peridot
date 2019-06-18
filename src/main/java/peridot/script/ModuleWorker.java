@@ -356,13 +356,13 @@ public class ModuleWorker implements Runnable {
         //peridot.Archiver.Manager.stringToFile(Places.finalResultsDir
         //        + File.separator + currentModule.name + ".output", currentOutput.getText());
         if(currentModule.verifyResults()){
-            //System.out.println("Saving results of " + script.name);
-            currentModule.saveResults();
             module_sucess(currentModule);
         }else{
             //successFlag.set(false);
             module_failed(currentModule);
         }
+        //System.out.println("Saving results of " + script.name);
+        currentModule.saveResults();
         currentModule.cleanLocalResults();
         //savingFlag.set(false);
     }
