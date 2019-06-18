@@ -38,7 +38,7 @@ public class Script {
     public void run(Interpreter interpreter, boolean wait) throws Exception{
         defineCommand(interpreter);
         processBuilder = makeProcessBuilder(scriptFile.getAbsolutePath(), 
-            commandArray, scriptFile.getParentFile());
+            commandArray, scriptFile.getParentFile(), !wait);
         if(processBuilder == null){
             Log.logger.severe("ProcessBuilder is null, not executing analysis.");
             throw new Interpreter.InvalidExeException();
@@ -55,14 +55,27 @@ public class Script {
     private void update(){
         if(process != null){
             running.set(true);
-            while(true){
-                try{Thread.sleep(300);}catch(Exception ex){}
-                if(process.isAlive()){
-                    output = peridot.Global.readFileUsingSystem(outputFilePath);
-                }else{
-                    break;
+            //while(true){
+            BufferedReader reader = 
+            new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder builder = new StringBuilder();
+            String line = null;
+            try{
+                while ( (line = reader.readLine()) != null) {
+                    builder.append(line);
+                    builder.append(System.getProperty("line.separator"));
                 }
+            }catch(IOException ex){
+                Log.logger.severe(ex.getMessage());
             }
+            output = builder.toString();
+            /*try{Thread.sleep(300);}catch(Exception ex){}
+            if(process.isAlive()){
+                output = peridot.Global.readFileUsingSystem(outputFilePath);
+            }else{
+                break;
+            }*/
+            //}
             afterEnd();
         }
     }
@@ -223,7 +236,7 @@ public class Script {
         return new ProcessBuilder(bashCmdArray);
     }
 
-    public ProcessBuilder makeProcessBuilder(String scriptFile, String[] commandArray, File dir){
+    public ProcessBuilder makeProcessBuilder(String scriptFile, String[] commandArray, File dir, boolean redirectOutputToFile){
         ProcessBuilder processBuilder = null;
 
         if(SystemUtils.IS_OS_WINDOWS){
@@ -232,8 +245,10 @@ public class Script {
             processBuilder = makeProcessBuilderUnix(commandArray, dir);
         }
         processBuilder.redirectErrorStream(true);
-        outputFilePath = getOutputFile(scriptFile);
-        processBuilder.redirectOutput(new File(outputFilePath));
+        if(redirectOutputToFile){
+            outputFilePath = getOutputFile(scriptFile);
+            processBuilder.redirectOutput(new File(outputFilePath));
+        }
         return processBuilder;
     }
 

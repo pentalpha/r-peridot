@@ -170,10 +170,11 @@ public class Interpreter {
         }catch (Exception exp){
             //System.out.println("Exception thrown");
             //exp.printStackTrace();
-            //System.out.println(testOutput.getText());
+            //System.out.println(testOutput);
             validInterpreter = false;
         }
         if(validInterpreter){
+            //Log.logger.info("The interpreter seems to be valid, verifying packages");
             validInterpreter = readPackagesFromOutput(testOutput);
         }
     }
@@ -275,24 +276,24 @@ public class Interpreter {
 
         //compare the packages available in this interpreter with the ones required by the modules
         float nRequiredPackages = requiredPackages.size();
-        float value = 0.0f;
+        float v = 0.0f;
         for(Package pack : this.availablePackages){
             if(packsMap.keySet().contains(pack.name)){
                 int comparison = pack.version.compareTo(packsMap.get(pack.name).version);
                 if(comparison >= 0){
                     if(comparison == 0){
-                        value += 1.0;
+                        v += 1.0;
                     }else{
-                        value += 0.75;
+                        v += 0.75;
                     }
                 }else{
-                    value += 0.5;
+                    v += 0.5;
                 }
             }
         }
 
         //normalize by the number of required packages
-        value = value / nRequiredPackages;
+        v = v / nRequiredPackages;
 
         float rValue = 0.0f;
         //compare with the minimal and preferred R versions
@@ -311,8 +312,11 @@ public class Interpreter {
                 rValue = 1.0f;
             }
         }
-        this.value = value * 0.6f + rValue * 0.4f;
-        return value;
+        this.value = v * 0.6f + rValue * 0.4f;
+        if(this.value >= 1){
+            this.value = 1f;
+        }
+        return this.value;
     }
 
     public boolean update(){

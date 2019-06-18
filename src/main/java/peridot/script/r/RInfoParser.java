@@ -1,6 +1,7 @@
 package peridot.script.r;
 
 import peridot.Global;
+import peridot.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,8 +15,10 @@ public class RInfoParser {
     public VersionNumber rVersion;
     public Set<Package> packages;
     private HashMap<String, List<String>> commands;
+    private String info;
 
     public RInfoParser(String info){
+        this.info = info;
         this.rVersion = null;
         this.packages = null;
 
@@ -26,6 +29,7 @@ public class RInfoParser {
     public boolean validOutput(){
         boolean hasRVersion = rVersion != null;
         boolean hasPackages = packages != null;
+        //Log.logger.info("R:" + hasRVersion + ", Packs:" + hasPackages);
         return hasRVersion && hasPackages;
     }
 
