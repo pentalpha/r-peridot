@@ -62,9 +62,10 @@ public class PeridotConfig implements Serializable{
             return new PeridotConfig();
         }else{
             if(loadedConfig.defaultInterpreter == null){
-                //Log.logger.severe("loaded no default interpreter");
+                Log.logger.severe("loaded no default interpreter, returning new instance of PeridotConfig");
+                return new PeridotConfig();
             }else{
-                //Log.logger.info("loaded default interpreter: " + loadedConfig.defaultInterpreter);
+                Log.logger.info("loaded default interpreter: " + loadedConfig.defaultInterpreter);
             }
             return loadedConfig;
         }

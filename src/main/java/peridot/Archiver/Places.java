@@ -180,7 +180,7 @@ public final class Places {
      */
     private static void updateModulesFolder(boolean overwrite) throws Exception{
         if (defaultModulesDir == null){
-                Log.logger.severe("Could not find any modules to load. Please clone " 
+                Log.logger.severe("Could not find any default modules for loading. Please clone "
                 + "https://github.com/pentalpha/r-peridot-scripts into "
                 + Places.jarFolder.getAbsolutePath() + File.separator
                 + "r-peridot-scripts/ to load the default modules.");
@@ -305,6 +305,7 @@ public final class Places {
             exes.addAll(linuxRexes());
         }
         exes.add("R");
+        Log.logger.info("Returning default Rs list");
         return exes;
     }
 

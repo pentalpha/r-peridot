@@ -11,6 +11,7 @@ import peridot.Archiver.Places;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.HashMap;
 import java.util.logging.FileHandler;
@@ -342,7 +343,7 @@ public final class Global {
         System.out.println(str);
     }
 
-    public static String listOfWordsToLine(List<String> words){
+    public static String listOfWordsToLine(Collection<String> words){
         String s = "";
         for(String str : words){
             s+=str + " ";

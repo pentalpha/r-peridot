@@ -56,10 +56,13 @@ public class Script {
         if(process != null){
             running.set(true);
             while(true){
-                try{Thread.sleep(300);}catch(Exception ex){}
+                try{Thread.sleep(300);}catch(Exception ex){
+                    ex.printStackTrace();
+                }
                 if(process.isAlive()){
                     output = peridot.Global.readFileUsingSystem(outputFilePath);
                 }else{
+                    output = peridot.Global.readFileUsingSystem(outputFilePath);
                     break;
                 }
             }

@@ -2,6 +2,7 @@ package peridot.script.r;
 
 import peridot.Archiver.PeridotConfig;
 import peridot.Archiver.Places;
+import peridot.Global;
 import peridot.Log;
 import peridot.script.RModule;
 
@@ -46,7 +47,13 @@ public class Interpreter {
     }
 
     public static void getAvailableInterpreters(){
+        Log.logger.finest("Listing available interpreters");
         Set<String> execs = PeridotConfig.get().availableInterpreters;
+        if (execs.size() == 0){
+            Log.logger.fine("List is empty");
+        }else{
+            Log.logger.finest("Default R's to analyze:\n" + Global.listOfWordsToLine(execs));
+        }
         List<Interpreter> interpreters = new ArrayList<>();
         for(String exec : execs){
             Interpreter interpreter = new Interpreter(exec);
@@ -150,6 +157,7 @@ public class Interpreter {
     private VersionNumber rVersion;
 
     public Interpreter(String exe){
+        //Log.logger.info("Starting interpreter:" + exe);
         this.exe = exe;
         /*if(!this.exe.exists()){
             validInterpreter = false;
@@ -164,17 +172,22 @@ public class Interpreter {
     }
 
     public void analyseInterpreter(){
+        Log.logger.fine("Analyzing interpreter:" + exe);
         String testOutput = null;
         try{
             testOutput = readPackagesAvailable();
         }catch (Exception exp){
-            //System.out.println("Exception thrown");
-            //exp.printStackTrace();
-            //System.out.println(testOutput.getText());
+            System.out.println("Exception thrown while testing interpreter " + exe);
+            exp.printStackTrace();
             validInterpreter = false;
+            return;
         }
         if(validInterpreter){
             validInterpreter = readPackagesFromOutput(testOutput);
+        }
+
+        if(!validInterpreter){
+            Log.logger.fine("Invalid Interpreter:'" + testOutput + "'");
         }
     }
 

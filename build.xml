@@ -20,7 +20,7 @@
 
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
-        <javac target="11" srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+        <javac target="8" source="8" srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
     </target>
 
     <!-- Group all dependencies into a big dependency-all.jar -->
