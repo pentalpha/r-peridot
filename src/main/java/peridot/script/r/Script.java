@@ -55,28 +55,26 @@ public class Script {
     private void update(){
         if(process != null){
             running.set(true);
-            while(true){
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                StringBuilder builder = new StringBuilder();
-                String line = null;
-                try{
-                    while ( (line = reader.readLine()) != null) {
-                        builder.append(line);
-                        builder.append(System.getProperty("line.separator"));
-                    }
-                }catch(IOException ex){
-                    Log.logger.severe(ex.getMessage());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder builder = new StringBuilder();
+            String line = null;
+            try{
+                while ( (line = reader.readLine()) != null) {
+                    builder.append(line);
+                    builder.append(System.getProperty("line.separator"));
                 }
-                output = builder.toString();
-                /*try{Thread.sleep(300);}catch(Exception ex){}
-                if(process.isAlive()){
-                    output = peridot.Global.readFileUsingSystem(outputFilePath);
-                }else{
-                    break;
-                }*/
-                //}
-                afterEnd();
+            }catch(IOException ex){
+                Log.logger.severe(ex.getMessage());
             }
+            output = builder.toString();
+            /*try{Thread.sleep(300);}catch(Exception ex){}
+            if(process.isAlive()){
+                output = peridot.Global.readFileUsingSystem(outputFilePath);
+            }else{
+                break;
+            }*/
+            //}
+            afterEnd();
         }
     }
 
