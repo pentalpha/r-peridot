@@ -21,6 +21,7 @@ public class PeridotConfig implements Serializable{
     public String defaultInterpreter;
     public Set<String> availableInterpreters;
     public String packagesRepository;
+    public String lastInputDir;
     public String rPeridotWebSite = "http://www.bioinformatics-brazil.org/r-peridot/";
     public static VersionNumber preferredRVersion = new VersionNumber("3.4");
     public static VersionNumber minimalRVersion = new VersionNumber("3.4");
@@ -29,6 +30,7 @@ public class PeridotConfig implements Serializable{
         this.packagesRepository = rPeridotWebSite + "R/drat/";
         this.availableInterpreters = Places.getDefaultRexecs();
         this.defaultInterpreter = null;
+        this.lastInputDir = null;
     }
 
     public void updateValues(){

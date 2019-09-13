@@ -344,13 +344,13 @@ public class RModule extends AbstractModule implements Serializable{
     }
     
     public void setChildren(){
-        Log.logger.info("Looking for children of " + this.name);
+        Log.logger.finest("Looking for children of " + this.name);
         this.children = new HashSet<>();
         for (String module_name : RModule.availableModules.keySet()){
             RModule possible_children = RModule.availableModules.get(module_name);
             if(possible_children.requiredScripts.contains(this.name)){
                 children.add(possible_children);
-                Log.logger.info(possible_children.name + " is a children of " + this.name);
+                Log.logger.finest(possible_children.name + " is a children of " + this.name);
             }
         }
     }
@@ -601,17 +601,21 @@ public class RModule extends AbstractModule implements Serializable{
             ex.printStackTrace();
         }
     }
-    
+
     public boolean verifyResults(){
+        return verifyResults(this.resultsFolder);
+    }
+    
+    public boolean verifyResults(File resultsDir){
         if(results.size() == 0){
             return true;
         }else{
             int nSuccessful = 0;
             for(String resultName : results){
-                if(new File(this.resultsFolder + File.separator + resultName)
+                if(new File(resultsDir + File.separator + resultName)
                         .exists() == false){
                     Log.logger.warning("The expected result does not exists: " 
-                            + this.resultsFolder + File.separator + resultName);
+                            + resultsDir + File.separator + resultName);
                     
                     if(mandatoryResults.contains(resultName)){
                         Log.logger.severe(resultName + " was a mandatory result "

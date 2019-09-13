@@ -13,6 +13,7 @@ package peridot.script;
 
 import peridot.AnalysisData;
 import peridot.AnalysisParameters;
+import peridot.Archiver.PeridotConfig;
 import peridot.ConsensusThreshold;
 //import peridot.Archiver.Manager;
 //import peridot.Archiver.Places;
@@ -105,6 +106,7 @@ public class Task {
         this.params = params;
         this.specificParams = specificParams;
         this.expression = expression;
+        PeridotConfig.get().lastInputDir = expression.expressionFile.getParentFile().getAbsolutePath();
         
         //packagesFinishedFlag = new AtomicBoolean(false);
         processingStatus = Processing_Status.NOT_STARTED;

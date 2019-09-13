@@ -44,18 +44,27 @@ public class Spreadsheet {
         return false;
     }
 
-    private static void testParsing(String[] row) throws NumberFormatException{
+    private static void testParsing(String[] row, boolean rowNames) throws NumberFormatException{
         float x;
         for(int i = 0; i < row.length; i++){
             try{
                 x = Float.parseFloat(row[i]);
             }catch(NumberFormatException ex){
-                throw new NumberFormatException("Cannot parse value to float: " + row[i]);
+                if(rowNames){
+                    if(i != 0){
+                        throw new NumberFormatException("Cannot parse value to float: " + row[i]);
+                    }
+                }else{
+                    throw new NumberFormatException("Cannot parse value to float: " + row[i]);
+                }
             }
         }
     }
 
-    private static List<String[]> getRowsFromTable(File tableFile, int max, String separator) throws NumberFormatException{
+    private static List<String[]> getRowsFromTable(File tableFile, int max, String separator,
+                                                   boolean header, boolean rowNames, boolean testParsing)
+            throws NumberFormatException
+    {
         List<String[]> allRows = new LinkedList<>();
         int nLines = 0;
         try{
@@ -64,7 +73,20 @@ public class Spreadsheet {
             String line = buffInput.readLine();
             while(line != null){
                 String[] cells = Global.split(line, separator);
-                testParsing(cells);
+                try {
+                    if(!header && nLines == 0){
+                        if(testParsing){
+                            testParsing(cells, rowNames);
+                        }
+                    }
+                }catch (Exception ex){
+                    if(nLines == 0){
+                        Log.logger.info("Detect header in file not supposed to have a header: "
+                                + tableFile.getAbsolutePath());
+                    }else{
+                        throw ex;
+                    }
+                }
                 allRows.add(cells);
                 nLines++;
                 line = buffInput.readLine();
@@ -203,17 +225,21 @@ public class Spreadsheet {
     public File tableFile;
     private boolean reloadFlag = true;
     private int lastMax = -2;
+    private boolean testParsing;
 
-    public Spreadsheet(File tableFile) throws IOException{
+    public Spreadsheet(File tableFile, boolean testParsing) throws IOException{
         Log.logger.info("Reading spreadsheet for " + tableFile.getName());
         this.info = new Info(tableFile);
         this.tableFile = tableFile;
         Log.logger.info("Read spreadsheet for " + tableFile.getName());
+        this.testParsing = testParsing;
     }
 
-    public Spreadsheet(File tableFile, Info info){
+    public Spreadsheet(File tableFile, Info info, boolean testParsing){
         this.info = info;
         this.tableFile = tableFile;
+        this.testParsing = testParsing;
+
     }
 
     public void setSeparator(String sep){
@@ -227,7 +253,8 @@ public class Spreadsheet {
     }
 
     private void reloadRows(int max) throws NumberFormatException{
-        this.rows = Spreadsheet.getRowsFromTable(tableFile, max, info.separator);
+        this.rows = Spreadsheet.getRowsFromTable(tableFile, max, info.separator,
+                info.headerOnFirstLine, info.labelsOnFirstCol, testParsing);
     }
 
     public List<String[]> getRows() throws NumberFormatException{
