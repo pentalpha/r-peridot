@@ -194,6 +194,7 @@ public class Interpreter {
 
     private String readPackagesAvailable() throws Exception{
         Script readPackagesScript = new Script(Places.readPackagesScript);
+        Log.logger.info("Waiting of read packages script:");
         readPackagesScript.run(this, true);
         return readPackagesScript.getOutputString();
     }

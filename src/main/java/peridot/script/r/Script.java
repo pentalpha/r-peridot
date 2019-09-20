@@ -20,12 +20,14 @@ public class Script {
     AtomicBoolean stopListeningFlag;
     private String[] userArgs;
     public String outputFilePath;
+    protected StringBuilder builder;
 
     public Script (File scriptFile){
         output = "";
         running = new AtomicBoolean(false);
         this.scriptFile = scriptFile;
         userArgs = new String[0];
+        builder = new StringBuilder();
     }
 
     public Script (File scriptFile, String[] args, boolean autoPrintToBash){
@@ -33,6 +35,7 @@ public class Script {
         running = new AtomicBoolean(false);
         this.scriptFile = scriptFile;
         userArgs = args;
+        builder = new StringBuilder();
     }
 
     public void run(Interpreter interpreter, boolean wait) throws Exception{
@@ -53,48 +56,44 @@ public class Script {
     }
 
     private void update(){
-        if(process != null){
-            running.set(true);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            StringBuilder builder = new StringBuilder();
-            String line = null;
-            try{
-                while ( (line = reader.readLine()) != null) {
-                    builder.append(line);
-                    builder.append(System.getProperty("line.separator"));
-                }
-            }catch(IOException ex){
-                Log.logger.severe(ex.getMessage());
-            }
-            output = builder.toString();
-            /*try{Thread.sleep(300);}catch(Exception ex){}
-            if(process.isAlive()){
-                output = peridot.Global.readFileUsingSystem(outputFilePath);
-            }else{
-                break;
-            }*/
-            //}
-            afterEnd();
-        }
+        update(true);
     }
 
-    public void little_update(){
-        if(process != null){
-            if(process.isAlive()){
-                output = peridot.Global.readFileUsingSystem(outputFilePath);
-            }else{
-                afterEnd();
+    private void readOutput(){
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = null;
+        try{
+            while ( (line = reader.readLine()) != null) {
+                builder.append(line);
+                builder.append(System.getProperty("line.separator"));
             }
+        }catch(IOException ex){
+            Log.logger.severe(ex.getMessage());
+        }
+        output = builder.toString();
+        afterEnd();
+    }
+
+    private void update(boolean wait){
+        if(process != null){
+            running.set(true);
+            if(!wait){
+                Log.logger.info("No waiting, launching read output thread.");
+                new Thread(() -> {
+                    readOutput();
+                }).start();
+            }else{
+                Log.logger.info("Waiting for output from script.");
+                readOutput();
+            }
+        }else{
+            Log.logger.info("Null process, not reading output");
         }
     }
 
     private void afterStart(boolean wait){
         running.set(true);
-        if(!wait){
-            little_update();
-        }else{
-            update();
-        }
+        update(wait);
     }
 
     public String waitForOutput(){
@@ -112,7 +111,11 @@ public class Script {
     }
 
     public String getOutputString(){
-        return output;
+        if (output.length() == 0){
+            return builder.toString();
+        }else {
+            return output;
+        }
     }
 
     //public Output getOutputStream() {return output;}
