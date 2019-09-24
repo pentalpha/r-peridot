@@ -1,6 +1,9 @@
 package peridot.CLI;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import peridot.*;
+import peridot.Archiver.Manager;
 import peridot.Archiver.Spreadsheet;
 import peridot.Archiver.Spreadsheet.Info;
 import peridot.script.AnalysisModule;
@@ -25,7 +28,7 @@ public class AnalysisFileParser {
     boolean hasModules;
     boolean hasParams;
 
-    int threshold;
+    int threshold, numberOfAnalysisModules;
     String roundingMode;
 
     File countReadsFile;
@@ -55,6 +58,7 @@ public class AnalysisFileParser {
         params = new HashMap<>();
         specificParams = new HashMap<>();
         paramTypes = new HashMap<>();
+        numberOfAnalysisModules = 0;
 
         parse(file);
     }
@@ -64,50 +68,26 @@ public class AnalysisFileParser {
         return parser.analysisFile;
     }
 
-    private void parse(File file){
+    private void parse(File file) {
         analysisFile = new AnalysisFile();
-        Scanner scanner;
-        String word = null;
-        String line = null;
         try {
-            scanner = new Scanner(file);
-            while(scanner.hasNextLine()) {
-                line = scanner.nextLine();
-                if(line.length() > 1){
-                    if(line.substring(0, 1).equals("#") == false){
-                        String[] words = Global.firstWordAndTheRest(line);
-                        word = words[0];
-                        if(words[1] == null){
-                            Set<String> all = new TreeSet<>();
-                            while(true) {
-                                line = scanner.nextLine();
-                                if (line.contains(endStr)) {
-                                    break;
-                                }else if(line.length() >= 1){
-                                    if (line.substring(0, 1).equals("#") == false) {
-                                        all.add(line);
-                                    }
-                                }
-                            }
-                            parseParamsAndModules(word, all);
-                        }else{
-                            String second = words[1];
-                            parseSingleLineInfo(word, second);
-                        }
-                    }
-                }
-            }
-            scanner.close();
+            String jsonContent = Manager.fileToString(file).toString();
+            JSONObject json = new JSONObject(jsonContent);
 
-            if(separatorChar != null){
-                info.separator = separatorChar;
-            }
+            parseSimpleFields(json);
+
+            JSONArray modulesArray = json.getJSONArray(modulesStr);
+            parseModules(modulesArray);
+
+            JSONObject paramsJson = json.getJSONObject(paramsStr);
+            parseParams(paramsJson);
 
             setExpression();
             setModules();
             analysisFile.outputFolder = saveFolder;
             analysisFile.params = getAnalysisParamsFromMap(params, null);
             analysisFile.specificParams = getSpecificParams();
+
             for(Map.Entry<String, Class> pair : analysisFile.params.requiredParameters.entrySet()){
                 boolean found = false;
                 for(Map.Entry<String, Object> pair2 : analysisFile.params.parameters.entrySet()){
@@ -122,6 +102,13 @@ public class AnalysisFileParser {
                 }
             }
             hasParams = true;
+
+            peridot.ConsensusThreshold minimumPackages = (peridot.ConsensusThreshold) analysisFile.params.parameters.get(
+                    "minimumPackagesForConsensus"
+            );
+            if(minimumPackages.toInt() > numberOfAnalysisModules){
+                throw new ParseException("Your consensus threshold is greater than the number of analysis modules.");
+            }
         }
         catch (ParseException ex){
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
@@ -131,13 +118,121 @@ public class AnalysisFileParser {
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
             valid = false;
         }
-        
+        catch (NumberFormatException ex){
+            Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+            valid = false;
+        }
+
         analysisFile.hasData = hasData;
         analysisFile.hasConditions = hasConditions;
         analysisFile.hasModules = hasModules;
         analysisFile.hasParams = hasParams;
 
         analysisFile.valid = valid;
+    }
+
+    private void parseSimpleFields(JSONObject json) throws ParseException{
+        countReadsFile = new File(peridot.Archiver.Manager.makeTildeIntoHomeDir(
+                json.getString(AnalysisFileParser.dataStr)
+        ));
+        if (countReadsFile.exists() == false) {
+            throw new ParseException(countReadsFile.getAbsolutePath() + ": file does not exists.");
+        }
+        conditionsFile = new File(peridot.Archiver.Manager.makeTildeIntoHomeDir(
+                json.getString(conditionsStr)
+        ));
+        if (conditionsFile.exists() == false) {
+            throw new ParseException(conditionsFile.getAbsolutePath() + " file does not exists.");
+        }
+        saveFolder = new File(peridot.Archiver.Manager.makeTildeIntoHomeDir(
+                json.getString(saveAtStr)
+        ));
+        if(saveFolder.isFile()){
+            throw new ParseException("The output directory " +
+                    "'" + saveFolder.getAbsolutePath() + "' is a file, not a directory.");
+        }
+
+        info.setLabelsOnFirstCol(json.getBoolean(labelsOnFirstColStr));
+        info.setHeaderOnFirstLine(json.getBoolean(headerOnFirstLineStr));
+        threshold = json.getInt(thresholdStr);
+        roundingMode = json.getString(roundingModeStr);
+
+        String separatorStr = json.getString(sepStr);
+        separatorStr = separatorStr.replace("\"", "");
+        if(separatorStr.equals("") || separatorStr.equals(" ")){
+            separatorChar = " ";
+        }else if(separatorStr.equals(",")){
+            separatorChar = ",";
+        }else if(separatorStr.equals("\\t") || separatorStr.equals("\t")){
+            separatorChar = "\t";
+        }else if(separatorStr.equals(";")){
+            separatorChar = ";";
+        }else if(separatorStr.length() > 0){
+            separatorChar = separatorStr;
+        }else{
+            separatorChar = null;
+        }
+        if(separatorChar != null){
+            info.separator = separatorChar;
+        }
+    }
+
+    private void parseModules(JSONArray modulesArray) throws ParseException{
+        List<Object> modulesList = modulesArray.toList();
+        for (Object obj : modulesList){
+            String moduleName = obj.toString();
+            if(moduleName.startsWith("#")){
+                Log.logger.info(moduleName + " module name starting with #, ignoring it.");
+            }else {
+                if(!RModule.availableModules.containsKey(moduleName)) {
+                    throw new ParseException("Error: " + moduleName + " is not a" +
+                            "valid module.");
+                }else{
+                    modules.add(moduleName);
+                    if(RModule.getAvailableAnalysisModules().contains(moduleName)){
+                        numberOfAnalysisModules += 1;
+                    }
+                }
+            }
+        }
+    }
+
+    private void parseParams(JSONObject paramsJson) throws ParseException{
+        for (String paramName : paramsJson.keySet()){
+            String name = null;
+            String moduleName = null;
+            if(paramName.contains(paramModSeparator)){
+                String[] modAndName = paramName.split(paramModSeparator);
+                moduleName = modAndName[0];
+                name = modAndName[1];
+            }else{
+                name = paramName;
+            }
+
+            String[] valueAndType = paramsJson.getJSONArray(name).toList().toArray(new String[0]);
+            if(valueAndType.length != 2){
+                throw new ParseException("Error: No parameter type: " + name);
+            }
+            Class paramType = null;
+
+            if(AnalysisParameters.availableParamTypes.containsKey(valueAndType[1])){
+                paramType = AnalysisParameters.availableParamTypes.get(valueAndType[1]);
+            }else {
+                throw new ParseException("Error: The type " + valueAndType[1] + " is not valid.");
+            }
+            String value = valueAndType[0];
+
+            if(moduleName != null){
+                if(specificParams.containsKey(name) == false){
+                    specificParams.put(name, new HashMap<>());
+                }
+                specificParams.get(name).put(moduleName, value);
+                paramTypes.put(name, paramType);
+            }else{
+                params.put(name, value);
+                paramTypes.put(name, paramType);
+            }
+        }
     }
 
     public void setExpression() throws IOException, AnalysisFileParser.ParseException{
@@ -147,7 +242,7 @@ public class AnalysisFileParser {
             }else{
                 info.setFirstCellPresent(Info.getFirstCellPresent(countReadsFile, separatorChar));
             }
-            
+
             analysisFile.expression = new AnalysisData(countReadsFile, conditionsFile, info, roundingMode, threshold);
             hasData = true;
             hasConditions = true;
@@ -175,7 +270,7 @@ public class AnalysisFileParser {
                     if(modules.contains(dep) == false){
                         if(RModule.availableModules.get(module).needsAllDependencies){
                             throw new ParseException("Error: " + module + " depends on " + dep +
-                                ", but " + dep + " was not chosen to be executed.");
+                                    ", but " + dep + " was not chosen to be executed.");
                         }
                     }else{
                         number_of_required_mods_installed += 1;
@@ -185,7 +280,7 @@ public class AnalysisFileParser {
                     throw new ParseException("Error: None of " + module + "'s dependencies have been chosen, so it cannot be executed.");
                 }
             }
-            
+
         }
         if(anyPackages){
             analysisFile.scriptsToExec = modules;
@@ -245,125 +340,17 @@ public class AnalysisFileParser {
         return sParams;
     }
 
-    public void parseParamsAndModules(String type, Set<String> values) throws ParseException {
-        if(type.equals(modulesStartStr)){
-            for(String word : values){
-                if(!RModule.availableModules.containsKey(word)){
-                    throw new ParseException("Error: " + word + " is not a" +
-                            "valid module.");
-                }else{
-                    modules.add(word);
-                }
-            }
-        }else if(type.equals(paramsStartStr)){
-            parseParams(values);
-        }else{
-            throw new ParseException("Error: Expected [modules] or [parameters]: " + type);
-        }
-    }
-
-    public void parseParams(Set<String> values) throws ParseException {
-        for(String param : values){
-            String[] typeAndParam = Global.spliceBySpacesAndTabs(param);
-            if(typeAndParam.length != 2){
-                throw new ParseException("Error: No parameter type: " + param);
-            }
-            Class paramType = null;
-
-            if(AnalysisParameters.availableParamTypes.containsKey(typeAndParam[0])){
-                paramType = AnalysisParameters.availableParamTypes.get(typeAndParam[0]);
-            }else {
-                throw new ParseException("Error: The type " + typeAndParam[0] + " is not valid.");
-            }
-
-            String[] attributeAndValue = typeAndParam[1].split(paramEqualStr);
-            if(attributeAndValue.length != 2){
-                throw new ParseException("Error: Invalid parameter attribution: " + param);
-            }
-            String attr = attributeAndValue[0];
-            String value = attributeAndValue[1];
-
-            if(attr.contains(paramModSeparator)){
-                String[] modAndAttr = attr.split(paramModSeparator);
-                if(specificParams.containsKey(modAndAttr[0]) == false){
-                    specificParams.put(modAndAttr[0], new HashMap<>());
-                }
-                specificParams.get(modAndAttr[0]).put(modAndAttr[1], value);
-                paramTypes.put(modAndAttr[0], paramType);
-            }else{
-                this.params.put(attr, value);
-                paramTypes.put(attr, paramType);
-            }
-        }
-    }
-
-    public void parseSingleLineInfo(String word, String second) throws ParseException {
-        second = second.replace(" ", "");
-        if(word.equals(dataStr)){
-            countReadsFile = new File(peridot.Archiver.Manager.makeTildeIntoHomeDir(second));
-            if(countReadsFile.exists() == false){
-                System.out.println(second);
-                throw new ParseException(second + " file does not exists.");
-            }
-        }else if(word.equals(conditionsStr)) {
-            conditionsFile = new File(peridot.Archiver.Manager.makeTildeIntoHomeDir(second));
-            if (conditionsFile.exists() == false) {
-                throw new ParseException(conditionsStr + " file does not exists.");
-            }
-        }else if(word.equals(saveAtStr)){
-            saveFolder = new File(peridot.Archiver.Manager.makeTildeIntoHomeDir(second));
-            if(saveFolder.isFile()){
-                throw new ParseException("The output directory " +
-                        "'" + saveFolder.getAbsolutePath() + "' is a file, not a directory.");
-            }
-        }else if(word.equals(labelsOnFirstColStr)){
-            boolean value = Boolean.parseBoolean(second);
-            info.setLabelsOnFirstCol(value);
-        }else if(word.equals(headerOnFirstLineStr)){
-            boolean value = Boolean.parseBoolean(second);
-            info.setHeaderOnFirstLine(value);
-        }else if(word.equals(thresholdStr)){
-            int value = Integer.parseInt(second);
-            threshold = value;
-        }else if(word.equals(roundingModeStr)){
-            String value = second;
-            roundingMode = value;
-        }else if(word.equals(sepStr)){
-            //String value = second;
-            second = second.replace("\"", "");
-            if(second.equals("") || second.equals(" ")){
-                separatorChar = " ";
-            }else if(second.equals(",")){
-                separatorChar = ",";
-            }else if(second.equals("\\t") || second.equals("\t")){
-                separatorChar = "\t";
-            }else if(second.equals(";")){
-                separatorChar = ";";
-            }else if(second.length() > 0){
-                separatorChar = second;
-            }else{
-                separatorChar = null;
-            }
-        }else {
-            Log.logger.warning("Unknown category: " + word + ". Ignoring.");
-        }
-    }
-
-
-
-    public final static String dataStr = "[data]";
-    public final static String conditionsStr = "[conditions]";
-    public final static String modulesStartStr = "[modules]";
-    public final static String paramsStartStr = "[parameters]";
-    public final static String endStr = "[/end]";
-    public final static String paramEqualStr = "=";
+    public final static String dataStr = "data";
+    public final static String conditionsStr = "conditions";
+    public final static String modulesStr = "modules";
+    public final static String paramsStr = "parameters";
     public final static String paramModSeparator = "::";
-    public final static String labelsOnFirstColStr = "[labels]";
-    public final static String headerOnFirstLineStr = "[header]";
-    public final static String saveAtStr = "[output]";
-    public final static String thresholdStr = "[count-reads-threshold]";
-    public final static String roundingModeStr = "[rounding-mode]";
-    public final static String sepStr = "[separator]";
+    public final static String labelsOnFirstColStr = "labels";
+    public final static String headerOnFirstLineStr = "header";
+    public final static String saveAtStr = "output";
+    public final static String thresholdStr = "count-reads-threshold";
+    public final static String roundingModeStr = "rounding-mode";
+    public final static String sepStr = "separator";
 
     public static class ParseException extends Exception{
         public ParseException(String message){

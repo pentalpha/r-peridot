@@ -61,4 +61,8 @@ public class ConsensusThreshold {
             return threshold;
         }
     }
+
+    public int toInt() throws NumberFormatException{
+        return Integer.parseInt(threshold);
+    }
 }
