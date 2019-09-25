@@ -6,13 +6,15 @@
 package peridot.script;
 
 import org.apache.commons.io.FileUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import peridot.AnalysisParameters;
 import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 import peridot.Log;
 import peridot.script.r.Interpreter;
 import peridot.script.r.Package;
-
+import peridot.script.AbstractModule;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -104,107 +106,7 @@ public class RModule extends AbstractModule implements Serializable{
         this.needsReplicates = false;
         this.max2Conditions = false;
         
-        File descriptionFile = new File(dir.getAbsolutePath() + File.separator
-                                + "description");
-        if(descriptionFile.exists() == false){
-            throw new Exception("script description file not found in " 
-                    + descriptionFile.getAbsolutePath());
-        }
-
-        FileReader fileReader = new FileReader(descriptionFile);
-        BufferedReader reader = new BufferedReader(fileReader);
-
-        String line = reader.readLine();
-        while(line != null){
-            String[] words = line.split("\t");
-            String category;
-            String value;
-            String value2;
-            if (words.length > 1){
-                category = words[0];
-                value = words[1];
-                if(words.length == 2)
-                {
-                    if(category.equals("[NAME]"))
-                    {
-                        this.name = value;
-                    }
-                    else if(category.equals("[SCRIPT-NAME]"))
-                    {
-                        this.scriptName = value;
-                    }
-                    else if(category.equals("[RESULT]"))
-                    {
-                        this.results.add(value);
-                    }
-                    else if(category.equals("[MANDATORY-RESULT]"))
-                    {
-                        this.results.add(value);
-                        this.mandatoryResults.add(value);
-                    }
-                    else if(category.equals("[REQUIRED-INPUT-FILE]"))
-                    {
-                        this.requiredExternalFiles.add(value);
-                    }
-                    else if(category.equals("[REQUIRED-SCRIPT]"))
-                    {
-                        this.requiredScripts.add(value);
-                    }
-                    else if(category.equals("[MAX-2-CONDITIONS]"))
-                    {
-                        this.max2Conditions = Boolean.parseBoolean(value);
-                    }
-                    else if(category.equals("[NEEDS-REPLICATES]"))
-                    {
-                        this.needsReplicates = Boolean.parseBoolean(value);
-                    }
-                    else if(category.equals("[REQUIRES-ALL-DEPENDENCIES]"))
-                    {
-                        this.needsAllDependencies = Boolean.parseBoolean(value);
-                    }
-                    else if(category.equals("[INFO]")){
-                        this.info += value + "\n";
-                    }
-                    else
-                    {
-                        throw new Exception("Unknown category: " + category + " " + value);
-                    }
-
-                }
-                else if(words.length == 3)
-                {
-                    value2 = words[2];
-
-                    if(category.equals("[REQUIRED-PARAMETER]")) {
-                        if(AnalysisParameters.availableParamTypes.keySet().contains(value2)){
-                            this.requiredParameters.put(value, AnalysisParameters.availableParamTypes.get(value2));
-                        }
-                        else{
-                            throw new Exception("Unknown parameter type: " + value2);
-                        }
-                    }else if(category.equals("[PACKAGE]")) {
-                        Package pack = new Package(value, value2);
-                        this.requiredPackages.add(pack);
-                    }else
-                    {
-                        throw new Exception("Unknown category: " + category);
-                    }
-                }
-                else
-                {
-                    throw new Exception("Number of words in line different from 2 or 3: " + words.length
-                            + ". In:\n" + line + "\nModule: " + dir.getAbsolutePath());
-                }
-            }else{
-                throw new Exception("Number of words in line different from 2 or 3: " + words.length
-                        + ". In:\n" + line + "\nModule: " + dir.getAbsolutePath());
-            }
-
-            line = reader.readLine();
-        }
-        
-        reader.close();
-        fileReader.close();
+        parseJson(dir);
         
         workingDirectory = getWorkingDirectory();
         configFile = getConfigFile();
@@ -216,66 +118,110 @@ public class RModule extends AbstractModule implements Serializable{
         }
         loadScriptContent();
         this.mandatoryFailed = false;
+
+        //this.createJson();
     }
 
-    public File getDescriptionFile(){
-        return new File(getWorkingDirectoryPath() + File.separator + "description");
-    }
-    
-    public void createClassDescription() throws IOException{
-        File description = new File(getWorkingDirectoryPath() + File.separator + "description");
-        description.createNewFile();
-        
-        FileWriter fileWriter = new FileWriter(description);
-        BufferedWriter writer = new BufferedWriter(fileWriter);
-        
-        
-        writer.write("[NAME]\t"+ this.name + System.lineSeparator());
-        writer.write("[SCRIPT-NAME]\t" + this.scriptName + System.lineSeparator());
-        writer.write("[MAX-2-CONDITIONS]\t" + this.max2Conditions + System.lineSeparator());
-        writer.write("[NEEDS-REPLICATES]\t" + this.needsReplicates + System.lineSeparator());
-        writer.write("[NEEDS-REPLICATES]\t" + this.needsAllDependencies + System.lineSeparator());
-        for(String result : this.results){
-            if(mandatoryResults.contains(result)){
-                writer.write("[MANDATORY-RESULT]\t"+ result + System.lineSeparator());
-            }else{
-                writer.write("[RESULT]\t"+ result + System.lineSeparator());
+    private void parseJson(File dir) throws Exception{
+        File descriptionFile = new File(dir.getAbsolutePath() + File.separator
+                + "module.json");
+        if(descriptionFile.exists() == false){
+            throw new Exception("Module description file not found in "
+                    + descriptionFile.getAbsolutePath());
+        }
+
+        String jsonContent = Manager.fileToString(descriptionFile).toString();
+        JSONObject json = new JSONObject(jsonContent);
+
+        this.name = json.getString("NAME");
+        this.scriptName = json.getString("SCRIPT-NAME");
+        this.max2Conditions = json.getBoolean("MAX-2-CONDITIONS");
+        this.needsReplicates = json.getBoolean("NEEDS-REPLICATES");
+
+        if(json.keySet().contains("REQUIRES-ALL-DEPENDENCIES")){
+            this.needsAllDependencies = json.getBoolean("REQUIRES-ALL-DEPENDENCIES");
+        }
+        if(json.keySet().contains("INFO")){
+            this.info = json.getString("INFO");
+        }
+        if(json.keySet().contains("RESULTS")){
+            List<String> resultsList = Arrays.asList(json.getJSONArray("RESULTS").toList().toArray(new String[0]));
+            results.addAll(resultsList);
+        }
+        if(json.keySet().contains("MANDATORY-RESULTS")){
+            List<String> resultsList = Arrays.asList(json.getJSONArray("MANDATORY-RESULTS").toList().toArray(new String[0]));
+            results.addAll(resultsList);
+            mandatoryResults.addAll(resultsList);
+        }
+        if(json.keySet().contains("REQUIRED-INPUT-FILES")){
+            requiredExternalFiles.addAll(Arrays.asList(json.getJSONArray("REQUIRED-INPUT-FILES").toList().toArray(new String[0])));
+        }
+        if(json.keySet().contains("REQUIRED-SCRIPTS")){
+            requiredScripts.addAll(Arrays.asList(json.getJSONArray("REQUIRED-SCRIPTS").toList().toArray(new String[0])));
+        }
+
+        if(json.keySet().contains("PACKAGES")) {
+            JSONObject packagesJson = json.getJSONObject("PACKAGES");
+            for (String packageName : packagesJson.keySet()) {
+                Package pack = new Package(packageName, packagesJson.getString(packageName));
+                this.requiredPackages.add(pack);
             }
-            
         }
-        for(String file : this.requiredExternalFiles){
-            writer.write("[REQUIRED-INPUT-FILE]\t"+ file + System.lineSeparator());
-        }
-        for(String script : this.requiredScripts){
-            writer.write("[REQUIRED-SCRIPT]\t"+ script + System.lineSeparator());
-        }
-        for(Map.Entry<String, Class> pair : this.requiredParameters.entrySet()){
-            //Log.logger.info("pair.getKey() == " + pair.getKey());
-            //System.out.println(pair.getKey());
-            String className = pair.getValue().getSimpleName();
-            writer.write("[REQUIRED-PARAMETER]\t"+ pair.getKey() + "\t" + className + System.lineSeparator());
-        }
-        for(Package pack : this.requiredPackages){
-            writer.write("[PACKAGE]\t" + pack.name + "\t" + pack.version.toString() + System.lineSeparator());
-        }
-        String infoStr = "[INFO]\t";
-        String[] linesRaw = this.info.split("\n");
-        ArrayList<String> lines = new ArrayList<>();
-        for(int i = 0; i < linesRaw.length; i++){
-            String line = linesRaw[i];
-            if(line.length() > 0){
-                if(!(line.length() == 1 && line.equals("\t"))){
-                    lines.add(line.replace(infoStr, ""));
+        if(json.keySet().contains("REQUIRED-PARAMETERS")) {
+            JSONObject paramsJson = json.getJSONObject("REQUIRED-PARAMETERS");
+            for (String paramName : paramsJson.keySet()) {
+                String paramType = paramsJson.getString(paramName);
+                if(AnalysisParameters.availableParamTypes.keySet().contains(paramType)){
+                    this.requiredParameters.put(paramName, AnalysisParameters.availableParamTypes.get(paramType));
+                }
+                else{
+                    throw new Exception("Unknown parameter type: " + paramType);
                 }
             }
         }
+    }
 
-        for(String line : lines){
-            writer.write(infoStr + line + System.lineSeparator());
+
+
+    public File getDescriptionFile(){
+        return new File(getWorkingDirectoryPath() + File.separator + "module.json");
+    }
+
+    public void createJson(){
+        String path = getWorkingDirectoryPath() + File.separator + "module.json";
+        JSONObject json = new JSONObject();
+
+        json.put("NAME", this.name);
+        json.put("SCRIPT-NAME", this.scriptName);
+        json.put("MAX-2-CONDITIONS", this.max2Conditions);
+        json.put("NEEDS-REPLICATES", this.needsReplicates);
+        json.put("REQUIRES-ALL-DEPENDENCIES", this.needsAllDependencies);
+        json.put("INFO", this.info);
+        JSONArray resultsArray = new JSONArray();
+        for(String result : this.results){
+            if(!mandatoryResults.contains(result)){
+                resultsArray.put(result);
+            }
         }
-        
-        writer.close();
-        fileWriter.close();
+        json.put("MANDATORY-RESULTS", mandatoryResults);
+        json.put("RESULTS", resultsArray);
+        JSONArray requiredExternalFilesArray = new JSONArray(requiredExternalFiles);
+        json.put("REQUIRED-INPUT-FILES", requiredExternalFilesArray);
+        JSONArray requiredScriptsArray = new JSONArray(requiredScripts);
+        json.put("REQUIRED-SCRIPTS", requiredScriptsArray);
+        JSONObject requiredParametersJson = new JSONObject();
+        for(Map.Entry<String, Class> pair : this.requiredParameters.entrySet()){
+            String className = pair.getValue().getSimpleName();
+            requiredParametersJson.put(pair.getKey(),className);
+        }
+        json.put("REQUIRED-PARAMETERS", requiredParametersJson);
+        JSONObject requiredPackagesJson = new JSONObject();
+        for(Package pack : this.requiredPackages){
+            requiredPackagesJson.put(pack.name, pack.version.toString());
+        }
+        json.put("PACKAGES", requiredPackagesJson);
+
+        Manager.stringToFile(path,json.toString(4));
     }
     
     /**
@@ -307,7 +253,7 @@ public class RModule extends AbstractModule implements Serializable{
                 Log.logger.info("could not create " + resultsFolder.getAbsolutePath());
             }
             this.environmentCreated = true;
-            createClassDescription();
+            createJson();
         }catch(Exception ex){
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -751,4 +697,170 @@ public class RModule extends AbstractModule implements Serializable{
         }
         
     }
+
+    /*
+
+    private void parseDescription(File dir) throws Exception{
+        File descriptionFile = new File(dir.getAbsolutePath() + File.separator
+                + "description");
+        if(descriptionFile.exists() == false){
+            throw new Exception("script description file not found in "
+                    + descriptionFile.getAbsolutePath());
+        }
+
+        FileReader fileReader = new FileReader(descriptionFile);
+        BufferedReader reader = new BufferedReader(fileReader);
+
+        String line = reader.readLine();
+        while(line != null){
+            String[] words = line.split("\t");
+            String category;
+            String value;
+            String value2;
+            if (words.length > 1){
+                category = words[0];
+                value = words[1];
+                if(words.length == 2)
+                {
+                    if(category.equals("[NAME]"))
+                    {
+                        this.name = value;
+                    }
+                    else if(category.equals("[SCRIPT-NAME]"))
+                    {
+                        this.scriptName = value;
+                    }
+                    else if(category.equals("[RESULT]"))
+                    {
+                        this.results.add(value);
+                    }
+                    else if(category.equals("[MANDATORY-RESULT]"))
+                    {
+                        this.results.add(value);
+                        this.mandatoryResults.add(value);
+                    }
+                    else if(category.equals("[REQUIRED-INPUT-FILE]"))
+                    {
+                        this.requiredExternalFiles.add(value);
+                    }
+                    else if(category.equals("[REQUIRED-SCRIPT]"))
+                    {
+                        this.requiredScripts.add(value);
+                    }
+                    else if(category.equals("[MAX-2-CONDITIONS]"))
+                    {
+                        this.max2Conditions = Boolean.parseBoolean(value);
+                    }
+                    else if(category.equals("[NEEDS-REPLICATES]"))
+                    {
+                        this.needsReplicates = Boolean.parseBoolean(value);
+                    }
+                    else if(category.equals("[REQUIRES-ALL-DEPENDENCIES]"))
+                    {
+                        this.needsAllDependencies = Boolean.parseBoolean(value);
+                    }
+                    else if(category.equals("[INFO]")){
+                        this.info += value + "\n";
+                    }
+                    else
+                    {
+                        throw new Exception("Unknown category: " + category + " " + value);
+                    }
+
+                }
+                else if(words.length == 3)
+                {
+                    value2 = words[2];
+
+                    if(category.equals("[REQUIRED-PARAMETER]")) {
+                        if(AnalysisParameters.availableParamTypes.keySet().contains(value2)){
+                            this.requiredParameters.put(value, AnalysisParameters.availableParamTypes.get(value2));
+                        }
+                        else{
+                            throw new Exception("Unknown parameter type: " + value2);
+                        }
+                    }else if(category.equals("[PACKAGE]")) {
+                        Package pack = new Package(value, value2);
+                        this.requiredPackages.add(pack);
+                    }else
+                    {
+                        throw new Exception("Unknown category: " + category);
+                    }
+                }
+                else
+                {
+                    throw new Exception("Number of words in line different from 2 or 3: " + words.length
+                            + ". In:\n" + line + "\nModule: " + dir.getAbsolutePath());
+                }
+            }else{
+                throw new Exception("Number of words in line different from 2 or 3: " + words.length
+                        + ". In:\n" + line + "\nModule: " + dir.getAbsolutePath());
+            }
+
+            line = reader.readLine();
+        }
+
+        reader.close();
+        fileReader.close();
+    }
+
+    public File getDescriptionFile(){
+        return new File(getWorkingDirectoryPath() + File.separator + "description");
+    }
+    public void createClassDescription() throws IOException{
+
+        File description = new File(getWorkingDirectoryPath() + File.separator + "description");
+        description.createNewFile();
+
+        FileWriter fileWriter = new FileWriter(description);
+        BufferedWriter writer = new BufferedWriter(fileWriter);
+
+
+        writer.write("[NAME]\t"+ this.name + System.lineSeparator());
+        writer.write("[SCRIPT-NAME]\t" + this.scriptName + System.lineSeparator());
+        writer.write("[MAX-2-CONDITIONS]\t" + this.max2Conditions + System.lineSeparator());
+        writer.write("[NEEDS-REPLICATES]\t" + this.needsReplicates + System.lineSeparator());
+        writer.write("[REQUIRES-ALL-DEPENDENCIES]\t" + this.needsAllDependencies + System.lineSeparator());
+        for(String result : this.results){
+            if(mandatoryResults.contains(result)){
+                writer.write("[MANDATORY-RESULT]\t"+ result + System.lineSeparator());
+            }else{
+                writer.write("[RESULT]\t"+ result + System.lineSeparator());
+            }
+
+        }
+        for(String file : this.requiredExternalFiles){
+            writer.write("[REQUIRED-INPUT-FILE]\t"+ file + System.lineSeparator());
+        }
+        for(String script : this.requiredScripts){
+            writer.write("[REQUIRED-SCRIPT]\t"+ script + System.lineSeparator());
+        }
+        for(Map.Entry<String, Class> pair : this.requiredParameters.entrySet()){
+            //Log.logger.info("pair.getKey() == " + pair.getKey());
+            //System.out.println(pair.getKey());
+            String className = pair.getValue().getSimpleName();
+            writer.write("[REQUIRED-PARAMETER]\t"+ pair.getKey() + "\t" + className + System.lineSeparator());
+        }
+        for(Package pack : this.requiredPackages){
+            writer.write("[PACKAGE]\t" + pack.name + "\t" + pack.version.toString() + System.lineSeparator());
+        }
+        String infoStr = "[INFO]\t";
+        String[] linesRaw = this.info.split("\n");
+        ArrayList<String> lines = new ArrayList<>();
+        for(int i = 0; i < linesRaw.length; i++){
+            String line = linesRaw[i];
+            if(line.length() > 0){
+                if(!(line.length() == 1 && line.equals("\t"))){
+                    lines.add(line.replace(infoStr, ""));
+                }
+            }
+        }
+
+        for(String line : lines){
+            writer.write(infoStr + line + System.lineSeparator());
+        }
+
+        writer.close();
+        fileWriter.close();
+    }*/
 }
