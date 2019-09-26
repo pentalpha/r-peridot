@@ -354,14 +354,7 @@ public class AnalysisData {
             if(makeHeader){
                 text += conditionsHeader + System.lineSeparator();
             }
-            /*String nameWithCondition, name, condition;
-            for(int i = 0; i < sampleNameWithCondition.length; i++){
-                nameWithCondition = sampleNameWithCondition[i];
-                int sepIndex = nameWithCondition.indexOf("-");
-                name = nameWithCondition.substring(sepIndex+1);
-                condition = nameWithCondition.substring(0, sepIndex-1);
-                text += name + "\t" + condition + System.lineSeparator();
-            }*/
+
             IndexedString[] sampleNames = conditions.keySet().toArray(new IndexedString[conditions.size()]);
             //Arrays.sort(sampleNames);
             for(int i = 0; i < sampleNames.length; i++){

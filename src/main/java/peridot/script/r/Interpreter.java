@@ -157,17 +157,7 @@ public class Interpreter {
     private VersionNumber rVersion;
 
     public Interpreter(String exe){
-        //Log.logger.info("Starting interpreter:" + exe);
         this.exe = exe;
-        /*if(!this.exe.exists()){
-            validInterpreter = false;
-            return;
-        }
-
-        if(!this.exe.isFile()){
-            validInterpreter = false;
-            return;
-        }*/
         analyseInterpreter();
     }
 

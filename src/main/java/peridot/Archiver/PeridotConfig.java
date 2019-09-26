@@ -64,10 +64,6 @@ public class PeridotConfig implements Serializable{
     private static PeridotConfig getConfigs(){
         PeridotConfig loadedConfig = null;
         if(Places.peridotConfigFile.exists()){
-            /*loadedConfig =
-                    (PeridotConfig) Persistence.loadObjectFromBin(
-                            Places.peridotConfigFile.getAbsolutePath()
-                    );*/
             loadedConfig = parseJsonConfig(Places.peridotConfigFile.getAbsolutePath());
         }
         if(loadedConfig == null){
@@ -88,7 +84,6 @@ public class PeridotConfig implements Serializable{
 
     public static void save() throws IOException{
         _instance.updateValues();
-        //Persistence.saveObjectAsBin(Places.peridotConfigFile, _instance);
         saveJsonConfig(Places.peridotConfigFile.getAbsolutePath(), _instance);
     }
 

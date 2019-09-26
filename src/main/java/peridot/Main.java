@@ -54,14 +54,6 @@ public class Main {
             if(!task.isFinished()){
                 System.out.println("\n- Ending all tasks.\n");
                 task.abortAll();
-                /*try{
-                    //System.out.println("Joining mainThread");
-                    while(finished.get() == false){
-
-                    }
-                }catch(Exception ex){
-                    Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
-                }*/
             }
         }
     }

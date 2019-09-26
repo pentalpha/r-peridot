@@ -202,20 +202,4 @@ public class Operations {
             return false;
         }
     }
-
-    /*public static boolean openR(Interpreter interpreter){
-        try{
-            if(SystemUtils.IS_OS_WINDOWS){
-                Runtime.getRuntime().exec("cmd.exe /c start " + interpreter.exe + " --no-save");
-            }else if(SystemUtils.IS_OS_UNIX){
-                Runtime.getRuntime().exec("xterm " + interpreter.exe + " --no-save");
-            }
-
-            return true;
-        }catch (Exception ex){
-            Log.logger.severe("Could not launch R environment: " + interpreter.exe);
-            ex.printStackTrace();
-            return false;
-        }
-    }*/
 }

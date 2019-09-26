@@ -22,6 +22,7 @@ public abstract class AbstractModule {
      *  The extension of the RModule binary file
      */
     public static final String binExtension = "PeridotModule";
+    public static final String moduleFileName = "module.json";
 
     private static Map<String, Class> defineAvailableParamTypes(){
         Map<String, Class> params = new TreeMap<>();

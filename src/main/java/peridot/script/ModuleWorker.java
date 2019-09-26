@@ -312,38 +312,6 @@ public class ModuleWorker implements Runnable {
     }
 
     private void update_module(){
-        /*InputStream iStream = process.getInputStream();
-        InputStreamReader iStreamReader = new InputStreamReader(iStream);
-        BufferedReader buffReader = new BufferedReader(iStreamReader);
-
-        int chars_per_update = 50;
-        int c = 0;
-        try{
-            c = buffReader.read();
-            for (int i = 1; i <= chars_per_update; i++){
-        */
-        //if(pipeline.abort_flag.get(currentModule.name).booleanValue() == true)
-        /*        if(c != -1){
-                    currentOutput.appendChar((char)c);
-                    if(c == '\n'){
-                        break;
-                    }
-                }else{
-                    break;
-                }
-                c = buffReader.read();
-            }
-        }catch(IOException ex){
-            Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
-            c = -1;
-            process.destroyForcibly();
-            try{
-                process.wait();
-            }catch(InterruptedException ex2){
-                //there's probably nothing more to do here
-            }
-        }*/
-
         if(!process.isAlive()){
             //process_ended
             on_end();

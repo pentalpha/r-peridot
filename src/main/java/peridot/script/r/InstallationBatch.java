@@ -138,10 +138,6 @@ public class InstallationBatch {
     }
 
     public boolean isRunning(){
-        //System.out.println("Done " + concluded.size() + " Todo " + installationQueue.size());
-        //if(currentInstallation != null){
-        //    System.out.println(currentInstallation.getPackageName() + " " + currentInstallation.status);
-        //}
         return status == Status.INSTALLING;
     }
 

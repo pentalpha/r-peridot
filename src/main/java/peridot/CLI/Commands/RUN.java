@@ -49,10 +49,7 @@ public class RUN extends Command{
                 File countReadsFile = new File(args[1]);
                 if (countReadsFile.exists() == false){
                    fail("The file '" + countReadsFile.getAbsolutePath() + "' does not exists.");
-                }/*else if (peridot.Archiver.Spreadsheet.fileIsCSVorTSV(countReadsFile) == false){
-                    fail(countReadsFile.getName() + ": invalid file extension." +
-                            " Try again with a .csv or .tsv file");
-                }*/
+                }
             }
         }
 
@@ -104,10 +101,6 @@ public class RUN extends Command{
     }
 
     public void waitForEnd (Task task, AnalysisFile analysisFile){
-        //System.out.print("Waiting for processing to finish");
-        /*while(task.isProcessing()){
-
-        }*/
         task.join();
         System.out.println("\nFinished processing task.");
 

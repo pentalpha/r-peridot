@@ -186,6 +186,7 @@ public final class Places {
                 + "r-peridot-scripts/ to load the default modules.");
             return;
         }
+        Log.logger.info("Reading modules from " + defaultModulesDir.getAbsolutePath());
         File[] subs = defaultModulesDir.listFiles();
 
         for(int i = 0; i < subs.length; i++){
@@ -199,11 +200,11 @@ public final class Places {
                         if(overwrite){
                             FileUtils.deleteDirectory(targetDir);
                             FileUtils.copyDirectory(subs[i], targetDir);
-                            Log.logger.info("Updated " + subs[i].getName() + ".");
+                            Log.logger.info("Updated " + subs[i].getName() + " overwriting");
                         }
                     }else{
                         FileUtils.copyDirectory(subs[i], targetDir);
-                        Log.logger.fine("Updated " + subs[i].getName() + ".");
+                        Log.logger.info("Updated " + subs[i].getName() + ".");
                     }
                 }else if(subs[i].getName().contains(".R")){
                     File destFile = new File(modulesDir.getAbsolutePath()
@@ -216,8 +217,6 @@ public final class Places {
                     }else{
                         FileUtils.copyFile(subs[i], destFile, true);
                     }
-
-
                 }
             }
         }
@@ -335,97 +334,4 @@ public final class Places {
         }
         
     }
-
-    /**
-     * Determines where r-portable may be installed
-     * Looks for a ./r-portable/ folder or for a ~/r-portable folder.
-     * @return  The directory in which r-peridot is located.
-     *          null if could not find it.
-     */
-    /*public static File getRPortableFolder(){
-        File userRPortable = new File(getUserHomePath() + File.separator
-                + "r-portable");
-        File jarFolder = getJarFolder();
-        File localRPortable = new File(jarFolder.getAbsolutePath() + File.separator
-                + "r-portable");
-
-        if(org.apache.commons.lang3.SystemUtils.IS_OS_UNIX){
-            File file = new File("/opt/r-peridot/r-portable");
-            if (file.exists()){
-                return file;
-            }
-        }
-
-        if(localRPortable.exists()){
-            //Log.logger.info("Local r-portable folder found.");
-            return localRPortable;
-        }else if (userRPortable.exists()){
-            //Log.logger.warning("Warning: Local r-portable folder not found.");
-            //Log.logger.info("User r-portable folder found.");
-            return userRPortable;
-        }else{
-            //Log.logger.severe("Error: No r-portable found");
-
-            return null;
-        }
-    }*/
-
-    /**
-     * Looks for the R executable file in [rPortableDir]/bin,
-     * choosing the right one based on the current processor architecture and OS.
-     *
-     * @return  The R executable file.
-     *          null if could not find it.
-     */
-    /*public static File getRExec(){
-        boolean is64Bits = false;
-        if(org.apache.commons.lang3.SystemUtils.OS_ARCH.contains("64")){
-            is64Bits = true;
-        }
-        String path1 = "";
-        String path2 = "";
-        if(Places.rPortableDir != null){
-            path1 = rPortableDir.getAbsolutePath() + File.separator + "bin";
-            if(org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS){
-                path2 = rPortableDir.getAbsolutePath() + File.separator + "bin";
-                if(is64Bits == true){
-                    path1 += File.separator +"x64";
-                    path2 += File.separator +"i386";
-                }else{
-                    path1 += File.separator + "i386";
-                }
-                path1 += File.separator + "R.exe";
-                path2 += File.separator + "R.exe";
-            }else if(org.apache.commons.lang3.SystemUtils.IS_OS_UNIX){
-                path2 = rPortableDir.getAbsolutePath();
-                path1 += File.separator + "R";
-                path2 += File.separator + "R";
-            }
-        }
-        
-        File exec = new File(path1);
-        File exec2 = new File(path2);
-        if(exec.exists() == false || exec.isDirectory()){
-            exec = exec2;
-        }
-        if(exec.exists()){
-            if(exec.isFile()){
-                //Log.logger.info("R is " + exec.getAbsolutePath());
-                if(org.apache.commons.lang3.SystemUtils.IS_OS_UNIX){
-                    //setLinuxEnvironmentVars();
-                }
-                return exec;
-            }
-        }
-        Log.logger.warning("R portable not found, using system PATH instead.");
-        return null;
-    }*/
-
-    /**
-     * @return Array of Linux Environment Variables for R-Portable.
-     */
-    /*public static String[] getLinuxEnvForRPortable(){
-        String[] strings = {"R_HOME='" + Places.rPortableDir.getAbsolutePath() + "'"};
-        return strings;
-    }*/
 }

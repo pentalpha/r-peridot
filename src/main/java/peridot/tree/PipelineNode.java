@@ -142,10 +142,6 @@ public class PipelineNode
         return key;
     }
 
-    /*public RModule getData(){
-        return data;
-    }*/
-
     public boolean hasParents(){
         return this.parents.size() != 0;
     }
