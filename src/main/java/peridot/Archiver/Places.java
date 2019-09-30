@@ -7,6 +7,7 @@ package peridot.Archiver;
 
 import org.apache.commons.io.FileUtils;
 import peridot.Log;
+import peridot.script.RModule;
 
 import java.io.File;
 import java.net.URI;
@@ -202,11 +203,19 @@ public final class Places {
                         if(overwrite){
                             FileUtils.deleteDirectory(targetDir);
                             FileUtils.copyDirectory(subs[i], targetDir);
-                            Log.logger.info("Updated " + subs[i].getName() + " overwriting");
+                            if(new File(targetDir.getAbsolutePath() + File.separator + RModule.moduleFileName).exists()){
+                                Log.logger.info("Updated " + subs[i].getName() + " overwriting");
+                            }else{
+                                Log.logger.severe("Failed to update " + subs[i].getName() + " overwriting");
+                            }
                         }
                     }else{
                         FileUtils.copyDirectory(subs[i], targetDir);
-                        Log.logger.info("Updated " + subs[i].getName() + ".");
+                        if(new File(targetDir.getAbsolutePath() + File.separator + RModule.moduleFileName).exists()){
+                            Log.logger.info("Updated " + subs[i].getName());
+                        }else{
+                            Log.logger.severe("Failed to update " + subs[i].getName());
+                        }
                     }
                 }else if(subs[i].getName().contains(".R")){
                     File destFile = new File(modulesDir.getAbsolutePath()
