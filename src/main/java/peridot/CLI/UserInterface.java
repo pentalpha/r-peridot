@@ -3,6 +3,8 @@ package peridot.CLI;
 import peridot.CLI.Commands.*;
 import peridot.Global;
 import peridot.Operations;
+import peridot.script.AnalysisModule;
+import peridot.script.PostAnalysisModule;
 import peridot.script.RModule;
 
 /**
@@ -58,10 +60,11 @@ public class UserInterface {
     }
 
     public static void printMajorHelp(){
+        String moduleExtensions = "[" + PostAnalysisModule.extension + "|" + AnalysisModule.extension + "]";
         System.out.println("R-Peridot Commands:\n" +
                 "\tCommand:\t\tDescription:\n" +
-                "\tin [args]\t\tImport a module from *." + RModule.binExtension + " file\n" +
-                "\tout [args]\t\tExport a module to a *." + RModule.binExtension + " file\n" +
+                "\tin [args]\t\tImport a module from *." + moduleExtensions + " file\n" +
+                "\tout [args]\t\tExport a module to a *." + moduleExtensions + " file\n" +
                 "\tls [args]\t\tList modules or read module details\n" +
                 "\trun [args]\t\tMake an analysis defined by an .af file.\n" +
                 "\tr [args]\t\tList, add, remove or update R environments for R-Peridot.\n" +

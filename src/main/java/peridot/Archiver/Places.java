@@ -157,11 +157,13 @@ public final class Places {
      */
     public static void updateModulesDir(boolean overwrite){
         try{
-            if(modulesDir.exists() == false){
-                modulesDir.mkdir();
-                overwrite = true;
+            if(!modulesDir.exists() || overwrite){
+                if(modulesDir.exists() == false){
+                    modulesDir.mkdir();
+                    overwrite = true;
+                }
+                updateModulesFolder(overwrite);
             }
-            updateModulesFolder(overwrite);
         }
         catch(Exception ex){
             Log.logger.severe("Error: could not update modules folder.");

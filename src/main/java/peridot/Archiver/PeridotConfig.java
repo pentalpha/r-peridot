@@ -1,6 +1,7 @@
 package peridot.Archiver;
 
 import org.json.JSONArray;
+import peridot.CLI.PeridotCmd;
 import peridot.Log;
 import peridot.script.r.Interpreter;
 import peridot.script.r.VersionNumber;
@@ -69,11 +70,10 @@ public class PeridotConfig implements Serializable{
         if(loadedConfig == null){
             return new PeridotConfig();
         }else{
-            if(loadedConfig.defaultInterpreter == null){
-                Log.logger.severe("loaded no default interpreter, returning new instance of PeridotConfig");
-                return new PeridotConfig();
-            }else{
+            if(loadedConfig.defaultInterpreter != null){
                 Log.logger.info("loaded default interpreter: " + loadedConfig.defaultInterpreter);
+            }else{
+                Log.logger.fine("No default interpreter loaded from configurations.");
             }
             return loadedConfig;
         }
@@ -95,7 +95,10 @@ public class PeridotConfig implements Serializable{
         if (json.has("lastInputDir")){
             config.lastInputDir = json.getString("lastInputDir");
         }
-        config.defaultInterpreter = json.getString("defaultInterpreter");
+        if(json.keySet().contains("defaultInterpreter")){
+            config.defaultInterpreter = json.getString("defaultInterpreter");
+        }
+
         config.packagesRepository = json.getString("packagesRepository");
         config.rPeridotWebSite = json.getString("rPeridotWebSite");
         config.preferredRVersion = new VersionNumber(json.getString("preferredRVersion"));

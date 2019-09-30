@@ -17,7 +17,7 @@ public class OUT extends Command {
         this.commandStr = "out";
         this.detail = "R-Peridot's Command: out\n" +
                 "Options:\n" +
-                "\tout [module-name] [directory]\tExport a module to [directory]/[module-name]." + RModule.binExtension + "\n" +
+                "\tout [module-name] [directory]\tExport a module to [directory]/[module-name]\n" +
                 "\tout -h\t\t\t\tDisplays this help message\n" +
                 "\tout --help\t\t\tDisplays this help message\n";
     }

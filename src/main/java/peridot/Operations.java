@@ -115,58 +115,70 @@ public class Operations {
         return new InstallationBatch(toInstall, interpreter);
     }
 
-    public static void exportModule(String modName, String folderName){
+    public static boolean exportModule(String modName, String folderName){
         File folder = new File(folderName);
         if(folder.exists() == false || folder.isFile()){
-            Log.logger.severe("Error: " + folderName + " is not a folder or does not exists.");
-            return;
+            Log.logger.severe("Error: " + folderName + " is not a directory or does not exists.");
+            return false;
         }
         RModule s = RModule.availableModules.get(modName);
         if(s == null){
             Log.logger.severe("Error: " + modName + " is not an existent module.");
-            return;
+            return false;
         }
-        File file = new File(folderName + File.separator + s.name + "." + RModule.binExtension);
-        if(file.exists()){
-            file.delete();
+
+        String extension;
+        if(s instanceof PostAnalysisModule){
+            extension = PostAnalysisModule.extension;
+        }else if(s instanceof AnalysisModule){
+            extension = AnalysisModule.extension;
+        }else{
+            Log.logger.severe("Error: " + modName + " has no defined type.");
+            return false;
         }
+        File newDir = new File(folderName + File.separator + s.name + "." + extension);
+        if(newDir.exists()){
+            Log.logger.severe("Error: " + newDir.getAbsolutePath() + " already exists.");
+            return false;
+        }
+        File newModuleFile = new File(newDir.getAbsolutePath() + File.separator + RModule.moduleFileName);
+        File newScriptFile = new File(newDir.getAbsolutePath() + File.separator + s.scriptName);
         try{
-            System.out.println(file.getAbsolutePath());
-            s.toBin(file);
+            System.out.println("Creating " + newDir.getAbsolutePath());
+            newDir.mkdir();
+            System.out.println("Creating " + newModuleFile.getAbsolutePath());
+            FileUtils.copyFile(s.getDescriptionFile(), newModuleFile);
+            System.out.println("Creating " + newScriptFile.getAbsolutePath());
+            FileUtils.copyFile(s.getScriptFile(), newScriptFile);
+
         }catch (IOException ex){
             Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
         }
+        return true;
     }
 
-    public static void importModule(String filePath){
-        File binFile = new File(filePath);
-        if(binFile.isDirectory()){
-            Log.logger.severe("Error: "+ filePath + " is not a file.");
-            return;
-        }
-        if(binFile.exists()){
-            Log.logger.severe("Error: "+ filePath + " already exists.");
-            return;
-        }
-        Object bin = peridot.Archiver.Persistence.loadObjectFromBin(binFile.getAbsolutePath());
-        if(bin == null){
-            Log.logger.log(Level.SEVERE, "Could not load RModule binary. Maybe you don't have" +
-                    " permission to read this file, or the file is corrupt.");
-            return;
-        }
-
-        if(bin instanceof AnalysisModule || bin instanceof PostAnalysisModule){
-            RModule script = null;
-            if(bin instanceof AnalysisModule){
-                script = (AnalysisModule)bin;
-            }else{
-                script = (PostAnalysisModule)bin;
+    public static boolean importModule(String dirPath){
+        File file = new File(dirPath);
+        RModule module;
+        try {
+            if (file.getName().contains(".PostAnalysisModule")) {
+                module = new PostAnalysisModule(file);
+            } else if (file.getName().contains(".AnalysisModule")) {
+                module = new AnalysisModule(file);
+            } else {
+                Log.logger.log(Level.SEVERE, "Could not load RModule binary. Unknown type.");
+                return false;
             }
-            script.createEnvironment(null);
-            RModule.availableModules.put(script.name, script);
-        }else{
-            Log.logger.log(Level.SEVERE, "Could not load RModule binary. Unknown type.");
+
+            module.createEnvironment(dirPath + File.separator + module.scriptName);
+            RModule.availableModules.put(module.name, module);
+        }catch (Exception ex){
+            Log.logger.log(Level.SEVERE, ex.getMessage());
+            ex.printStackTrace();
+            return false;
         }
+        return true;
     }
 
 

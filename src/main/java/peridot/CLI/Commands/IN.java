@@ -2,6 +2,8 @@ package peridot.CLI.Commands;
 
 import peridot.CLI.Command;
 import peridot.Operations;
+import peridot.script.AnalysisModule;
+import peridot.script.PostAnalysisModule;
 import peridot.script.RModule;
 
 /**
@@ -17,7 +19,9 @@ public class IN extends Command{
         this.commandStr = "in";
         this.detail = "R-Peridot's Command: in\n" +
                 "Options:\n" +
-                "\tin [file-path]\tImport a module from *." + RModule.binExtension + " file, into R-Peridot\n" +
+                "\tin [file-path]\tImport a module from a *.[" +
+                PostAnalysisModule.extension + "|" + AnalysisModule.extension + "] directory, into R-Peridot. " +
+                "It must contain a valid module.json file and an R script.\n" +
                 "\tin -h\t\t\tDisplays this help message\n" +
                 "\tin --help\t\tDisplays this help message\n";
     }

@@ -78,12 +78,12 @@ public class Script {
         if(process != null){
             running.set(true);
             if(!wait){
-                Log.logger.info("No waiting, launching read output thread.");
+                Log.logger.fine("No waiting, launching read output thread.");
                 new Thread(() -> {
                     readOutput();
                 }).start();
             }else{
-                Log.logger.info("Waiting for output from script.");
+                Log.logger.fine("Waiting for output from script.");
                 readOutput();
             }
         }else{

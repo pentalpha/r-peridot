@@ -18,10 +18,6 @@ import java.util.logging.Level;
 public abstract class AbstractModule {
     public static HashMap<String, RModule> availableModules;
     public static Map<String, Class> availableParamTypes = defineAvailableParamTypes();
-    /**
-     *  The extension of the RModule binary file
-     */
-    public static final String binExtension = "PeridotModule";
     public static final String moduleFileName = "module.json";
 
     private static Map<String, Class> defineAvailableParamTypes(){

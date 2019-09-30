@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import peridot.AnalysisParameters;
 import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
+import peridot.CLI.AnalysisFileParser;
 import peridot.Log;
 import peridot.script.r.Interpreter;
 import peridot.script.r.Package;
@@ -29,7 +30,7 @@ public class RModule extends AbstractModule implements Serializable{
     public boolean equals(RModule a, RModule b){
         return a.name.equals(b.name);
     }
-
+    public static String extension = "GenericModule";
     //Nome dos parametros necessarios e suas respectivas classes
     //O script não irá executar se não forem todos passados antes
     public Map<String, Class> requiredParameters = null;
@@ -135,6 +136,10 @@ public class RModule extends AbstractModule implements Serializable{
 
         this.name = json.getString("NAME");
         this.scriptName = json.getString("SCRIPT-NAME");
+        String scriptFileName = dir.getAbsolutePath() + File.separator + this.scriptName;
+        if(!(new File(scriptFileName).exists())){
+            throw new Exception("The following script file does not exist:\n" + scriptFileName);
+        }
         this.max2Conditions = json.getBoolean("MAX-2-CONDITIONS");
         this.needsReplicates = json.getBoolean("NEEDS-REPLICATES");
 
@@ -225,38 +230,34 @@ public class RModule extends AbstractModule implements Serializable{
     }
     
     /**
-     * Cria o diretorio temporario (workingdirectory) onde serão guardados o script, os resultados e etc.
+     * Cria o diretorio (workingdirectory) onde serão guardados o script, os resultados e etc.
      * @param newScriptFilePath External script to be copied to environment. Can be null if its a internalScript.
      */
-    public void createEnvironment(String newScriptFilePath){
-        try{
-            Log.logger.info("trying to create " + getWorkingDirectoryPath());
-            FileUtils.deleteDirectory(getWorkingDirectory());
-            this.getWorkingDirectory().mkdirs();
-            this.getWorkingDirectory().mkdir();
-            if(!getWorkingDirectory().exists()){
-                Log.logger.info("could not create " + getWorkingDirectory().getName());
-            }else{
-                Log.logger.info("created " + getWorkingDirectory().getName());
-            }
-            if(newScriptFilePath != null){
-                if(!copyExternalScriptToWorkingDir(newScriptFilePath, scriptName)){
-                    throw new IOException("Could not copy external script " + newScriptFilePath);
-                }
-            }else if(scriptContent != null){
-                exportScriptToDir();
-            }
-            loadScriptContent();
-            resultsFolder = new File(this.getWorkingDirectoryPath() + File.separator + "results");
-            FileUtils.forceMkdir(resultsFolder);
-            if(!resultsFolder.exists()){
-                Log.logger.info("could not create " + resultsFolder.getAbsolutePath());
-            }
-            this.environmentCreated = true;
-            createJson();
-        }catch(Exception ex){
-            Log.logger.log(Level.SEVERE, ex.getMessage(), ex);
+    public void createEnvironment(String newScriptFilePath) throws IOException{
+        Log.logger.info("trying to create " + getWorkingDirectoryPath());
+        FileUtils.deleteDirectory(getWorkingDirectory());
+        this.getWorkingDirectory().mkdirs();
+        this.getWorkingDirectory().mkdir();
+        if(!getWorkingDirectory().exists()){
+            throw new IOException("could not create " + getWorkingDirectory().getName());
+        }else{
+            Log.logger.info("created " + getWorkingDirectory().getName());
         }
+        if(newScriptFilePath != null){
+            if(!copyExternalScriptToWorkingDir(newScriptFilePath, scriptName)){
+                throw new IOException("Could not copy external script " + newScriptFilePath);
+            }
+        }else if(scriptContent != null){
+            exportScriptToDir();
+        }
+        loadScriptContent();
+        resultsFolder = new File(this.getWorkingDirectoryPath() + File.separator + "results");
+        FileUtils.forceMkdir(resultsFolder);
+        if(!resultsFolder.exists()){
+            Log.logger.info("could not create " + resultsFolder.getAbsolutePath());
+        }
+        this.environmentCreated = true;
+        createJson();
     }
     
     public void exportScriptToDir(){

@@ -15,7 +15,8 @@ import java.util.TreeSet;
  * @author pitagoras
  */
 public class AnalysisModule extends RModule {
-    
+    public static String extension = "AnalysisModule";
+
     public AnalysisModule(String name, String scriptFile,
                           Map<String, Class> requiredParameters,
                           Set<String> requiredExternalFiles,

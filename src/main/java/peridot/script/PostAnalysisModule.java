@@ -14,6 +14,8 @@ import java.util.Set;
  * @author pitagoras
  */
 public class PostAnalysisModule extends RModule {
+    public static String extension = "PostAnalysisModule";
+
     public PostAnalysisModule(String name, String scriptFile,
                               Map<String, Class> requiredParameters,
                               Set<String> requiredExternalFiles,
