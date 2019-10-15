@@ -7,6 +7,7 @@ package peridot;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
+import peridot.Archiver.Manager;
 import peridot.Archiver.Places;
 
 import java.io.*;
@@ -494,26 +495,37 @@ public final class Global {
     }
 
     public static String readFileUsingSystem(String path){
-        String exe = "cat";
-        String result = "";
         if(SystemUtils.IS_OS_WINDOWS){
-            exe = "type";
-        }
-        try{
-            ProcessBuilder pb = new ProcessBuilder(exe, path);
-            Process process = pb.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            StringBuilder builder = new StringBuilder();
-            String line = null;
-            while ( (line = reader.readLine()) != null) {
-                builder.append(line);
-                builder.append(System.getProperty("line.separator"));
+            File file = new File(path);
+            if(!file.exists()){
+                return " ";
+            }else{
+                StringBuilder result = Manager.fileToString(file);
+                if(result != null){
+                    return result.toString();
+                }else{
+                    return "";
+                }
             }
-            result = builder.toString();
-        }catch(IOException ex){
-            //ex.printStackTrace();
+
+        }else{
+            String exe = "cat";
+            try{
+                ProcessBuilder pb = new ProcessBuilder(exe, path);
+                Process process = pb.start();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                StringBuilder builder = new StringBuilder();
+                String line = null;
+                while ( (line = reader.readLine()) != null) {
+                    builder.append(line);
+                    builder.append(System.getProperty("line.separator"));
+                }
+                return builder.toString();
+            }catch(IOException ex){
+                //ex.printStackTrace();
+                return " ";
+            }
         }
-        return result;
     }
 
     public static HashMap<String, List<String>> commandsFromOutput(String output){
